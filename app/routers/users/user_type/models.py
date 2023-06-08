@@ -9,7 +9,7 @@ import re, uuid
 class UserType(Base):
     '''User Type Model'''
 
-    __tablename__ = "user-type"
+    __tablename__ = "user_type"
 
     usertype_id =Column(Integer,primary_key=True,index=True)
     title = Column(String, nullable=True)

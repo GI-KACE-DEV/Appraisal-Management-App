@@ -22,8 +22,6 @@ class UpdatePassword(PasswordBase):
 class CreateAdmin(EmailBase):
     password: constr(min_length=8) = None
     
-    class Meta:
-        model = m.Administrator
 
 class Admin(EmailBase):
     id: int
@@ -40,16 +38,12 @@ class CreateUser(EmailBase):
     is_active: bool
     password: constr(min_length=8) = None
     
-    class Meta:
-        model = m.User
 
 class UpdateUser(BaseModel):
     email: EmailStr
     is_active: bool
     password: Optional[UpdatePassword]
     
-    class Meta:
-        model = m.User
 
 class ShowUser(EmailBase):
     email : EmailStr 

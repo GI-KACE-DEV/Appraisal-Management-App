@@ -17,5 +17,7 @@ class Staff(Base):
     department = Column(String, nullable=True)
     grade = Column(Integer, nullable=True)
     date_joined = Column(Date, nullable=True)
-    created_at = Column(TIMESTAMP, nullable=False,server_default=text("CURRENT_TIMESTAMP"))
-    updated_at = Column(TIMESTAMP, nullable=False,server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    created_at = Column(TIMESTAMP, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)
+
+    status = None 

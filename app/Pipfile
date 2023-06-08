@@ -1,0 +1,52 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+psycopg2-binary = "*"
+sqlalchemy = "*"
+python-dotenv = "*"
+python-jose = "*"
+pydantic = {extras = ["email"], version = "*"}
+python-multipart = "*"
+passlib = "*"
+fastapi-mail = "*"
+starlette = "*"
+xlrd = "*"
+babel = "*"
+pyjwt = "*"
+jinja2 = "*"
+pillow = "*"
+twilio = "*"
+numpy = "*"
+pandas = "*"
+boto3 = "*"
+aiofiles = "*"
+gunicorn = "*"
+jmespath = "*"
+websockets = "*"
+botocore = "*"
+s3transfer = "*"
+apscheduler = "*"
+cryptography = "*"
+python-dateutil = "*"
+sqlalchemy-utils = "*"
+typing-extensions = "*"
+redis = "*"
+rq = "*"
+uuid = "*"
+xattr = "*"
+http-ece = "*"
+py-vapid = "*"
+pywebpush = "*"
+broadcaster = "*"
+asyncio-redis = "*"
+config = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

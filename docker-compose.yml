@@ -1,0 +1,56 @@
+## docker-compose.yml 
+version: '3.8' 
+
+services:
+  db:
+    build: 
+      context: .
+      dockerfile: Dockerfile.postgres 
+    restart: always
+    environment:
+      POSTGRES_USER: appraisal_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appraisal_db
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 91:90
+    networks:
+    - test_network
+    
+  pgadmin4:
+    build: 
+      context: .
+      dockerfile: dockerfile.pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "localhost@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    ports:
+     - "85:80"
+    depends_on:
+     - db
+    networks:
+     - test_network
+    volumes:
+    - ./pgadmin_data:/var/lib/pgadmin/data
+
+
+  web:
+    build: ./backend 
+    command: uvicorn backend.app.main:app --host 0.0.0.0 
+    volumes:
+      - ./backend:/app 
+    ports:
+      - 8008:8000
+    networks: 
+      - test_network 
+     
+      
+networks: 
+  test_network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

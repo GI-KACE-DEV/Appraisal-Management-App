@@ -1,4 +1,6 @@
 from routers.users import * 
+from routers.department_type import *
+from routers.staffs import *
 
 from database import Base, engine
 

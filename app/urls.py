@@ -14,5 +14,5 @@ api_router = APIRouter()
 
 api_router.include_router(user_acc_router, tags=['User & Adminstrator Accounts'], prefix='/accounts')
 api_router.include_router(deptype_router, tags=['Department Type'])
-api_router.include_router(staff_router, tags=['Staff '])
+api_router.include_router(staff_router, tags=['Staff'])
 api_router.include_router(usertype_router, tags=['User Type'])

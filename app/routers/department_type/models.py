@@ -9,9 +9,9 @@ import re, uuid
 class DepartmentType(Base):
     '''Department Type Model'''
 
-    __tablename__ = "department-type"
+    __tablename__ = "department_type"
 
-    usertype_id =Column(Integer,primary_key=True,index=True)
+    deptype_id =Column(Integer,primary_key=True,index=True)
     title = Column(String, nullable=True)
 
 

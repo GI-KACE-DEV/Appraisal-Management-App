@@ -1,5 +1,4 @@
 from utils import raise_exc, decode_jwt, schema_to_model, create_jwt
-from ..auth.crud import is_token_blacklisted, revoke_token
 from ..auth.models import EmailVerificationCode
 from  fastapi import HTTPException, Depends
 from exceptions import BlacklistedToken

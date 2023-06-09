@@ -26,4 +26,5 @@ class Logout(BaseModel):
 
 class Token(BaseModel):
     access_token: Optional[str]
+    token_type: Optional[str]
     refresh_token: Optional[str]

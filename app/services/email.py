@@ -3,7 +3,7 @@ from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from pydantic import BaseModel, EmailStr
 from starlette.responses import JSONResponse
 from dotenv  import dotenv_values
-from config import settings
+from core.config import settings
 from routers.staffs.models import Staff
 
 

@@ -20,7 +20,7 @@ def create_new_user(user:schemas.CreateUser, db:Session):
 
 ## function for retrieving a job
 def retreive_user(id:int, db:Session):
-    item = db.query(models.User).filter(models.User.id == id).first() 
+    item = db.query(models.User).filter(models.User.user_id == id).first() 
     return item 
 
 ## function for listing all jobs

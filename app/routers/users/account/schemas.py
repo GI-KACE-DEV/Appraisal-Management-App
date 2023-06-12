@@ -34,6 +34,7 @@ class Admin(EmailBase):
         orm_mode = True
 
 class CreateUser(EmailBase):
+    username: str
     email: EmailStr 
     is_active: bool
     password: constr(min_length=8) = None

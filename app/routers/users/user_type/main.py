@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from dependencies import get_db, validate_bearer
-from utils import r_fields, urljoin, logger
+from dependencies import get_db
+
 from typing import Union, List, Optional
-#from rds.tasks import async_send_email
-#from cls import ContentQueryChecker
+
 from sqlalchemy.orm import Session
-from config import settings
 from . import crud, schemas
 import re
 from  dependencies import *

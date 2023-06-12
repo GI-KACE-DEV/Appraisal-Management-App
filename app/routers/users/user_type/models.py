@@ -1,8 +1,4 @@
 from sqlalchemy import Column, String, Integer
-#from mixins import BaseMixin, HashMethodMixin
-from sqlalchemy.orm import validates
-#from constants import PHONE, EMAIL
-from utils import gen_code
 from database import Base
 import re, uuid
 

@@ -2,7 +2,7 @@
 from typing import Optional, List, Union
 import routers.users.account.models as m
 from pydantic import BaseModel, constr, EmailStr
-#from constants import EMAIL, PHONE
+
 import datetime, enum
 
 class Account(str, enum.Enum):
@@ -33,12 +33,8 @@ class Admin(EmailBase):
     class Config:
         orm_mode = True
 
-<<<<<<< HEAD
 class CreateUser(EmailBase):
     username: str
-=======
-class CreateUser(BaseModel):
->>>>>>> 9133d4b8b4e7c88e9edc1c52c44eab3570720982
     email: EmailStr 
     is_active: bool
     staff_id: str

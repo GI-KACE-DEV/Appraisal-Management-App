@@ -1,8 +1,8 @@
 from multiprocessing import synchronize
 from sqlalchemy.orm import Session
 from . import models, schemas
-from config import settings
-from cls import CRUD
+from core.config import settings
+
 
 
 

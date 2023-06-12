@@ -33,10 +33,15 @@ class Admin(EmailBase):
     class Config:
         orm_mode = True
 
+<<<<<<< HEAD
 class CreateUser(EmailBase):
     username: str
+=======
+class CreateUser(BaseModel):
+>>>>>>> 9133d4b8b4e7c88e9edc1c52c44eab3570720982
     email: EmailStr 
     is_active: bool
+    staff_id: str
     password: constr(min_length=8) = None
     
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
 from sqlalchemy.orm import Session
 from . import schemas, models, crud
 from  dependencies import get_db
@@ -11,9 +11,17 @@ staff_router = APIRouter()
 
 
 @staff_router.post("/create", response_description="Staff data added into the database")
-async def create_new_satff(staff:schemas.CreateStaff, db:Session = Depends(get_db)):
+async def create_new_satff( db:Session = Depends(get_db), first_name:str = Form(...), last_name:str = Form(...),
+                other_name:str = Form(None), email:str = Form(...),
+                gender:str = Form(None) ,department:str = Form(None),
+                grade:str = Form(None), supervisor_id:str = Form(None)):
     
-    return await crud.create_new_satff(staff, db)
+    return await crud.create_new_satff(db, first_name, last_name, other_name,email,gender,
+                                       department, grade, supervisor_id)
+
+
+
+
 
 
 @staff_router.get("/getAllStaff")

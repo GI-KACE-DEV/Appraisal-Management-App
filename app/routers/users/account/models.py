@@ -17,14 +17,22 @@ class User(Base):
     hashed_password = Column(String,nullable=False)
     is_active = Column(Boolean, default=False)
     staff_id = Column(Integer, ForeignKey("staff.staff_id"))
+<<<<<<< HEAD
     usertype_id = Column(Integer, ForeignKey("user_type.usertype_id"))
     deptype_id = Column(Integer, ForeignKey("department_type.deptype_id"))
+=======
+    reset_password_token = Column(String, nullable=True)
+    #user_type_id = Column(Integer, ForeignKey("user_type.user_type_id"))
+>>>>>>> 9133d4b8b4e7c88e9edc1c52c44eab3570720982
     create_at = Column(Date)
-    updated_at = Column(Date)
-    reset_password_token = Column(String, nullable=True) 
+    updated_at = Column(Date) 
     satff = relationship("Staff", back_populates="staff")
+<<<<<<< HEAD
     deptype = relationship('DepartmentType', back_populates="department_type")
     usertype = relationship("UserType", back_populates="user_type")
+=======
+    #user_type = relationship("UserType", back_populates="user_type")
+>>>>>>> 9133d4b8b4e7c88e9edc1c52c44eab3570720982
     
     @validates('password', include_removes=True)
     def validate_password(self, key, value, is_remove):

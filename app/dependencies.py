@@ -3,17 +3,18 @@ from jwt.exceptions import ExpiredSignatureError
 from exceptions import BlacklistedToken
 from database import SessionLocal
 from utils import raise_exc
+from email.generator import Generator
 
 #from main import oauth2_scheme
 
 
-def get_db(request:Request):
-    try:
-        yield request.state.db
-    finally:
-        request.state.db.close()
+# def get_db(request:Request):
+#     try:
+#         yield request.state.db
+#     finally:
+#         request.state.db.close()
 
-def get_db_2():
+def get_db() -> Generator:
     db = SessionLocal()
     try:
         yield db

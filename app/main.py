@@ -10,7 +10,7 @@ from database import SessionLocal, engine
 from fastapi import FastAPI, Request
 
 #from scheduler import scheduler
-from config import *
+from core.config import *
 from urls import * 
 ## 
 

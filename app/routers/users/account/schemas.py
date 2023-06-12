@@ -33,9 +33,10 @@ class Admin(EmailBase):
     class Config:
         orm_mode = True
 
-class CreateUser(EmailBase):
+class CreateUser(BaseModel):
     email: EmailStr 
     is_active: bool
+    staff_id: str
     password: constr(min_length=8) = None
     
 

@@ -5,7 +5,7 @@ from datetime import timedelta
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from db.session import get_db
+from dependencies import get_db
 from core.hashing import Hasher
 from .schemas import Token
 

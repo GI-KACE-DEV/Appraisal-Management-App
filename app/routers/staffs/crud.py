@@ -1,20 +1,28 @@
+from core.hashing import Hasher
 from fastapi.exceptions import HTTPException
 from fastapi import status, Form
 from sqlalchemy.orm import Session
-from routers.staffs.schemas import CreateStaff,UpdateStaff
+from routers.staffs.schemas import CreateStaff
 from routers.users.account.models import User
 from routers.staffs.models import Staff
-from services.email import sendEmailToNewStaff
-from passlib.context import CryptContext
+#from services.email import sendEmailToNewStaff
+#from passlib.context import CryptContext
 
 
-def create_new_staff(staff:CreateStaff, db: Session):
+def create_new_staff_user(staff:CreateStaff, db: Session):
     staff_object = Staff(**staff.dict())
 
+    user_object = User(email=staff.email, hashed_password=Hasher.get_password_hash(),
+                     is_active=True, is_superuser=False, 
+                     created_at=staff.created_at, updated_at=staff.updated_at)
+
     db.add(staff_object)
+    db.add(user_object)
     db.commit()
     db.refresh(staff_object)
+    db.refresh(user_object)
     return staff_object
+
 
 # async def create_new_satff(db:Session, first_name:str = Form(...), last_name:str = Form(...),
 #                 other_name:str = Form(None), email:str = Form(...),

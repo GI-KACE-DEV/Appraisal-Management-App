@@ -12,13 +12,13 @@ class User(Base):
     __tablename__ = "users"
     user_id =Column(Integer,primary_key=True,index=True)  
     email = Column(String, unique=True, index=True)
-    hashed_password = Column(String,nullable=False)
-    is_active = Column(Boolean, default=False)
-    staff_id = Column(Integer, ForeignKey("staff.staff_id"))
-    create_at = Column(Date)
-    updated_at = Column(Date)
+    hashed_password = Column(String,nullable=True)
+    is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean(), default=True)
+    created_at = Column(Date, nullable=False)
+    updated_at = Column(Date, nullable=False)
     reset_password_token = Column(String, nullable=True) 
-    satff = relationship("Staff", back_populates="staff")
+    
    
 
     status = None

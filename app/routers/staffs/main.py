@@ -9,10 +9,11 @@ from  dependencies import get_db
 # APIRouter creates path operations for staffs module
 staff_router = APIRouter()
 
-@staff_router.post("/create")
-def create_new_staff(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
-    staff = crud.create_new_staff(staff=staff, db=db)
-    return staff 
+@staff_router.post("/create", response_model=schemas.ShowStaff)
+async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
+    staff = crud.create_new_staff_user(staff=staff, db=db)
+
+    return staff
 
 # @staff_router.post("/create", response_description="Staff data added into the database")
 # async def create_new_satff( db:Session = Depends(get_db), first_name:str = Form(...), last_name:str = Form(...),

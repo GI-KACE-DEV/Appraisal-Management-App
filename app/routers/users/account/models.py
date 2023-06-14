@@ -17,7 +17,9 @@ class User(Base):
     is_superuser = Column(Boolean(), default=True)
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
-    reset_password_token = Column(String, nullable=True) 
+    reset_password_token = Column(String, nullable=True)
+    staff_id = Column(Integer, ForeignKey("staffs.staff_id"))
+    staff = relationship("Staff", back_populates="users")
     
    
 

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Form
+from fastapi import APIRouter, Depends, Form, status
+from typing import List
 from sqlalchemy.orm import Session
 from . import schemas, models, crud
 from  dependencies import get_db
@@ -24,22 +25,19 @@ async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(ge
 #     return await crud.create_new_satff(db, first_name, last_name, other_name,email,gender,
 #                                        department, grade, supervisor_id)
 
+## api route for getting returning all staff.
+@staff_router.get("/getAllStaff", response_model=List[schemas.ShowStaff])
+async def get_all_staff(db:Session = Depends(get_db)):
+
+    return await crud.get_all_staff(db)
 
 
-
-
-
-# @staff_router.get("/getAllStaff")
-# async def get_all_staff(db:Session = Depends(get_db)):
-
-#     return await crud.get_all_staff(db)
-
-
-
-# @staff_router.get("/getStaffById/{id}")
-# async def getStaffById(id: int, db:Session = Depends(get_db)):
+# api route to get staff base on id. 
+@staff_router.get("/getStaffById/{id}", response_model=schemas.ShowStaff)
+async def getStaffById(id: int, db:Session = Depends(get_db)):
+    # staff = crud.getStaffById(id=id, db=db)
     
-#     return await crud.getStaffById(id, db)
+    return await crud.getStaffById(id=id, db=db)
 
 
 # @staff_router.put("/updateStaff")

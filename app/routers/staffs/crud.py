@@ -1,3 +1,4 @@
+from multiprocessing import synchronize
 from core.hashing import Hasher
 from fastapi import status, Form, Depends
 from fastapi.exceptions import HTTPException
@@ -10,12 +11,13 @@ from  dependencies import get_db
 #from passlib.context import CryptContext
 
 
-def create_new_staff_user(staff:CreateStaff, db: Session):
+def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
     staff_object = Staff(**staff.dict())
+
 
     user_object = User(email=staff.email, hashed_password=Hasher.get_password_hash(),
                      is_active=True, is_superuser=False, 
-                     created_at=staff.created_at, updated_at=staff.updated_at)
+                     created_at=staff.created_at, updated_at=staff.updated_at,)
 
     db.add(staff_object)
     db.add(user_object)
@@ -97,24 +99,30 @@ async def getStaffById(id:int, db:Session):
 #     return data
 
 
+# async def deleteStaff(id: int, db:Session, staff_id):
+#     # db_data = db.query(User).filter(User.user_id == staff_id).update({
+#     #         User.is_active: False
+#     #         }, synchronize_session=False)
+#     # db.flush()
+#     # db.commit()
+#     # if not db_data:
+#     #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#     #         detail=f"Staff with the id {staff_id} is not found")
 
+#     # data = db.query(Staff).filter(Staff.staff_id == id).first()
+#     # if not data:
+#     #     return 0
+#     # db.delete()
+#     # db.commit()
 
+#     # existing_user = db.query(Staff).filter(Staff.staff_id == id)
 
+#     # if not existing_user:
+#     #     return 0
+#     # existing_user.delete(synchronize_session=False)
+#     # db.commit()
 
-
-
-
-
-# async def deleteStaff(id: int, db:Session):
-#     db_data = db.query(User).filter(User.staff_id == id).update({
-#             User.is_active: False
-#             }, synchronize_session=False)
-#     db.flush()
-#     db.commit()
-#     if not db_data:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#             detail=f"Staff with the id {id} is not found")
-
-#     data = db.query(Staff).filter(Staff.staff_id == id).one()
-#     return data
+#     # return 1
+    
+#     # return 1
 

@@ -12,7 +12,8 @@ staff_router = APIRouter()
 
 @staff_router.post("/create", response_model=schemas.ShowStaff)
 async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
-    staff = crud.create_new_staff_user(staff=staff, db=db)
+    current_staff = 1
+    staff = crud.create_new_staff_user(staff=staff, db=db, staff_id=current_staff)
 
     return staff
 
@@ -49,5 +50,5 @@ async def getStaffById(id: int, db:Session = Depends(get_db)):
 
 # @staff_router.delete("/deleteStaff/{id}")
 # async def deleteStaff(id: int, db:Session = Depends(get_db)):
-    
-#     return await crud.deleteStaff(id, db)
+#     current_staff = 1
+#     return await crud.deleteStaff(id=id, db=db, staff_id=current_staff)

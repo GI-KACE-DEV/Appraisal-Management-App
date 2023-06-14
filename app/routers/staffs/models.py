@@ -21,5 +21,6 @@ class Staff(Base):
     is_superuser = Column(Boolean(), default=True)
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
+    users = relationship("User", back_populates="staff")
 
     status = None 

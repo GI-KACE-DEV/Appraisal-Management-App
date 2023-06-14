@@ -1,10 +1,11 @@
 from core.hashing import Hasher
+from fastapi import status, Form, Depends
 from fastapi.exceptions import HTTPException
-from fastapi import status, Form
 from sqlalchemy.orm import Session
 from routers.staffs.schemas import CreateStaff
 from routers.users.account.models import User
-from routers.staffs.models import Staff
+from routers.staffs.models import Staff 
+from  dependencies import get_db
 #from services.email import sendEmailToNewStaff
 #from passlib.context import CryptContext
 
@@ -55,25 +56,19 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
 #     return new_staff
 
 
+## function to get query all staff base on their active status
+async def get_all_staff(db:Session):
+    data = db.query(Staff).filter(Staff.is_active == True).all()
+    return data
 
 
-
-# async def get_all_staff(db:Session):
-#     data = db.query(Staff).filter(Staff.staff_id == User.staff_id).filter(User.is_active == True).all()
-#     return data
-
-
-
-
-
-
-# async def getStaffById(id: int, db:Session):
-#     data = db.query(Staff).filter(Staff.staff_id == id).all()
-    
-#     if not data:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#                             detail=f"Staff with the id {id} is not found")
-#     return data
+## function to get staff base on the staff id. 
+async def getStaffById(id:int, db:Session):
+    data = db.query(Staff).filter(Staff.staff_id == id).first()
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Staff with the id {id} is not found")
+    return data
 
 
 

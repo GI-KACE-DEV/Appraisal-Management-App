@@ -22,5 +22,6 @@ class Staff(Base):
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
     users = relationship("User", back_populates="staff")
+    appform = relationship("AppraisalForm", back_populates="staffs")
 
     status = None 

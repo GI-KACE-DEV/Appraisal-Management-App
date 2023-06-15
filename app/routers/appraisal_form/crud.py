@@ -7,42 +7,34 @@ from routers.appraisal_form.models import AppraisalForm
 
 
 
-async def create_new_appraisal_form(appraisalForm:CreateAppraisalForm, db:Session):
-    new_appraisalForm = AppraisalForm()
-    new_appraisalForm.department = appraisalForm.department
-    new_appraisalForm.grade = appraisalForm.grade
-    new_appraisalForm.positions = appraisalForm.positions
-    new_appraisalForm.appraisal_date = appraisalForm.appraisal_date
-    #new_appraisalForm.staff_id = appraisalForm.staff_id
-    new_appraisalForm.status = 1
+async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session, staff_id):
+    appform_object = AppraisalForm(**appForm.dict(), staff_id=staff_id)
     
-    db.add(new_appraisalForm)
-    db.flush()
-    db.refresh(new_appraisalForm, attribute_names=['appraisal_form_id'])
+    db.add(appform_object)
     db.commit()
-    db.close()
-    return new_appraisalForm
+    db.refresh(appform_object)
+    return appform_object
 
 
 
 
 
-async def get_all_appraisal_form(db:Session):
-    data = db.query(AppraisalForm).all()
-    return data
+# async def get_all_appraisal_form(db:Session):
+#     data = db.query(AppraisalForm).all()
+#     return data
 
 
 
 
 
 
-async def get_appraisal_formBy_ID(id: int, db:Session):
-    data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).all()
+# async def get_appraisal_formBy_ID(id: int, db:Session):
+#     data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).all()
     
-    if not data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"AppraisalForm with the id {id} is not found")
-    return data
+#     if not data:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#                             detail=f"AppraisalForm with the id {id} is not found")
+#     return data
 
 
 

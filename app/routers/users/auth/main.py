@@ -5,6 +5,8 @@ from datetime import timedelta
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import JWTError, jwt
 
+from pydantic import EmailStr 
+
 from dependencies import get_db
 from core.hashing import Hasher
 from .schemas import Token
@@ -16,8 +18,8 @@ from core.config import settings
 
 auth_router = APIRouter()
 
-def authenticate_user(username: str, password: str,db: Session):
-    user = get_user(username=username,db=db)
+def authenticate_user(email: str, password: str,db: Session):
+    user = get_user(email=email,db=db)
     print(user)
     if not user:
         return False
@@ -34,6 +36,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: 
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+    print(user)
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires

@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session 
+from pydantic import EmailStr
 
 
 from routers.users.account.models import User
 
-def get_user(username:str,db: Session):
-    user = db.query(User).filter(User.email == username).first()
+def get_user(email:str,db: Session):
+    user = db.query(User).filter(User.email == email).first()
     return user
 
 # async def verify_user(payload:schemas.Login, account:str, db:Session):

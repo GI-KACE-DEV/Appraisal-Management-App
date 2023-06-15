@@ -24,6 +24,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
 
     ## lets use the secrete key and algo to encode the data dic to get a dedicated access token
-    encode_jwt = jwt.encode(to_encode, settings.SECRETE_KEY, algorithm=settings.ALGORITHM)
+    encode_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     return encode_jwt

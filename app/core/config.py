@@ -22,7 +22,7 @@ class Settings:
     DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
     ## lets define var for creating the access token
-    SECRETE_KEY : str = os.getenv("SECRETE_KEY")
+    SECRET_KEY : str = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     EMAIL_CODE_DURATION_IN_MINUTES= 15

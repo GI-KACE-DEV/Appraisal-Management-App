@@ -12,7 +12,7 @@ class AppraisalForm(Base):
     department = Column(String, nullable=True)
     grade = Column(String, nullable=True)
     positions = Column(String, nullable=True)
-    appraisal_date = Column(String, nullable=True)
+    appraisal_date = Column(Date, nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.staff_id"))
     status = Column(String, nullable=True)
     created_at = Column(Date, nullable=False)

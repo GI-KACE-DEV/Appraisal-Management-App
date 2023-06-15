@@ -6,17 +6,17 @@ from core.config import settings
 
 
 
-def create_new_user(user:schemas.CreateUser, db:Session):
-    user = models.User(username=user.username, 
-                email=user.email,
-                hashed_password=(user.password),
-                is_active=True,
-                is_superuser=False
-                )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+# def create_new_user(user:schemas.CreateUser, db:Session):
+#     user = models.User(username=user.username, 
+#                 email=user.email,
+#                 hashed_password=(user.password),
+#                 is_active=True,
+#                 is_superuser=False
+#                 )
+#     db.add(user)
+#     db.commit()
+#     db.refresh(user)
+#     return user
 
 ## function for retrieving a job
 def retreive_user(id:int, db:Session):

@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
+from datetime import date, datetime 
 
 
 class CreateAppraisalForm(BaseModel):
@@ -8,13 +9,22 @@ class CreateAppraisalForm(BaseModel):
     grade: Optional[str]
     positions: Optional[str]
     appraisal_date: Optional[str]
-    #staff_id: Optional[int]
+    status: bool
+    created_at: Optional[date] = datetime.now().date()
+    updated_at: Optional[date] = datetime.now().date()
+    
 
 
+
+class ShowAppraisalForm(BaseModel):
+    department: Optional[str]
+    grade: Optional[str]
+    positions: Optional[str]
 
 
     class Config():
-        orm_model = True
+        orm_mode = True
+
 
 
 class UpdateAppraisalForm(BaseModel):

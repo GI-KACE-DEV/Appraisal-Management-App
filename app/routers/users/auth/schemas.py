@@ -1,28 +1,29 @@
-from ..account.schemas import User, Admin, EmailBase, Account
+from routers.users.account.schemas import User, Admin, EmailBase, Account
 from pydantic import BaseModel, constr
 from typing import Optional, Union
 
-# class Login(EmailBase):
-#     password: constr(min_length=8)
+class Login(EmailBase):
+    #password: constr(min_length=8)
+    password: str
 
-# class LoginResponse(BaseModel):
-#     access_token: str
-#     refresh_token: str
-#     account: Optional[str]
-#     user: Union[User, Admin] 
+class LoginResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    account: Optional[str]
+    #user: Union[User, Admin] 
 
-#     class Config:
-#         orm_mode = True
+    class Config:
+        orm_mode = True
 
-# class AccessToken(BaseModel):
-#     access_token: str
+class AccessToken(BaseModel):
+    access_token: str
 
-# class RefreshToken(BaseModel):
-#     refresh_token: str
+class RefreshToken(BaseModel):
+    refresh_token: str
 
-# class Logout(BaseModel):
-#     access_token: str
-#     refresh_token: str
+class Logout(BaseModel):
+    access_token: str
+    refresh_token: str
 
 class Token(BaseModel):
     access_token: Optional[str]

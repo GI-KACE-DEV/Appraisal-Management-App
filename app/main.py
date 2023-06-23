@@ -60,6 +60,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 #     return response
 
 #from core.urls import *
+
 def start_application():
     app = FastAPI(docs_url="/", title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
     include_router(app)

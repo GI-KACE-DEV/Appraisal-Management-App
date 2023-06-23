@@ -8,7 +8,9 @@ class Staff(Base):
     '''Staff Model'''
     
     __tablename__ = "staffs"
-    staff_id = Column(Integer,primary_key=True,index=True)
+    #__table_args__ = ({'schema':'public'},)
+    
+    id = Column(Integer,primary_key=True,index=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     other_name = Column(String, nullable=True)
@@ -21,7 +23,8 @@ class Staff(Base):
     is_superuser = Column(Boolean(), default=True)
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
-    users = relationship("User", back_populates="staff")
-    appraisal_forms = relationship("AppraisalForm", back_populates="staffs")
+    user = relationship("User", back_populates="staff")
+    #appForm_id = Column(Integer, ForeignKey("appraisal_forms.appform_id"))
+    #appraisal_forms = relationship("AppraisalForm", back_populates="staffs")
 
     status = None 

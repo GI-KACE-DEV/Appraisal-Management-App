@@ -17,7 +17,7 @@ def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
 
     user_object = User(email=staff.email, hashed_password=Hasher.get_password_hash(),
                      is_active=True, is_superuser=False, 
-                     created_at=staff.created_at, updated_at=staff.updated_at,)
+                     created_at=staff.created_at, updated_at=staff.updated_at)
 
     db.add(staff_object)
     db.add(user_object)

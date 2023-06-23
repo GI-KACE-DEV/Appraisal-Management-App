@@ -25,9 +25,6 @@ async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session, sta
 
 
 
-
-
-
 # async def get_appraisal_formBy_ID(id: int, db:Session):
 #     data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).all()
     
@@ -37,27 +34,22 @@ async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session, sta
 #     return data
 
 
+# async def updateAppraisalForm(updateAppraisalForm: UpdateAppraisalForm, db:Session):
+#     appraisal_form_id = updateAppraisalForm.appraisal_form_id
+#     is_appraisal_form_id_update = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == appraisal_form_id).update({
+#         AppraisalForm.department : updateAppraisalForm.department,
+#         AppraisalForm.grade : updateAppraisalForm.grade,
+#         AppraisalForm.positions : updateAppraisalForm.positions,
+#         AppraisalForm.appraisal_date : updateAppraisalForm.appraisal_date,
+#         }, synchronize_session=False)
+#     db.flush()
+#     db.commit()
+#     if not is_appraisal_form_id_update:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#             detail=f"AppraisalForm with the id (" + str(appraisal_form_id) + ") is not found")
 
-
-
-
-
-async def updateAppraisalForm(updateAppraisalForm: UpdateAppraisalForm, db:Session):
-    appraisal_form_id = updateAppraisalForm.appraisal_form_id
-    is_appraisal_form_id_update = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == appraisal_form_id).update({
-        AppraisalForm.department : updateAppraisalForm.department,
-        AppraisalForm.grade : updateAppraisalForm.grade,
-        AppraisalForm.positions : updateAppraisalForm.positions,
-        AppraisalForm.appraisal_date : updateAppraisalForm.appraisal_date,
-        }, synchronize_session=False)
-    db.flush()
-    db.commit()
-    if not is_appraisal_form_id_update:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"AppraisalForm with the id (" + str(appraisal_form_id) + ") is not found")
-
-    data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == appraisal_form_id).one()
-    return data
+#     data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == appraisal_form_id).one()
+#     return data
 
 
 

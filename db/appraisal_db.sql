@@ -57,11 +57,86 @@ ALTER SEQUENCE public.administrators_admin_id_seq OWNED BY public.administrators
 
 
 --
+-- Name: appraisal_forms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.appraisal_forms (
+    id integer NOT NULL,
+    department character varying,
+    grade character varying,
+    positions character varying,
+    appraisal_date date,
+    status boolean,
+    created_at date NOT NULL,
+    updated_at date NOT NULL
+);
+
+
+--
+-- Name: appraisal_forms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.appraisal_forms_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: appraisal_forms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.appraisal_forms_id_seq OWNED BY public.appraisal_forms.id;
+
+
+--
+-- Name: email_verication_codes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.email_verication_codes (
+    email character varying NOT NULL
+);
+
+
+--
+-- Name: revoked_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.revoked_tokens (
+    id integer NOT NULL,
+    jti character varying
+);
+
+
+--
+-- Name: revoked_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.revoked_tokens_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: revoked_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.revoked_tokens_id_seq OWNED BY public.revoked_tokens.id;
+
+
+--
 -- Name: staffs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.staffs (
-    staff_id integer NOT NULL,
+    id integer NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     other_name character varying,
@@ -78,10 +153,10 @@ CREATE TABLE public.staffs (
 
 
 --
--- Name: staffs_staff_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: staffs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.staffs_staff_id_seq
+CREATE SEQUENCE public.staffs_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -91,10 +166,10 @@ CREATE SEQUENCE public.staffs_staff_id_seq
 
 
 --
--- Name: staffs_staff_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: staffs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.staffs_staff_id_seq OWNED BY public.staffs.staff_id;
+ALTER SEQUENCE public.staffs_id_seq OWNED BY public.staffs.id;
 
 
 --
@@ -132,7 +207,7 @@ ALTER SEQUENCE public.user_type_usertype_id_seq OWNED BY public.user_type.userty
 --
 
 CREATE TABLE public.users (
-    user_id integer NOT NULL,
+    id integer NOT NULL,
     email character varying,
     hashed_password character varying,
     is_active boolean,
@@ -145,10 +220,10 @@ CREATE TABLE public.users (
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.users_user_id_seq
+CREATE SEQUENCE public.users_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -158,10 +233,10 @@ CREATE SEQUENCE public.users_user_id_seq
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
@@ -172,10 +247,24 @@ ALTER TABLE ONLY public.administrators ALTER COLUMN admin_id SET DEFAULT nextval
 
 
 --
--- Name: staffs staff_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: appraisal_forms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.staffs ALTER COLUMN staff_id SET DEFAULT nextval('public.staffs_staff_id_seq'::regclass);
+ALTER TABLE ONLY public.appraisal_forms ALTER COLUMN id SET DEFAULT nextval('public.appraisal_forms_id_seq'::regclass);
+
+
+--
+-- Name: revoked_tokens id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.revoked_tokens ALTER COLUMN id SET DEFAULT nextval('public.revoked_tokens_id_seq'::regclass);
+
+
+--
+-- Name: staffs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staffs ALTER COLUMN id SET DEFAULT nextval('public.staffs_id_seq'::regclass);
 
 
 --
@@ -186,10 +275,10 @@ ALTER TABLE ONLY public.user_type ALTER COLUMN usertype_id SET DEFAULT nextval('
 
 
 --
--- Name: users user_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
@@ -199,10 +288,28 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 
 
 --
+-- Data for Name: appraisal_forms; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: email_verication_codes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: revoked_tokens; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.staffs (staff_id, first_name, last_name, other_name, gender, email, supervisor_id, department, grade, is_active, is_superuser, created_at, updated_at) VALUES (1, 'string', 'string', 'string', 'string', 'user@example.com', 0, 'string', 0, true, true, '2023-06-19', '2023-06-19');
+INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, email, supervisor_id, department, grade, is_active, is_superuser, created_at, updated_at) VALUES (1, 'string', 'string', 'string', 'string', 'user@example.com', 0, 'string', 0, true, true, '2023-06-26', '2023-06-26');
 
 
 --
@@ -215,7 +322,7 @@ INSERT INTO public.staffs (staff_id, first_name, last_name, other_name, gender, 
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users (user_id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id) VALUES (1, 'user@example.com', '$2b$12$jipqX2pPfiwT5N17pFAWTObiHQeBYaP9sm9nZ5BdtLNzvWPonN8Aa', true, false, '2023-06-19', '2023-06-19', NULL, NULL);
+INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id) VALUES (1, 'user@example.com', '$2b$12$c/9vImryOAP2ngP0o2pGne7EOwy5Upqwr0oU25QwZlspjdov8M4Ze', true, false, '2023-06-26', '2023-06-26', NULL, NULL);
 
 
 --
@@ -226,10 +333,24 @@ SELECT pg_catalog.setval('public.administrators_admin_id_seq', 1, false);
 
 
 --
--- Name: staffs_staff_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: appraisal_forms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.staffs_staff_id_seq', 1, true);
+SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, false);
+
+
+--
+-- Name: revoked_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.revoked_tokens_id_seq', 1, false);
+
+
+--
+-- Name: staffs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.staffs_id_seq', 1, true);
 
 
 --
@@ -240,10 +361,10 @@ SELECT pg_catalog.setval('public.user_type_usertype_id_seq', 1, false);
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
@@ -263,11 +384,35 @@ ALTER TABLE ONLY public.administrators
 
 
 --
+-- Name: appraisal_forms appraisal_forms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_forms
+    ADD CONSTRAINT appraisal_forms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: email_verication_codes email_verication_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.email_verication_codes
+    ADD CONSTRAINT email_verication_codes_pkey PRIMARY KEY (email);
+
+
+--
+-- Name: revoked_tokens revoked_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.revoked_tokens
+    ADD CONSTRAINT revoked_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: staffs staffs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.staffs
-    ADD CONSTRAINT staffs_pkey PRIMARY KEY (staff_id);
+    ADD CONSTRAINT staffs_pkey PRIMARY KEY (id);
 
 
 --
@@ -283,7 +428,14 @@ ALTER TABLE ONLY public.user_type
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ix_appraisal_forms_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_appraisal_forms_id ON public.appraisal_forms USING btree (id);
 
 
 --
@@ -301,6 +453,13 @@ CREATE UNIQUE INDEX ix_public_administrators_email ON public.administrators USIN
 
 
 --
+-- Name: ix_revoked_tokens_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_revoked_tokens_id ON public.revoked_tokens USING btree (id);
+
+
+--
 -- Name: ix_staffs_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -308,10 +467,10 @@ CREATE UNIQUE INDEX ix_staffs_email ON public.staffs USING btree (email);
 
 
 --
--- Name: ix_staffs_staff_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ix_staffs_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX ix_staffs_staff_id ON public.staffs USING btree (staff_id);
+CREATE INDEX ix_staffs_id ON public.staffs USING btree (id);
 
 
 --
@@ -329,10 +488,10 @@ CREATE UNIQUE INDEX ix_users_email ON public.users USING btree (email);
 
 
 --
--- Name: ix_users_user_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ix_users_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX ix_users_user_id ON public.users USING btree (user_id);
+CREATE INDEX ix_users_id ON public.users USING btree (id);
 
 
 --
@@ -340,7 +499,7 @@ CREATE INDEX ix_users_user_id ON public.users USING btree (user_id);
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(staff_id);
+    ADD CONSTRAINT users_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
 
 
 --

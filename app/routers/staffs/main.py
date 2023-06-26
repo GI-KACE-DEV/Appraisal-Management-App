@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, Form, status
 from typing import List
 from sqlalchemy.orm import Session
 from . import schemas, models, crud
-from  dependencies import get_db
+from  dependencies import get_db 
+
+from routers.users.account.models import User
 
 
 
@@ -13,6 +15,7 @@ staff_router = APIRouter()
 @staff_router.post("/create", response_model=schemas.ShowStaff)
 async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
     current_staff = 1
+    current_role = 1
     staff = crud.create_new_staff_user(staff=staff, db=db, staff_id=current_staff)
 
     return staff
@@ -36,8 +39,7 @@ async def get_all_staff(db:Session = Depends(get_db)):
 # api route to get staff base on id. 
 @staff_router.get("/getStaffById/{id}", response_model=schemas.ShowStaff)
 async def getStaffById(id: int, db:Session = Depends(get_db)):
-    # staff = crud.getStaffById(id=id, db=db)
-    
+  
     return await crud.getStaffById(id=id, db=db)
 
 

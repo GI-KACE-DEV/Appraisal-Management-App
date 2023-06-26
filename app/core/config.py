@@ -9,6 +9,12 @@ from pathlib import Path
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
+
+BASE_DIR = Path(__file__).resolve().parent
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 class Settings:
     PROJECT_NAME:str = "Appraisal Management System"
     PROJECT_VERSION: str = "1.0.0"
@@ -26,6 +32,11 @@ class Settings:
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     EMAIL_CODE_DURATION_IN_MINUTES= 15
+    EMAIL_CODE_DURATION_IN_MINUTES: int = 15
+    ACCESS_TOKEN_DURATION_IN_MINUTES: int = 60
+    REFRESH_TOKEN_DURATION_IN_MINUTES: int = 600
+    PASSWORD_RESET_TOKEN_DURATION_IN_MINUTES: int = 15
+    ACCOUNT_VERIFICATION_TOKEN_DURATION_IN_MINUTES: int = 15
 
 
     MAIL_USERNAME: str = 'obwebsitedesign@gmail.com'

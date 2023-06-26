@@ -1,7 +1,8 @@
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Date
 
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 
+from constants import PHONE, EMAIL
 from database import Base
 import re, uuid
 
@@ -10,7 +11,9 @@ class User(Base):
     '''User Model'''
 
     __tablename__ = "users"
-    user_id =Column(Integer,primary_key=True,index=True)  
+    #__table_args__ = ({'schema':'public'},)
+
+    id = Column(Integer,primary_key=True,index=True)  
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String,nullable=True)
     is_active = Column(Boolean, default=True)
@@ -18,10 +21,20 @@ class User(Base):
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
     reset_password_token = Column(String, nullable=True)
-    staff_id = Column(Integer, ForeignKey("staffs.staff_id"))
-    staff = relationship("Staff", back_populates="users")
+    staff_id = Column(Integer, ForeignKey("staffs.id"))
+    #role_id = Column(Integer, ForeignKey('roles.id'), nullable=True)
+    staff = relationship("Staff", back_populates="user")
+    #role = relationship("Role", back_populates="users")
     
-   
+    @validates('password', include_removes=True)
+    def validate_password(self, key, value, is_remove):
+        assert len(value) > 7, 'unacceptable password length'
+        return self.__class__.generate_hash(value)
+
+    @validates('email')
+    def validate_email(self, key, value):
+        assert re.search(EMAIL, value), 'invalid email format'
+        return value
 
     status = None
 

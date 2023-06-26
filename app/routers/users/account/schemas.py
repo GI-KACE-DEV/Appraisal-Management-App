@@ -10,7 +10,8 @@ class Account(str, enum.Enum):
     administrators = 'administrators'
 
 class EmailBase(BaseModel):
-    email: constr(regex='')
+    #email: constr(regex='')
+    email: EmailStr
     
 class PasswordBase(BaseModel):
     password: constr(min_length=8)

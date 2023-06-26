@@ -20,7 +20,7 @@ from core.config import settings
 
 ## function for retrieving a job
 def retreive_user(id:int, db:Session):
-    item = db.query(models.User).filter(models.User.user_id == id).first() 
+    item = db.query(models.User).filter(models.User.id == id).first() 
     return item 
 
 ## function for listing all jobs
@@ -31,7 +31,7 @@ def list_user(db: Session):
 
 ## 
 def update_user_by_id(id:int, user: schemas.CreateUser, db: Session, owner_id):
-    existing_user = db.query(models.User).filter(models.User.user_id == id) 
+    existing_user = db.query(models.User).filter(models.User.id == id) 
     if not existing_user:
         return 0
     models.User.__dict__.update(owner_id==owner_id)
@@ -41,7 +41,7 @@ def update_user_by_id(id:int, user: schemas.CreateUser, db: Session, owner_id):
 
 
 def delete_job_by_id(id:int, user:schemas.CreateUser, db: Session, owner_id):
-    existing_user = db.query(models.User).filter(models.User.user_id == id)
+    existing_user = db.query(models.User).filter(models.User.id == id)
     if not existing_user:
         return 0 
     existing_user.delete(synchronize_session=False)

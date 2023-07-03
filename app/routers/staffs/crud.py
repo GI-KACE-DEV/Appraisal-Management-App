@@ -12,14 +12,18 @@ from  dependencies import get_db
 
 
 def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
-    staff_object = Staff(**staff.dict())
-
-
-    user_object = User(email=staff.email, hashed_password=Hasher.get_password_hash(),
-                     is_active=True, is_superuser=False, 
-                     created_at=staff.created_at, updated_at=staff.updated_at)
+    #staff_object = Staff(**staff.dict())
+    staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name,
+    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade)
+    
 
     db.add(staff_object)
+    db.flush()
+
+
+    user_object = User(email=staff.email, staff_id=staff_object.id,  hashed_password=Hasher.get_password_hash(),
+                     is_active=True, is_superuser=False)
+
     db.add(user_object)
     db.commit()
     db.refresh(staff_object)
@@ -33,29 +37,6 @@ def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
 #                 grade:str = Form(None), supervisor_id:str = Form(None)):
     
 #     new_staff = Staff()
-#     new_staff.first_name = first_name
-#     new_staff.last_name = last_name
-#     new_staff.other_name = other_name
-#     new_staff.gender = gender
-#     new_staff.supervisor_id = supervisor_id
-#     new_staff.department = department
-#     new_staff.grade = grade
-
-#     new_user = User()
-#     new_user.email = email
-#     new_user.hashed_password = pwd_context.hash("password")
-#     new_user.staff_id = new_staff.staff_id
-#     new_user.is_active = False
-
-#     db.add(new_staff)
-#     db.add(new_user)
-#     db.flush()
-#     data = db.query(User).filter(User.staff_id == Staff.staff_id).first()
-#     db.refresh(new_staff, attribute_names=['staff_id'])
-#     #await sendEmailToNewStaff([email], new_user)
-#     db.commit()
-#     db.close()
-#     return new_staff
 
 
 ## function to get query all staff base on their active status

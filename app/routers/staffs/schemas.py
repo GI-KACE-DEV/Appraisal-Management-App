@@ -17,12 +17,10 @@ class CreateStaff(BaseModel):
     grade: Optional[int]
     is_active: bool
     is_superuser: bool 
-    created_at: Optional[date] = datetime.now().date()
-    updated_at: Optional[date] = datetime.now().date()
 
 
 class ShowStaff(BaseModel):
-    email: Optional[str]
+    # email: Optional[str]
     first_name: Optional[str]
     last_name: Optional[str]
     other_name: Optional[str]

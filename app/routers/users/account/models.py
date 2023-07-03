@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Date
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Date, TIMESTAMP, text
 
 from sqlalchemy.orm import relationship, validates
 
@@ -18,8 +18,8 @@ class User(Base):
     hashed_password = Column(String,nullable=True)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean(), default=True)
-    created_at = Column(Date, nullable=False)
-    updated_at = Column(Date, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     reset_password_token = Column(String, nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.id"))
     #role_id = Column(Integer, ForeignKey('roles.id'), nullable=True)

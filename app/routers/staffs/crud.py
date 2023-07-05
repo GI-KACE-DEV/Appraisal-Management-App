@@ -13,6 +13,15 @@ from  dependencies import get_db
 
 def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
     #staff_object = Staff(**staff.dict())
+
+    db_query = db.query(User).filter(User.email == staff.email).first()
+
+    if db_query is not None:
+        raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
+           detail=f"Staff with email (" + \
+        str(staff.email) + ") already exists")
+    
+
     staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade)
     
@@ -31,18 +40,17 @@ def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
     return staff_object
 
 
-# async def create_new_satff(db:Session, first_name:str = Form(...), last_name:str = Form(...),
-#                 other_name:str = Form(None), email:str = Form(...),
-#                 gender:str = Form(None) ,department:str = Form(None),
-#                 grade:str = Form(None), supervisor_id:str = Form(None)):
-    
-#     new_staff = Staff()
+
+
 
 
 ## function to get query all staff base on their active status
 async def get_all_staff(db:Session):
     data = db.query(Staff).filter(Staff.is_active == True).all()
     return data
+
+
+
 
 
 ## function to get staff base on the staff id. 

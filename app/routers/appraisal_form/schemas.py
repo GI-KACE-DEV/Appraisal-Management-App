@@ -8,10 +8,7 @@ class CreateAppraisalForm(BaseModel):
     department: Optional[str]
     grade: Optional[str]
     positions: Optional[str]
-    appraisal_date: Optional[str]
     status: bool
-    created_at: Optional[date] = datetime.now().date()
-    updated_at: Optional[date] = datetime.now().date()
     
 
 

@@ -7,10 +7,11 @@ from routers.appraisal_form.models import AppraisalForm
 
 
 
-async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session, staff_id):
-    appform_object = AppraisalForm(**appForm.dict(), staff_id=staff_id)
+async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session):
+    appform_object = AppraisalForm(**appForm.dict())
     
     db.add(appform_object)
+    db.flush()
     db.commit()
     db.refresh(appform_object)
     return appform_object
@@ -61,7 +62,7 @@ async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session, sta
 
 
 async def deleteAppraisalForm(id: int, db:Session):
-    db_data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).update({
+    db_data = db.query(AppraisalForm).filter(AppraisalForm.id == id).update({
             AppraisalForm.status: 0
             }, synchronize_session=False)
     db.flush()
@@ -70,6 +71,6 @@ async def deleteAppraisalForm(id: int, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail=f"AppraisalForm with the id {id} is not found")
 
-    data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).one()
+    data = db.query(AppraisalForm).filter(AppraisalForm.id == id).one()
     return data
 

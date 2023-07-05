@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from routers.staffs.schemas import CreateStaff
 from routers.users.account.models import User
 from routers.staffs.models import Staff 
+from routers.appraisal_form.models import AppraisalForm
 from  dependencies import get_db
 #from services.email import sendEmailToNewStaff
 #from passlib.context import CryptContext
@@ -29,8 +30,13 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
 
     user_object = User(email=staff.email, staff_id=staff_object.id,  hashed_password=Hasher.get_password_hash(),
                      is_active=True, is_superuser=False)
+    
+    appraisalForm_object = AppraisalForm(department = staff.department,grade = staff.grade, positions = staff.positions,
+    staff_id=staff_object.id)
+
 
     db.add(user_object)
+    db.add(appraisalForm_object)
     db.commit()
     db.refresh(staff_object)
     db.refresh(user_object)
@@ -57,11 +63,11 @@ async def get_all_staff(db:Session):
 
 
 ## function to get staff base on the staff id. 
-async def getStaffById(id:int, db:Session):
-    data = db.query(Staff).filter(Staff.staff_id == id).first()
+async def getStaffById(staff_id:int, db:Session):
+    data = db.query(Staff).filter(Staff.id == staff_id).first()
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Staff with the id {id} is not found")
+                            detail=f"Staff with the id {staff_id} is not found")
     return data
 
 

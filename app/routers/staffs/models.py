@@ -17,6 +17,7 @@ class Staff(Base):
     gender = Column(String(255), nullable=True)
     supervisor_id = Column(Integer, nullable=True)
     department = Column(String(255), nullable=True)
+    positions = Column(String(255), nullable=True)
     grade = Column(Integer, nullable=True)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=True)

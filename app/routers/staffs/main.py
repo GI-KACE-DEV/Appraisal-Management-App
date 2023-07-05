@@ -21,17 +21,17 @@ async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(ge
 
 
 ## api route for getting returning all staff.
-@staff_router.get("/getAllStaff", response_model=List[schemas.ShowStaff])
+@staff_router.get("/getAllStaff")
 async def get_all_staff(db:Session = Depends(get_db)):
 
     return await crud.get_all_staff(db)
 
 
 # api route to get staff base on id. 
-@staff_router.get("/getStaffById/{id}", response_model=schemas.ShowStaff)
-async def getStaffById(id: int, db:Session = Depends(get_db)):
+@staff_router.get("/getStaffById/{staff_id}")
+async def getStaffById(staff_id: int, db:Session = Depends(get_db)):
   
-    return await crud.getStaffById(id=id, db=db)
+    return await crud.getStaffById(staff_id=staff_id, db=db)
 
 
 # @staff_router.put("/updateStaff")

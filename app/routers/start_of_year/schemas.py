@@ -9,7 +9,6 @@ class CreateStartOfYear(BaseModel):
     target: Optional[str]
     resources: Optional[str]
     appraisal_form_id: Optional[int]
-    status: bool
     
 
 

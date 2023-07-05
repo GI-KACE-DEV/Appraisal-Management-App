@@ -16,10 +16,10 @@ class Permission(Base):
     #__table_args__ = ({'schema':'public'},)
 
     id = Column(Integer,primary_key=True,index=True)
-    op = Column(String , nullable=False)
-    name = Column(String , unique=True, nullable=False)
-    code_name = Column(String , unique=True, nullable=False)
-    decription = Column(String, nullable=True)
+    op = Column(String(255) , nullable=False)
+    name = Column(String(255) , unique=True, nullable=False)
+    code_name = Column(String(255) , unique=True, nullable=False)
+    decription = Column(String(255), nullable=True)
     content_type_id = Column(Integer, ForeignKey('content_types.id'))
     content_type = relationship("ContentType", back_populates="permissions")
     roles = relationship('Role', back_populates="permissions")
@@ -30,7 +30,7 @@ class ContentType(Base):
     #__table_args__ = ({'schema':'public'},)
 
     id = Column(Integer, primary_key=True, index=True)
-    model = Column(String, nullable=False)
+    model = Column(String(255), nullable=False)
     permissions = relationship("Permission", back_populates="content_type")
 
 # def after_create(target, connection, **kw):

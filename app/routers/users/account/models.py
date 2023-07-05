@@ -14,13 +14,13 @@ class User(Base):
     #__table_args__ = ({'schema':'public'},)
 
     id = Column(Integer,primary_key=True,index=True)  
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String,nullable=True)
+    email = Column(String(255), unique=True, index=True)
+    hashed_password = Column(String(255),nullable=True)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean(), default=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-    reset_password_token = Column(String, nullable=True)
+    reset_password_token = Column(String(255), nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.id"))
     #role_id = Column(Integer, ForeignKey('roles.id'), nullable=True)
     staff = relationship("Staff", back_populates="user")
@@ -41,14 +41,14 @@ class User(Base):
 class Administrator(Base):
     '''System Administrator Model'''
     __tablename__ = "administrators"
-    __table_args__ = ({'schema':'public'},)
+    #__table_args__ = ({'schema':'public'},)
     
     admin_id =Column(Integer,primary_key=True,index=True) 
     is_active = Column(Boolean, default=False)
-    email = Column(String, unique=True, index=True)
+    email = Column(String(255), unique=True, index=True)
     is_verified = Column(Boolean, default=False)
-    password = Column(String, nullable=True)
-    push_id = Column(String, unique=True, nullable=False, default=uuid.uuid4)
+    password = Column(String(255), nullable=True)
+    push_id = Column(String(255), unique=True, nullable=False, default=uuid.uuid4)
 
     
     status = None

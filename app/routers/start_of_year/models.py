@@ -4,18 +4,17 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
-class AppraisalForm(Base):
-    '''Appraisal Form Model'''
+class StartOfYear(Base):
+    '''Start of Year Model'''
     
-    __tablename__ = "appraisal_forms"
+    __tablename__ = "start_of_year"
     #__table_args__ = ({'schema':'public'},)
 
     id = Column(Integer,primary_key=True,index=True)
-    department = Column(String(255), nullable=True)
-    grade = Column(String(255), nullable=True)
-    positions = Column(String(255), nullable=True)
-    appraisal_date = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-    staff_id = Column(Integer, ForeignKey("staffs.id"))
+    results_areas = Column(String(255), nullable=True)
+    target = Column(String(255), nullable=True)
+    resources = Column(String(255), nullable=True)
+    appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
     status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

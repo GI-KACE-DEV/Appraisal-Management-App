@@ -11,7 +11,7 @@ from  dependencies import get_db
 #from passlib.context import CryptContext
 
 
-def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
+def create_new_staff_user(staff:CreateStaff, db: Session):
     #staff_object = Staff(**staff.dict())
 
     db_query = db.query(User).filter(User.email == staff.email).first()
@@ -24,11 +24,8 @@ def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
 
     staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade)
-    
-
     db.add(staff_object)
     db.flush()
-
 
     user_object = User(email=staff.email, staff_id=staff_object.id,  hashed_password=Hasher.get_password_hash(),
                      is_active=True, is_superuser=False)
@@ -38,6 +35,12 @@ def create_new_staff_user(staff:CreateStaff, db: Session, staff_id: int):
     db.refresh(staff_object)
     db.refresh(user_object)
     return staff_object
+
+
+
+
+
+
 
 
 

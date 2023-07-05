@@ -8,7 +8,7 @@ class UserType(Base):
     __tablename__ = "user_type"
 
     usertype_id =Column(Integer,primary_key=True,index=True)
-    title = Column(String, nullable=True)
+    title = Column(String(255), nullable=True)
 
 
     status = None

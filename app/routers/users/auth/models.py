@@ -10,7 +10,7 @@ class EmailVerificationCode(Base):
     __tablename__ = 'email_verication_codes'
     #__table_args__ = ({'schema':'public'},)
 
-    email = Column(String, unique=True, primary_key=True)
+    email = Column(String(255), unique=True, primary_key=True)
     
     @validates('email')
     def validate_email(self, key, value):
@@ -21,7 +21,7 @@ class RevokedToken(Base):
     __tablename__ = 'revoked_tokens'
     #__table_args__ = ({'schema':'public'},)
     id = Column(Integer,primary_key=True,index=True)
-    jti = Column(String)
+    jti = Column(String(255))
 
 @event.listens_for(EmailVerificationCode, 'before_insert')
 def delete_existing_value(mapper, connection, target):

@@ -4,20 +4,20 @@ from pydantic import BaseModel
 from datetime import date, datetime 
 
 
-class CreateAppraisalForm(BaseModel):
-    department: Optional[str]
-    grade: Optional[str]
-    positions: Optional[str]
-    staff_id: Optional[int]
+class CreateStartOfYear(BaseModel):
+    results_areas: Optional[str]
+    target: Optional[str]
+    resources: Optional[str]
+    appraisal_form_id: Optional[int]
     status: bool
     
 
 
 
-class ShowAppraisalForm(BaseModel):
-    department: Optional[str]
-    grade: Optional[str]
-    positions: Optional[str]
+class ShowStartOfYear(BaseModel):
+    results_areas: Optional[str]
+    target: Optional[str]
+    resources: Optional[str]
 
 
     class Config():
@@ -25,7 +25,7 @@ class ShowAppraisalForm(BaseModel):
 
 
 
-class UpdateAppraisalForm(BaseModel):
+class UpdateStartOfYear(BaseModel):
     appraisal_form_id:Optional[int]
     department: Optional[str]
     grade: Optional[str]

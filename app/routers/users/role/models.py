@@ -18,8 +18,8 @@ class Role(Base):
     __tablename__ = "roles"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=True)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255), nullable=True)
     #users = relationship('User', back_populates="role")
     permissions = relationship('Permission', back_populates="roles")
     

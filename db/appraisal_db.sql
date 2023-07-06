@@ -29,10 +29,10 @@ SET default_table_access_method = heap;
 CREATE TABLE public.administrators (
     admin_id integer NOT NULL,
     is_active boolean,
-    email character varying,
+    email character varying(255),
     is_verified boolean,
-    password character varying,
-    push_id character varying NOT NULL
+    password character varying(255),
+    push_id character varying(255) NOT NULL
 );
 
 
@@ -62,13 +62,14 @@ ALTER SEQUENCE public.administrators_admin_id_seq OWNED BY public.administrators
 
 CREATE TABLE public.appraisal_forms (
     id integer NOT NULL,
-    department character varying,
-    grade character varying,
-    positions character varying,
-    appraisal_date date,
+    department character varying(255),
+    grade character varying(255),
+    positions character varying(255),
+    appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    staff_id integer,
     status boolean,
-    created_at date NOT NULL,
-    updated_at date NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -93,11 +94,55 @@ ALTER SEQUENCE public.appraisal_forms_id_seq OWNED BY public.appraisal_forms.id;
 
 
 --
+-- Name: appraisal_view; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.appraisal_view (
+    id integer NOT NULL,
+    first_name character varying(255),
+    last_name character varying(255),
+    email character varying(255),
+    department character varying(255),
+    grade character varying(255),
+    gender character varying(255),
+    supervisor_id integer,
+    positions character varying(255),
+    appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    appraisal_form_id integer,
+    is_active boolean,
+    is_superuser boolean,
+    status boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: appraisal_view_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.appraisal_view_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: appraisal_view_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.appraisal_view_id_seq OWNED BY public.appraisal_view.id;
+
+
+--
 -- Name: email_verication_codes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.email_verication_codes (
-    email character varying NOT NULL
+    email character varying(255) NOT NULL
 );
 
 
@@ -107,7 +152,7 @@ CREATE TABLE public.email_verication_codes (
 
 CREATE TABLE public.revoked_tokens (
     id integer NOT NULL,
-    jti character varying
+    jti character varying(255)
 );
 
 
@@ -137,18 +182,18 @@ ALTER SEQUENCE public.revoked_tokens_id_seq OWNED BY public.revoked_tokens.id;
 
 CREATE TABLE public.staffs (
     id integer NOT NULL,
-    first_name character varying NOT NULL,
-    last_name character varying NOT NULL,
-    other_name character varying,
-    gender character varying,
-    email character varying NOT NULL,
+    first_name character varying(255) NOT NULL,
+    last_name character varying(255) NOT NULL,
+    other_name character varying(255),
+    gender character varying(255),
     supervisor_id integer,
-    department character varying,
+    department character varying(255),
+    positions character varying(255),
     grade integer,
     is_active boolean,
     is_superuser boolean,
-    created_at date NOT NULL,
-    updated_at date NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -173,12 +218,52 @@ ALTER SEQUENCE public.staffs_id_seq OWNED BY public.staffs.id;
 
 
 --
+-- Name: start_of_year; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.start_of_year (
+    id integer NOT NULL,
+    results_areas text,
+    target text,
+    resources character varying(255),
+    appraisal_form_id integer,
+    deadline_start_date character varying(255),
+    deadline_end_date character varying(255),
+    start_status boolean,
+    submit boolean,
+    start_of_year_status boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: start_of_year_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.start_of_year_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: start_of_year_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.start_of_year_id_seq OWNED BY public.start_of_year.id;
+
+
+--
 -- Name: user_type; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.user_type (
     usertype_id integer NOT NULL,
-    title character varying
+    title character varying(255)
 );
 
 
@@ -208,13 +293,13 @@ ALTER SEQUENCE public.user_type_usertype_id_seq OWNED BY public.user_type.userty
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    email character varying,
-    hashed_password character varying,
+    email character varying(255),
+    hashed_password character varying(255),
     is_active boolean,
     is_superuser boolean,
-    created_at date NOT NULL,
-    updated_at date NOT NULL,
-    reset_password_token character varying,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    reset_password_token character varying(255),
     staff_id integer
 );
 
@@ -254,6 +339,13 @@ ALTER TABLE ONLY public.appraisal_forms ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: appraisal_view id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_view ALTER COLUMN id SET DEFAULT nextval('public.appraisal_view_id_seq'::regclass);
+
+
+--
 -- Name: revoked_tokens id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -265,6 +357,13 @@ ALTER TABLE ONLY public.revoked_tokens ALTER COLUMN id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public.staffs ALTER COLUMN id SET DEFAULT nextval('public.staffs_id_seq'::regclass);
+
+
+--
+-- Name: start_of_year id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_of_year ALTER COLUMN id SET DEFAULT nextval('public.start_of_year_id_seq'::regclass);
 
 
 --
@@ -291,6 +390,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: appraisal_forms; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.appraisal_forms (id, department, grade, positions, appraisal_date, staff_id, status, created_at, updated_at) VALUES (1, 'string', '0', 'string', '2023-07-06', 1, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
+
+
+--
+-- Data for Name: appraisal_view; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.appraisal_view (id, first_name, last_name, email, department, grade, gender, supervisor_id, positions, appraisal_date, appraisal_form_id, is_active, is_superuser, status, created_at, updated_at) VALUES (1, 'string', 'string', 'user@example.com', 'string', '0', 'string', 0, 'string', '2023-07-06', 1, true, true, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
 
 
 --
@@ -309,7 +416,13 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, email, supervisor_id, department, grade, is_active, is_superuser, created_at, updated_at) VALUES (1, 'string', 'string', 'string', 'string', 'user@example.com', 0, 'string', 0, true, true, '2023-06-26', '2023-06-26');
+INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, supervisor_id, department, positions, grade, is_active, is_superuser, created_at, updated_at) VALUES (1, 'string', 'string', 'string', 'string', 0, 'string', 'string', 0, true, true, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
+
+
+--
+-- Data for Name: start_of_year; Type: TABLE DATA; Schema: public; Owner: -
+--
+
 
 
 --
@@ -322,7 +435,7 @@ INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, email,
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id) VALUES (1, 'user@example.com', '$2b$12$c/9vImryOAP2ngP0o2pGne7EOwy5Upqwr0oU25QwZlspjdov8M4Ze', true, false, '2023-06-26', '2023-06-26', NULL, NULL);
+INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id) VALUES (1, 'user@example.com', '$2b$12$Vs/AmYPP7H4bGHuK0BxlPuTr5jyQyjexSWFBX9zi0oJkG472DDdcS', true, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119', NULL, 1);
 
 
 --
@@ -336,7 +449,14 @@ SELECT pg_catalog.setval('public.administrators_admin_id_seq', 1, false);
 -- Name: appraisal_forms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, false);
+SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, true);
+
+
+--
+-- Name: appraisal_view_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.appraisal_view_id_seq', 1, false);
 
 
 --
@@ -351,6 +471,13 @@ SELECT pg_catalog.setval('public.revoked_tokens_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.staffs_id_seq', 1, true);
+
+
+--
+-- Name: start_of_year_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.start_of_year_id_seq', 1, false);
 
 
 --
@@ -392,6 +519,14 @@ ALTER TABLE ONLY public.appraisal_forms
 
 
 --
+-- Name: appraisal_view appraisal_view_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_view
+    ADD CONSTRAINT appraisal_view_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: email_verication_codes email_verication_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -416,6 +551,14 @@ ALTER TABLE ONLY public.staffs
 
 
 --
+-- Name: start_of_year start_of_year_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_of_year
+    ADD CONSTRAINT start_of_year_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_type user_type_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -432,6 +575,20 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: ix_administrators_admin_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_administrators_admin_id ON public.administrators USING btree (admin_id);
+
+
+--
+-- Name: ix_administrators_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ix_administrators_email ON public.administrators USING btree (email);
+
+
+--
 -- Name: ix_appraisal_forms_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -439,17 +596,10 @@ CREATE INDEX ix_appraisal_forms_id ON public.appraisal_forms USING btree (id);
 
 
 --
--- Name: ix_public_administrators_admin_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ix_appraisal_view_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX ix_public_administrators_admin_id ON public.administrators USING btree (admin_id);
-
-
---
--- Name: ix_public_administrators_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX ix_public_administrators_email ON public.administrators USING btree (email);
+CREATE UNIQUE INDEX ix_appraisal_view_email ON public.appraisal_view USING btree (email);
 
 
 --
@@ -460,17 +610,17 @@ CREATE INDEX ix_revoked_tokens_id ON public.revoked_tokens USING btree (id);
 
 
 --
--- Name: ix_staffs_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX ix_staffs_email ON public.staffs USING btree (email);
-
-
---
 -- Name: ix_staffs_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX ix_staffs_id ON public.staffs USING btree (id);
+
+
+--
+-- Name: ix_start_of_year_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_start_of_year_id ON public.start_of_year USING btree (id);
 
 
 --
@@ -492,6 +642,30 @@ CREATE UNIQUE INDEX ix_users_email ON public.users USING btree (email);
 --
 
 CREATE INDEX ix_users_id ON public.users USING btree (id);
+
+
+--
+-- Name: appraisal_forms appraisal_forms_staff_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_forms
+    ADD CONSTRAINT appraisal_forms_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
+
+
+--
+-- Name: appraisal_view appraisal_view_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_view
+    ADD CONSTRAINT appraisal_view_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: start_of_year start_of_year_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_of_year
+    ADD CONSTRAINT start_of_year_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
 
 
 --

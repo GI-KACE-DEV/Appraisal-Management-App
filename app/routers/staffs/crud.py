@@ -65,7 +65,7 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
 
 ## function to get query all staff base on their active status
 async def get_all_staff(db:Session):
-    data = db.query(Staff).filter(Staff.is_active == True).all()
+    data = db.query(Appraisalview).filter(Appraisalview.is_active == True).all()
     return data
 
 
@@ -74,7 +74,9 @@ async def get_all_staff(db:Session):
 
 ## function to get staff base on the staff id. 
 async def getStaffById(staff_id:int, db:Session):
-    data = db.query(Staff).filter(Staff.id == staff_id).first()
+
+    data = db.query(Appraisalview).filter(Appraisalview.staff_id == staff_id).first()
+
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Staff with the id {staff_id} is not found")

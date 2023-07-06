@@ -56,7 +56,6 @@ class Appraisalview(Base):
     appraisal_date = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     staff_id = Column(Integer, ForeignKey("staffs.id"))
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
-    hashed_password = Column(String(255),nullable=True)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean(), default=True)
     status = Column(Boolean, default=False, nullable=True)

@@ -25,10 +25,11 @@ class ShowStartOfYear(BaseModel):
 
 
 class UpdateStartOfYear(BaseModel):
+    id:Optional[int]
     appraisal_form_id:Optional[int]
-    department: Optional[str]
-    grade: Optional[str]
-    positions: Optional[str]
+    results_areas: Optional[str]
+    target: Optional[str]
+    resources: Optional[str]
     appraisal_date: Optional[str]
 
 

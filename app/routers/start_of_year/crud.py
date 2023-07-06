@@ -48,42 +48,41 @@ async def get_start_of_year_By_ID(id: int, db:Session):
 
 
 
-# async def updateAppraisalForm(updateAppraisalForm: UpdateAppraisalForm, db:Session):
-#     start_of_year_id = updateAppraisalForm.start_of_year_id
-#     is_start_of_year_id_update = db.query(AppraisalForm).filter(AppraisalForm.start_of_year_id == start_of_year_id).update({
-#         AppraisalForm.department : updateAppraisalForm.department,
-#         AppraisalForm.grade : updateAppraisalForm.grade,
-#         AppraisalForm.positions : updateAppraisalForm.positions,
-#         AppraisalForm.appraisal_date : updateAppraisalForm.appraisal_date,
-#         }, synchronize_session=False)
-#     db.flush()
-#     db.commit()
-#     if not is_start_of_year_id_update:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#             detail=f"AppraisalForm with the id (" + str(start_of_year_id) + ") is not found")
-
-#     data = db.query(AppraisalForm).filter(AppraisalForm.start_of_year_id == start_of_year_id).one()
-#     return data
-
-
-
-
-
-
-
-
-
-
-async def deleteAppraisalForm(id: int, db:Session):
-    db_data = db.query(AppraisalForm).filter(AppraisalForm.id == id).update({
-            AppraisalForm.status: 0
-            }, synchronize_session=False)
+async def updateStartOfYear(updateStartOfYear: UpdateStartOfYear, db:Session):
+    start_of_year_id = updateStartOfYear.id
+    is_start_of_year_id_update = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).update({
+        StartOfYear.results_areas : updateStartOfYear.results_areas,
+        StartOfYear.target : updateStartOfYear.target,
+        StartOfYear.resources : updateStartOfYear.resources
+        }, synchronize_session=False)
     db.flush()
     db.commit()
-    if not db_data:
+    if not is_start_of_year_id_update:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"AppraisalForm with the id {id} is not found")
+            detail=f"Start Of Year with the id (" + str(start_of_year_id) + ") is not found")
 
-    data = db.query(AppraisalForm).filter(AppraisalForm.id == id).one()
+    data = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).one()
     return data
+
+
+
+
+
+
+
+
+
+
+# async def deleteStartOfYear(id: int, db:Session):
+#     db_data = db.query(StartOfYear).filter(StartOfYear.id == id).update({
+#             StartOfYear.status: 0
+#             }, synchronize_session=False)
+#     db.flush()
+#     db.commit()
+#     if not db_data:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#             detail=f"StartOfYear with the id {id} is not found")
+
+#     data = db.query(StartOfYear).filter(StartOfYear.id == id).one()
+#     return data
 

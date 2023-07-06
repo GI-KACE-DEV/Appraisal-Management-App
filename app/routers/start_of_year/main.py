@@ -42,10 +42,10 @@ async def get_start_of_year_By_Id(id: int, db:Session = Depends(get_db)):
 
 
 
-# @start_of_year_router.put("/updatestart_of_year")
-# async def updatestart_of_year(updateStaff: schemas.Updatestart_of_year, db:Session = Depends(get_db)):
+@start_of_year_router.put("/updateStartOfYear")
+async def updateStartOfYear(updateStaff: schemas.UpdateStartOfYear, db:Session = Depends(get_db)):
     
-#     return await crud.updatestart_of_year(updateStaff, db)
+    return await crud.updateStartOfYear(updateStaff, db)
 
 
 

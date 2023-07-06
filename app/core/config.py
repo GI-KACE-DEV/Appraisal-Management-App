@@ -52,7 +52,7 @@ class Settings:
 
 
 
-    #DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
-    #SECRET_KEY = "supersecretkeyhere"
+    # DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
+    # SECRET_KEY = "supersecretkeyhere"
 
 settings = Settings()

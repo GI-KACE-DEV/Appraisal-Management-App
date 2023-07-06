@@ -1,7 +1,7 @@
 from core.hashing import Hasher
 from routers.users.account.models import User, Administrator
 
-from fastapi import status,HTTPException
+from fastapi import HTTPException
 from sqlalchemy.orm import Session 
 from . import models, schemas
 
@@ -9,28 +9,23 @@ from database import SessionLocal
 from core.utils import raise_exc
 from typing import Union
 
-async def verify_user(payload:schemas.Login, account: str, db: Session):
+async def authenticate_user(payload:schemas.Login, account: str, db: Session):
 
     model = User if account=="users" else Administrator
     user = db.query(model).filter_by(email=payload.email).first()
+    print(user)
     
 
     if not user:
-        raise HTTPException(
-
-            status_code=status.HTTP_404_UNAUTHORIZED, 
-            detail="email user not foundNotFound"
-
-            )
+        return False
+    
             
-    if Hasher.verify_password(payload.password, user.hashed_password):
-        return user
-    raise HTTPException(
+    if not Hasher.verify_password(payload.password, user.hashed_password):
+        return False 
 
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="password wrong credentials Unauthorized"
-
-        )
+    return user
+        
+  
 
 def read_by_id(id:str, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator

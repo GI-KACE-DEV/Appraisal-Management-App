@@ -12,7 +12,7 @@ from dependencies import get_db
 from core.hashing import Hasher
 from .schemas import Token
 
-from .crud import verify_user
+from .crud import authenticate_user
 from core.security import create_access_token
 from core.config import settings
 from core.utils import create_jwt
@@ -21,20 +21,23 @@ auth_router = APIRouter()
 
 
 @auth_router.post('/login', response_model=schemas.LoginResponse, name='Login')
-async def authenticate(payload:schemas.Login, account:schemas.Account, db:Session=Depends(get_db)):
-    user = await verify_user(payload, account.value, db)
+async def login_for_access_token(payload:schemas.Login, account:schemas.Account, db:Session=Depends(get_db)):
+    user = await authenticate_user(payload, account.value, db)
 
-    # if not user.is_active:
-    #     raise HTTPException(status_code, detail="account is not active")
+    if not user:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="account is not active")
 
-    # if not user.is_superuser:
-    #     raise HTTPException(status_code, detail="account is not a super user")
+    # if not user.is:
+    #     raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="account is not a super user")
 
-    data = {"id":user.email, "account":account.value}
-
+    #data = {"id":user.email, "account":account.value}
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.email}, expires_delta=access_token_expires
+    )
     return {
-        "access_token":create_jwt(data=data, exp=settings.ACCESS_TOKEN_DURATION_IN_MINUTES),
-        "refresh_token":create_jwt(data=data, exp=settings.REFRESH_TOKEN_DURATION_IN_MINUTES),
+        "access_token": access_token, 
+        "refresh_token":create_jwt(data={"sub": user.email}, exp=settings.REFRESH_TOKEN_DURATION_IN_MINUTES),
         "account":account.value,
         "user":user
     }

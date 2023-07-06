@@ -28,10 +28,10 @@ async def get_all_staff(db:Session = Depends(get_db)):
 
 
 # api route to get staff base on id. 
-@staff_router.get("/getStaffById/{staff_id}")
-async def getStaffById(staff_id: int, db:Session = Depends(get_db)):
+@staff_router.get("/getStaffById/{id}")
+async def getStaffById(id: int, db:Session = Depends(get_db)):
   
-    return await crud.getStaffById(staff_id=staff_id, db=db)
+    return await crud.getStaffById(id=id, db=db)
 
 
 # @staff_router.put("/updateStaff")

@@ -40,9 +40,9 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
     db.add(appraisalForm_object)
     db.flush()
 
-    appraisal_view_object = Appraisalview(first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
+    appraisal_view_object = Appraisalview(id=staff_object.id,first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade,
-    positions = staff.positions,hashed_password=Hasher.get_password_hash(),staff_id=staff_object.id, appraisal_form_id=appraisalForm_object.id)
+    positions = staff.positions,appraisal_form_id=appraisalForm_object.id)
 
 
     db.add(appraisal_view_object)
@@ -73,13 +73,13 @@ async def get_all_staff(db:Session):
 
 
 ## function to get staff base on the staff id. 
-async def getStaffById(staff_id:int, db:Session):
+async def getStaffById(id:int, db:Session):
 
-    data = db.query(Appraisalview).filter(Appraisalview.staff_id == staff_id).first()
+    data = db.query(Appraisalview).filter(Appraisalview.id == id).first()
 
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Staff with the id {staff_id} is not found")
+                            detail=f"Staff with the id {id} is not found")
     return data
 
 

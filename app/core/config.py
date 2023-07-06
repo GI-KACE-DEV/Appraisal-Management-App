@@ -27,11 +27,9 @@ class Settings:
 
     DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
-    #DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
-    #SECRET_KEY = "supersecretkeyhere"
 
     ## lets define var for creating the access token
-    #SECRET_KEY : str = os.getenv("SECRET_KEY")
+    SECRET_KEY : str = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     EMAIL_CODE_DURATION_IN_MINUTES= 15
@@ -52,5 +50,9 @@ class Settings:
     USE_CREDENTIALS = True
     VALIDATE_CERTS = True
 
+
+
+    #DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
+    #SECRET_KEY = "supersecretkeyhere"
 
 settings = Settings()

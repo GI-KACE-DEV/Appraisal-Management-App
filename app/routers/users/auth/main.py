@@ -30,14 +30,19 @@ async def login_for_access_token(payload:schemas.Login, account:schemas.Account,
     # if not user.is:
     #     raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="account is not a super user")
 
-    #data = {"id":user.email, "account":account.value}
+    data = {"sub":user.email, "account":account.value}
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data=data,
+        expires_delta=access_token_expires
+    )
+    refresh_token = create_access_token(
+        data=data,
+        expires_delta=access_token_expires
     )
     return {
         "access_token": access_token, 
-        "refresh_token":create_jwt(data={"sub": user.email}, exp=settings.REFRESH_TOKEN_DURATION_IN_MINUTES),
+        "refresh_token":refresh_token,
         "account":account.value,
         "user":user
     }

@@ -21,20 +21,20 @@ async def create_new_start_of_year(start_of_year:schemas.CreateStartOfYear, db:S
 
 
 
-# @start_of_year_router.get("/get_start_of_year")
-# async def get_all_start_of_year(db:Session = Depends(get_db)):
+@start_of_year_router.get("/get_start_of_year")
+async def get_all_start_of_year(db:Session = Depends(get_db)):
 
-#     return await crud.get_all_start_of_year(db)
-
-
+    return await crud.get_all_start_of_year(db)
 
 
 
 
-# @start_of_year_router.get("/getstart_of_yearById/{id}")
-# async def getstart_of_yearById(id: int, db:Session = Depends(get_db)):
+
+
+@start_of_year_router.get("/getById/{id}")
+async def get_start_of_year_By_Id(id: int, db:Session = Depends(get_db)):
     
-#     return await crud.get_start_of_yearBy_ID(id, db)
+    return await crud.get_start_of_year_By_ID(id, db)
 
 
 

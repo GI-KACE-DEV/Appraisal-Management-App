@@ -29,13 +29,19 @@ async def get_all_start_of_year(db:Session):
 
 
 
-# async def get_start_of_yearBy_ID(id: int, db:Session):
-#     data = db.query(AppraisalForm).filter(AppraisalForm.start_of_year_id == id).all()
+async def get_start_of_year_By_ID(id: int, db:Session):
+    data = db.query(StartOfYear).filter(StartOfYear.id == id).all()
     
-#     if not data:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#                             detail=f"AppraisalForm with the id {id} is not found")
-#     return data
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Start Of Year with the id {id} is not found")
+    return data
+
+
+
+
+
+
 
 
 # async def updateAppraisalForm(updateAppraisalForm: UpdateAppraisalForm, db:Session):

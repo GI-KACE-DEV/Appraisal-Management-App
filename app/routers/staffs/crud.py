@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from routers.staffs.schemas import CreateStaff
 from routers.users.account.models import User
 from routers.staffs.models import Staff 
-from routers.appraisal_form.models import AppraisalForm
+from routers.appraisal_form.models import AppraisalForm, Appraisalview
 from  dependencies import get_db
 #from services.email import sendEmailToNewStaff
 #from passlib.context import CryptContext
@@ -24,23 +24,33 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
     
 
     staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name,
-    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade)
+    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions)
     db.add(staff_object)
     db.flush()
 
     user_object = User(email=staff.email, staff_id=staff_object.id,  hashed_password=Hasher.get_password_hash(),
                      is_active=True, is_superuser=False)
     
+    db.add(user_object)
+    db.flush()
+    
     appraisalForm_object = AppraisalForm(department = staff.department,grade = staff.grade, positions = staff.positions,
     staff_id=staff_object.id)
-
-
-    db.add(user_object)
+    
     db.add(appraisalForm_object)
+    db.flush()
+
+    appraisal_view_object = Appraisalview(first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
+    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade,
+    positions = staff.positions,hashed_password=Hasher.get_password_hash(),staff_id=staff_object.id, appraisal_form_id=appraisalForm_object.id)
+
+
+    db.add(appraisal_view_object)
     db.commit()
     db.refresh(staff_object)
     db.refresh(user_object)
-    return staff_object
+    db.refresh(appraisal_view_object)
+    return appraisal_view_object
 
 
 

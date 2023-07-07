@@ -10,7 +10,7 @@ class LoginResponse(BaseModel):
     access_token: str
     refresh_token: str
     account: Optional[str]
-    #user: Union[User, Admin] 
+    user: Union[User, Admin] 
 
     class Config:
         orm_mode = True

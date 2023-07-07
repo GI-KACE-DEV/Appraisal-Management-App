@@ -63,6 +63,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 def start_application():
     app = FastAPI(docs_url="/", title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+
+    app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,    
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
     include_router(app)
     return app
 app = start_application()

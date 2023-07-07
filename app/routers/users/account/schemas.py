@@ -62,6 +62,7 @@ class User(EmailBase):
     id: int 
     email : EmailStr 
     is_active : bool
+    staff_id : int
   
 
     class Config:

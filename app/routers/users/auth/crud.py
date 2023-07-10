@@ -9,11 +9,11 @@ from database import SessionLocal
 from core.utils import raise_exc
 from typing import Union
 
-async def authenticate_user(payload:schemas.Login, account: str, db: Session):
+async def authenticate_user(payload:schemas.Login, db: Session):
 
-    model = User if account=="users" else Administrator
-    user = db.query(model).filter_by(email=payload.email).first()
-    print(user)
+    #model = User if account=="users" else Administrator
+    user = db.query(models.User).filter_by(email=payload.email).first()
+    #print(user)
     
 
     if not user:

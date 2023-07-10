@@ -8,6 +8,7 @@ import datetime, enum
 class Account(str, enum.Enum):
     users = 'users'
     administrators = 'administrators'
+    
 
 class EmailBase(BaseModel):
     #email: constr(regex='')

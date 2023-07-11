@@ -15,7 +15,9 @@ class CreateStaff(BaseModel):
     supervisor_id: Optional[int]
     department: Optional[str]
     positions: Optional[str]
+    appointment_date: Optional[str]
     grade: Optional[int]
+    user_type_id: Optional[int]
     is_active: bool
     is_superuser: bool 
 

@@ -22,8 +22,8 @@ class User(Base):
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     reset_password_token = Column(String(255), nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.id"))
-    #role_id = Column(Integer, ForeignKey('roles.id'), nullable=True)
-    staff = relationship("Staff", back_populates="user")
+    user_type_id = Column(Integer, ForeignKey("user_type.id"))
+    #staff = relationship("Staff", back_populates="user")
     #role = relationship("Role", back_populates="users")
     
     @validates('password', include_removes=True)

@@ -6,6 +6,10 @@ from routers.appraisal_form import *
 
 from routers.start_of_year.models import *
 
+from routers.mid_year_review.models import *
+
+from routers.users.user_type.models import *
+
 
 from database import Base, engine
 

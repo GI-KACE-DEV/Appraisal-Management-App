@@ -23,13 +23,13 @@ def create_new_staff_user(staff:CreateStaff, db: Session):
         str(staff.email) + ") already exists")
     
 
-    staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name,
+    staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name, appointment_date = staff.appointment_date,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions)
     db.add(staff_object)
     db.flush()
 
-    user_object = User(email=staff.email, staff_id=staff_object.id,  hashed_password=Hasher.get_password_hash(),
-                     is_active=True, is_superuser=False)
+    user_object = User(email=staff.email, staff_id=staff_object.id, user_type_id= staff.user_type_id, 
+                       hashed_password=Hasher.get_password_hash(),is_active=True, is_superuser=False)
     
     db.add(user_object)
     db.flush()

@@ -13,11 +13,6 @@ class CreateMidYearReview(BaseModel):
 
 
 
-class ShowMidYearReview(BaseModel):
-    results_areas: Optional[str]
-    target: Optional[str]
-    resources: Optional[str]
-
 
     class Config():
         orm_mode = True
@@ -25,11 +20,11 @@ class ShowMidYearReview(BaseModel):
 
 
 class UpdateMidYearReview(BaseModel):
-    appraisal_form_id:Optional[int]
-    department: Optional[str]
-    grade: Optional[str]
-    positions: Optional[str]
-    appraisal_date: Optional[str]
+    id:Optional[int]
+    progress_review: Optional[str]
+    remarks: Optional[str]
+    competency: Optional[str]
+    appraisal_form_id: Optional[int]
 
 
 

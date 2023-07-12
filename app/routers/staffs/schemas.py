@@ -38,14 +38,21 @@ class ShowStaff(BaseModel):
 
 
 class UpdateStaff(BaseModel):
-    #staff_id:Optional[int]
+    id:Optional[int]
+    email: EmailStr 
     first_name: Optional[str]
     last_name: Optional[str]
     other_name: Optional[str]
     gender: Optional[str]
-    #supervisor_id: Optional[int]
+    supervisor_id: Optional[int]
     department: Optional[str]
+    positions: Optional[str]
+    appointment_date: Optional[str]
     grade: Optional[int]
+    hashed_password: Optional[str]
+    user_type_id: Optional[int]
+    is_active: bool
+    is_superuser: bool 
 
 
     class Config():

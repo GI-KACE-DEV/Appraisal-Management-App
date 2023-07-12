@@ -15,8 +15,7 @@ staff_router = APIRouter()
 @staff_router.post("/create", response_model=schemas.ShowStaff)
 async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
 
-    staff = crud.create_new_staff_user(staff=staff, db=db)
-    return staff
+    return await crud.create_new_staff_user(staff=staff, db=db)
 
 
 
@@ -27,11 +26,59 @@ async def get_all_staff(db:Session = Depends(get_db)):
     return await crud.get_all_staff(db)
 
 
+
+
+
 # api route to get staff base on id. 
 @staff_router.get("/getStaffById/{id}")
 async def getStaffById(id: int, db:Session = Depends(get_db)):
   
     return await crud.getStaffById(id=id, db=db)
+
+
+
+
+
+
+
+# api route to get staff base on email. 
+@staff_router.get("/getStaffByEmail/{email}")
+async def get_Staff_By_email(email: str, db:Session = Depends(get_db)):
+  
+    return await crud.get_Staff_By_email(email=email, db=db)
+
+
+
+
+
+
+# api route to get staff base on token. 
+@staff_router.get("/getAdminByToken/{token}")
+async def get_Admin_By_Token(token: str, db:Session = Depends(get_db)):
+  
+    return await crud.get_Admin_By_Token(token=token, db=db)
+
+
+
+
+
+
+
+
+# api route to update staff base on id.
+@staff_router.put("/updateStaffAfterResetPassword")
+async def update_Staff_After_Reset_Password(updateStaff: schemas.UpdateStaff, db:Session = Depends(get_db)):
+    
+    return await crud.update_Staff_After_Reset_Password(updateStaff, db)
+
+
+
+
+
+
+
+
+
 
 
 # @staff_router.put("/updateStaff")

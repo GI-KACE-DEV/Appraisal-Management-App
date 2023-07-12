@@ -2,6 +2,7 @@
 ## import libraries
 import os 
 from dotenv import load_dotenv 
+import secrets
 
 from pathlib import Path
 
@@ -31,6 +32,7 @@ class Settings:
     ## lets define var for creating the access token
     SECRET_KEY : str = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"
+    JWT_SECRET_KEY : str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     EMAIL_CODE_DURATION_IN_MINUTES= 15
     EMAIL_CODE_DURATION_IN_MINUTES: int = 15

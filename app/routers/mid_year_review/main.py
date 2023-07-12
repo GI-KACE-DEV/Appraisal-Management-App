@@ -42,10 +42,10 @@ async def get_mid_year_review_By_Id(id: int, db:Session = Depends(get_db)):
 
 
 
-# @mid_year_review_router.put("/updateMidYearReview")
-# async def updateMidYearReview(updateStaff: schemas.UpdateMidYearReview, db:Session = Depends(get_db)):
+# @mid_year_review_router.put("/update")
+# async def updateMidYearReview(updateAppraisalForm: schemas.UpdateMidYearReview, db:Session = Depends(get_db)):
     
-#     return await crud.UpdateMidYearReview(updateStaff, db)
+#     return await crud.update_Appraisal_Form(updateAppraisalForm, db)
 
 
 

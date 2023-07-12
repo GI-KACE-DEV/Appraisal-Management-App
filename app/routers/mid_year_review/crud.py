@@ -48,7 +48,7 @@ async def get_mid_year_review_By_ID(id: int, db:Session):
 
 
 
-# async def updateAppraisalForm(updateAppraisalForm: UpdateAppraisalForm, db:Session):
+# async def update_Appraisal_Form(updateAppraisalForm: UpdateAppraisalForm, db:Session):
 #     mid_year_review_id = updateAppraisalForm.mid_year_review_id
 #     is_mid_year_review_id_update = db.query(AppraisalForm).filter(AppraisalForm.mid_year_review_id == mid_year_review_id).update({
 #         AppraisalForm.department : updateAppraisalForm.department,
@@ -63,7 +63,7 @@ async def get_mid_year_review_By_ID(id: int, db:Session):
 #             detail=f"AppraisalForm with the id (" + str(mid_year_review_id) + ") is not found")
 
 #     data = db.query(AppraisalForm).filter(AppraisalForm.mid_year_review_id == mid_year_review_id).one()
-#     return data
+    return data
 
 
 

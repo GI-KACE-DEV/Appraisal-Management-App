@@ -6,7 +6,6 @@ from pydantic import BaseModel, constr, EmailStr
 import datetime, enum
 
 class CreateUserType(BaseModel):
-    id: int
     title: str
 
 class ShowUserType(BaseModel):

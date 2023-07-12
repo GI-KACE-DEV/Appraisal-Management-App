@@ -5,7 +5,7 @@ from dependencies import get_db
 from . import models, schemas
 
 def create_new_user(usertype:schemas.CreateUserType, db:Session = Depends(get_db)):
-    usertype = models.User(title=usertype.title
+    usertype = models.UserType(title=usertype.title
                 )
     db.add(usertype)
     db.commit()

@@ -10,6 +10,12 @@ from routers.mid_year_review.models import *
 
 from routers.users.user_type.models import *
 
+from routers.end_of_year.models import *
+
+from routers.performance_details.models import *
+
+from routers.overall_performance.models import *
+
 
 from database import Base, engine
 

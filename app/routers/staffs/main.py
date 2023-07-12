@@ -20,7 +20,7 @@ async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(ge
 
 
 ## api route for getting returning all staff.
-@staff_router.get("/getAllStaff")
+@staff_router.get("/all")
 async def get_all_staff(db:Session = Depends(get_db)):
 
     return await crud.get_all_staff(db)
@@ -30,8 +30,8 @@ async def get_all_staff(db:Session = Depends(get_db)):
 
 
 # api route to get staff base on id. 
-@staff_router.get("/getStaffById/{id}")
-async def getStaffById(id: int, db:Session = Depends(get_db)):
+@staff_router.get("/id/{id}")
+async def get_Staff_By_Id(id: int, db:Session = Depends(get_db)):
   
     return await crud.getStaffById(id=id, db=db)
 
@@ -54,7 +54,7 @@ async def get_Staff_By_email(email: str, db:Session = Depends(get_db)):
 
 # api route to get staff base on token. 
 @staff_router.get("/getAdminByToken/{token}")
-async def get_Admin_By_Token(token: str, db:Session = Depends(get_db)):
+async def get_staff_By_Reset_Password_Token(token: str, db:Session = Depends(get_db)):
   
     return await crud.get_Admin_By_Token(token=token, db=db)
 

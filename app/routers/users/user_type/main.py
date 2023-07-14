@@ -15,3 +15,14 @@ usertype_router = APIRouter()
 def create_usertype(usertype: schemas.CreateUserType, db: Session = Depends(get_db)):
     usertype = crud.create_new_user(usertype=usertype, db=db)
     return usertype
+
+
+
+
+
+
+
+@usertype_router.get("/all")
+async def get_all_user_type(db:Session = Depends(get_db)):
+
+    return await crud.get_all_user_type(db)

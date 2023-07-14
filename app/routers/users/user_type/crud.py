@@ -11,3 +11,13 @@ def create_new_user(usertype:schemas.CreateUserType, db:Session = Depends(get_db
     db.commit()
     db.refresh(usertype)
     return usertype
+
+
+
+
+
+
+
+async def get_all_user_type(db:Session):
+    data = db.query(models.UserType).all()
+    return data

@@ -106,6 +106,7 @@ CREATE TABLE public.appraisal_view (
     grade character varying(255),
     gender character varying(255),
     supervisor_id integer,
+    user_type_id integer,
     positions character varying(255),
     appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
     appraisal_form_id integer,
@@ -578,14 +579,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: appraisal_forms; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.appraisal_forms (id, department, grade, positions, appraisal_date, staff_id, status, created_at, updated_at) VALUES (1, 'string', '0', 'string', '2023-07-20', 2, false, '2023-07-20 10:38:26.101041', '2023-07-20 10:38:26.101041');
+INSERT INTO public.appraisal_forms (id, department, grade, positions, appraisal_date, staff_id, status, created_at, updated_at) VALUES (1, 'string', '0', 'string', '2023-07-20', 2, false, '2023-07-20 14:03:17.016404', '2023-07-20 14:03:17.016404');
 
 
 --
 -- Data for Name: appraisal_view; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.appraisal_view (id, first_name, last_name, email, department, grade, gender, supervisor_id, positions, appraisal_date, appraisal_form_id, is_active, is_superuser, reset_password_token, status, created_at, updated_at) VALUES (2, 'Test', 'Example', 'user@example.com', 'string', '0', 'string', 0, 'string', '2023-07-20', 1, true, true, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODk4NTEzMDZ9.Wn7ZfrFysPmSkZ7nV8on_ZXOJG4UX0Vcb1BTiyCbno0', false, '2023-07-20 10:38:26.101041', '2023-07-20 10:38:26.101041');
+INSERT INTO public.appraisal_view (id, first_name, last_name, email, department, grade, gender, supervisor_id, user_type_id, positions, appraisal_date, appraisal_form_id, is_active, is_superuser, reset_password_token, status, created_at, updated_at) VALUES (2, 'User', 'Test', 'user@example.com', 'string', '0', 'string', 0, NULL, 'string', '2023-07-20', 1, true, true, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODk4NjM1OTd9.xepdFlzYyr9rMbaWhG1prsTleHom3BpzkTre8SshTbg', false, '2023-07-20 14:03:17.016404', '2023-07-20 14:03:17.016404');
 
 
 --
@@ -628,7 +629,7 @@ INSERT INTO public.appraisal_view (id, first_name, last_name, email, department,
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, supervisor_id, department, positions, appointment_date, grade, is_active, is_superuser, created_at, updated_at) VALUES (2, 'Test', 'Example', 'string', 'string', 0, 'string', 'string', 'string', 0, true, true, '2023-07-20 10:38:26.101041', '2023-07-20 10:38:26.101041');
+INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, supervisor_id, department, positions, appointment_date, grade, is_active, is_superuser, created_at, updated_at) VALUES (2, 'User', 'Test', 'string', 'string', 0, 'string', 'string', 'string', 0, true, true, '2023-07-20 14:03:17.016404', '2023-07-20 14:03:17.016404');
 
 
 --
@@ -643,14 +644,14 @@ INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, superv
 
 INSERT INTO public.user_type (id, title) VALUES (1, 'admin');
 INSERT INTO public.user_type (id, title) VALUES (2, 'supervisor');
-INSERT INTO public.user_type (id, title) VALUES (3, 'normal');
+INSERT INTO public.user_type (id, title) VALUES (3, 'staff');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id, user_type_id) VALUES (2, 'user@example.com', '$2b$12$ybt106DnRlj5A9U1hhTM6OrkNyckpbdNAWxfspzHjgxRs/HHE5grS', true, false, '2023-07-20 10:38:26.101041', '2023-07-20 10:38:26.101041', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODk4NTEzMDZ9.Wn7ZfrFysPmSkZ7nV8on_ZXOJG4UX0Vcb1BTiyCbno0', 2, 2);
+INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id, user_type_id) VALUES (2, 'user@example.com', '$2b$12$83h1RG7//.CMq3l8nopxtuLc2YvG4sUIBs/dhqnjqd81tv76WCW7C', true, false, '2023-07-20 14:03:17.016404', '2023-07-20 14:03:17.016404', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODk4NjM1OTd9.xepdFlzYyr9rMbaWhG1prsTleHom3BpzkTre8SshTbg', 2, 1);
 
 
 --
@@ -961,6 +962,14 @@ ALTER TABLE ONLY public.appraisal_forms
 
 ALTER TABLE ONLY public.appraisal_view
     ADD CONSTRAINT appraisal_view_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: appraisal_view appraisal_view_user_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_view
+    ADD CONSTRAINT appraisal_view_user_type_id_fkey FOREIGN KEY (user_type_id) REFERENCES public.user_type(id);
 
 
 --

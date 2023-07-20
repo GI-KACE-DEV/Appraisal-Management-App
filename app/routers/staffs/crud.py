@@ -5,6 +5,7 @@ from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from routers.staffs.schemas import CreateStaff, UpdateStaff
 from routers.users.account.models import User
+from routers.users.user_type.models import UserType
 from routers.staffs.models import Staff 
 from routers.appraisal_form.models import AppraisalForm, Appraisalview
 from  dependencies import get_db
@@ -177,7 +178,14 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
 
 
 
-
+## function to get query all supervisors where usertype is supervisor
+async def get_all_supervisors(db:Session):
+    data = db.query(Appraisalview).filter(
+        Appraisalview.user_type_id == UserType.id,
+        UserType.title == "supervisor"
+        ).all()
+    
+    return data
 
 
 

@@ -51,6 +51,7 @@ class Appraisalview(Base):
     grade = Column(String(255), nullable=True)
     gender = Column(String(255), nullable=True)
     supervisor_id = Column(Integer, nullable=True)
+    user_type_id = Column(Integer, ForeignKey("user_type.id"))
     positions = Column(String(255), nullable=True)
     appraisal_date = Column(Date, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))

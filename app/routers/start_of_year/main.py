@@ -31,7 +31,7 @@ async def get_all_start_of_year(db:Session = Depends(get_db)):
 
 
 
-@start_of_year_router.get("/getById/{id}")
+@start_of_year_router.get("/id/{id}")
 async def get_start_of_year_By_Id(id: int, db:Session = Depends(get_db)):
     
     return await crud.get_start_of_year_By_ID(id, db)

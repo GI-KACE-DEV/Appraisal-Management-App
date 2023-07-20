@@ -31,7 +31,7 @@ async def get_all_mid_year_review(db:Session = Depends(get_db)):
 
 
 
-@mid_year_review_router.get("/getById/{id}")
+@mid_year_review_router.get("/id/{id}")
 async def get_mid_year_review_By_Id(id: int, db:Session = Depends(get_db)):
     
     return await crud.get_mid_year_review_By_ID(id, db)

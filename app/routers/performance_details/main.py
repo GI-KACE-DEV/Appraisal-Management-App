@@ -31,7 +31,7 @@ async def get_all_performance_details(db:Session = Depends(get_db)):
 
 
 
-@performance_details_router.get("/getById/{id}")
+@performance_details_router.get("/id/{id}")
 async def get_performance_details_By_Id(id: int, db:Session = Depends(get_db)):
     
     return await crud.get_performance_details_By_ID(id, db)

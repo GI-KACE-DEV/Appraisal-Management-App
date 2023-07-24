@@ -3,6 +3,7 @@ from fastapi import status
 from sqlalchemy.orm import Session
 from routers.start_of_year.schemas import CreateStartOfYear,UpdateStartOfYear
 from routers.start_of_year.models import StartOfYear
+from routers.appraisal_form.models import Appraisalview
 
 
 
@@ -33,12 +34,23 @@ async def get_all_start_of_year(db:Session):
 
 
 
-async def get_start_of_year_By_ID(id: int, db:Session):
-    data = db.query(StartOfYear).filter(StartOfYear.id == id).all()
+
+
+
+
+
+
+
+
+async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
+    data = db.query(StartOfYear).filter(
+        StartOfYear.appraisal_form_id == Appraisalview.appraisal_form_id,
+        StartOfYear.appraisal_form_id == appraisal_form_id
+        ).all()
     
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Start Of Year with the id {id} is not found")
+                            detail=f"Start Of Year form with the id {appraisal_form_id} is not found")
     return data
 
 
@@ -53,16 +65,18 @@ async def updateStartOfYear(updateStartOfYear: UpdateStartOfYear, db:Session):
     is_start_of_year_id_update = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).update({
         StartOfYear.results_areas : updateStartOfYear.results_areas,
         StartOfYear.target : updateStartOfYear.target,
-        StartOfYear.resources : updateStartOfYear.resources
+        StartOfYear.resources : updateStartOfYear.resources,
+        StartOfYear.approval_status : updateStartOfYear.approval_status
         }, synchronize_session=False)
     db.flush()
     db.commit()
     if not is_start_of_year_id_update:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Start Of Year with the id (" + str(start_of_year_id) + ") is not found")
+            detail="Start Of Year with the id (" + str(start_of_year_id) + ") is not found")
 
     data = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).one()
     return data
+
 
 
 

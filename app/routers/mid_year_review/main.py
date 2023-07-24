@@ -31,10 +31,10 @@ async def get_all_mid_year_review(db:Session = Depends(get_db)):
 
 
 
-@mid_year_review_router.get("/id/{id}")
-async def get_mid_year_review_By_Id(id: int, db:Session = Depends(get_db)):
+@mid_year_review_router.get("/id/{appraisal_form_id}")
+async def staff_mid_year_review_form(appraisal_form_id: int, db:Session = Depends(get_db)):
     
-    return await crud.get_mid_year_review_By_ID(id, db)
+    return await crud.staff_mid_year_review_form(appraisal_form_id, db)
 
 
 
@@ -42,10 +42,10 @@ async def get_mid_year_review_By_Id(id: int, db:Session = Depends(get_db)):
 
 
 
-# @mid_year_review_router.put("/update")
-# async def updateMidYearReview(updateAppraisalForm: schemas.UpdateMidYearReview, db:Session = Depends(get_db)):
+@mid_year_review_router.put("/update")
+async def update_mid_year_review(updateAppraisalForm: schemas.UpdateMidYearReview, db:Session = Depends(get_db)):
     
-#     return await crud.update_Appraisal_Form(updateAppraisalForm, db)
+    return await crud.update_mid_year_review(updateAppraisalForm, db)
 
 
 

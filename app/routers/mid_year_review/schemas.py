@@ -25,6 +25,7 @@ class UpdateMidYearReview(BaseModel):
     remarks: Optional[str]
     competency: Optional[str]
     appraisal_form_id: Optional[int]
+    approval_status: Optional[bool]
 
 
 

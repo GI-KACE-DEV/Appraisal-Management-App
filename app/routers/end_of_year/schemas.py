@@ -32,6 +32,7 @@ class UpdateEndofYearReview(BaseModel):
     average_per_rating_id: Optional[str]
     appraisal_form_id: Optional[int]
     performance_details_id: Optional[int]
+    approval_status: Optional[bool]
 
 
 

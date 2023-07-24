@@ -31,6 +31,7 @@ class UpdateStartOfYear(BaseModel):
     target: Optional[str]
     resources: Optional[str]
     appraisal_date: Optional[str]
+    approval_status: Optional[bool]
 
 
 

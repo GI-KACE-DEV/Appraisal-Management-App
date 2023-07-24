@@ -31,10 +31,10 @@ async def get_all_end_of_year_review(db:Session = Depends(get_db)):
 
 
 
-@end_of_year_review_router.get("/id/{id}")
-async def get_end_of_year_review_By_Id(id: int, db:Session = Depends(get_db)):
+@end_of_year_review_router.get("/id/{appraisal_form_id}")
+async def get_staff_end_of_year_review_form(appraisal_form_id: int, db:Session = Depends(get_db)):
     
-    return await crud.get_end_of_year_review_By_ID(id, db)
+    return await crud.staff_end_of_year_review_form(appraisal_form_id, db)
 
 
 

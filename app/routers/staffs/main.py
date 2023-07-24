@@ -86,6 +86,23 @@ async def get_all_supervisors(db:Session = Depends(get_db)):
 
 
 
+
+
+
+## function to get query all staffs under each supervisor
+@staff_router.get("/staff_id/{staff_id}")
+async def staffs_under_supervisor(staff_id: int, db:Session = Depends(get_db)):
+  
+    return await crud.staff_under_supervisor(staff_id=staff_id, db=db)
+
+
+
+
+
+
+
+
+
 # @staff_router.put("/updateStaff")
 # async def updateStaff(updateStaff: schemas.UpdateStaff, db:Session = Depends(get_db)):
     

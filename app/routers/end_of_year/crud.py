@@ -3,6 +3,7 @@ from fastapi import status
 from sqlalchemy.orm import Session
 from routers.end_of_year.schemas import CreateEndofYearReview,UpdateEndofYearReview
 from routers.end_of_year.models import EndofYearReview
+from routers.appraisal_form.models import Appraisalview
 
 
 
@@ -33,13 +34,21 @@ async def get_all_end_of_year_review(db:Session):
 
 
 
-async def get_end_of_year_review_By_ID(id: int, db:Session):
-    data = db.query(EndofYearReview).filter(EndofYearReview.id == id).all()
+
+
+async def staff_end_of_year_review_form(appraisal_form_id: int, db:Session):
+    data = db.query(EndofYearReview).filter(
+        EndofYearReview.appraisal_form_id == Appraisalview.appraisal_form_id,
+        EndofYearReview.appraisal_form_id == appraisal_form_id
+        ).all()
     
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Start Of Year with the id {id} is not found")
+                            detail=f"End of Year Review form with the id {appraisal_form_id} is not found")
     return data
+
+
+
 
 
 
@@ -57,7 +66,8 @@ async def update_End_of_Year_Review(updateEndofYearReview: UpdateEndofYearReview
         EndofYearReview.head_of_divisions_comments : updateEndofYearReview.head_of_divisions_comments,
         EndofYearReview.average_per_rating : updateEndofYearReview.average_per_rating,
         EndofYearReview.average_total : updateEndofYearReview.average_total,
-        EndofYearReview.average_per_rating_id : updateEndofYearReview.average_per_rating_id
+        EndofYearReview.average_per_rating_id : updateEndofYearReview.average_per_rating_id,
+        EndofYearReview.approval_status : updateEndofYearReview.approval_status
         }, synchronize_session=False)
     db.flush()
     db.commit()

@@ -19,7 +19,6 @@ class CreateStaff(BaseModel):
     grade: Optional[int]
     user_type_id: Optional[int]
     is_active: bool
-    is_superuser: bool 
 
 
 class ShowStaff(BaseModel):

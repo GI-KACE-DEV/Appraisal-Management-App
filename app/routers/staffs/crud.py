@@ -29,7 +29,8 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     db.add(staff_object)
     db.flush()
 
-    user_object = User(email=staff.email, staff_id=staff_object.id, user_type_id= staff.user_type_id,reset_password_token=Hasher.generate_reset_password_token(), 
+    user_object = User(email=staff.email, staff_id=staff_object.id, user_type_id= staff.user_type_id,
+                       reset_password_token=Hasher.generate_reset_password_token(), 
                        hashed_password=Hasher.get_password_hash(),is_active=True, is_superuser=False)
     
     db.add(user_object)
@@ -43,7 +44,7 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
 
     appraisal_view_object = Appraisalview(id=staff_object.id,first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions,
-    appraisal_form_id=appraisalForm_object.id, reset_password_token=Hasher.generate_reset_password_token())
+    appraisal_form_id=appraisalForm_object.id,user_type_id= staff.user_type_id, reset_password_token=Hasher.generate_reset_password_token())
 
 
     db.add(appraisal_view_object)
@@ -180,10 +181,7 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
 
 ## function to get query all supervisors where usertype is supervisor
 async def get_all_supervisors(db:Session):
-    data = db.query(Appraisalview).filter(
-        Appraisalview.user_type_id == UserType.id,
-        UserType.title == "supervisor"
-        ).all()
+    data = db.query(Appraisalview).filter(Appraisalview.user_type_id == 2).all()
     
     return data
 

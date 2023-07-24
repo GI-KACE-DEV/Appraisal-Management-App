@@ -22,6 +22,6 @@ class EndofYearReview(Base):
     average_per_rating_id = Column(TEXT, nullable=True)
     end_status = Column(Boolean, default=True, nullable=True)
     submit = Column(Boolean, default=False, nullable=True)
-    end_year_review_status = Column(Boolean, default=False, nullable=True)
+    approval_status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

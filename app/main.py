@@ -7,17 +7,23 @@ from sqlalchemy.orm import close_all_sessions
 from fastapi.staticfiles import StaticFiles
 #from services.broadcaster import broadcast
 from database import SessionLocal, engine
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request,  Depends
 
+from dependencies import get_db
+from sqlalchemy.orm import Session
 #from scheduler import scheduler
 from core.config import *
 from urls import * 
 ## 
+from dependencies import *
+from routers.users.user_type.crud import create_default_user_type
 
 ## adding our api routes 
 def include_router(app):
     app.include_router(api_router)
 
+def add_default_usertypes():
+    create_default_user_type()
 # app = FastAPI(
 #     docs_url=None, 
 #     redoc_url=None,
@@ -71,6 +77,12 @@ def start_application():
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
     include_router(app)
     return app
-app = start_application()
+app = start_application() 
+
+
+# @app.on_event("startup")
+# async def app_startup():
+#     await create_default_user_type()

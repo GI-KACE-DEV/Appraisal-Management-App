@@ -6,11 +6,10 @@ from pydantic import BaseModel, constr, EmailStr
 import datetime, enum
 
 class CreateUserType(BaseModel):
-    id: int
     title: str
 
 class ShowUserType(BaseModel):
-    title: str
+    title: Optional[str]
 
     class Config:
-        orm_model = True
+        orm_mode = True

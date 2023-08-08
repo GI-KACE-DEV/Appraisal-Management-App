@@ -5,20 +5,20 @@ import datetime
 from database import Base
 
 
-class MidYearReview(Base):
-    '''Mid of Year Review Model'''
+class PerformanceDetails(Base):
+    '''Performance Details Model'''
     
-    __tablename__ = "mid_year_review"
+    __tablename__ = "performance_details"
 
     id = Column(Integer,primary_key=True,index=True)
-    progress_review = Column(TEXT, nullable=True)
-    remarks = Column(TEXT, nullable=True)
-    competency = Column(TEXT, nullable=True)
+    comments = Column(TEXT, nullable=True)
+    approved_date = Column(Date, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    weight = Column(TEXT, nullable=True)
+    final_score = Column(TEXT, nullable=True)
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
-    deadline_start_date = Column(String(255), nullable=True)
-    deadline_end_date = Column(String(255), nullable=True)
-    mid_status = Column(Boolean, default=True, nullable=True)
+    overall_performance_id = Column(Integer, ForeignKey("overall_performance.id"))
+    performance_assessment = Column(TEXT, nullable=True)
+    status = Column(Boolean, default=True, nullable=True)
     submit = Column(Boolean, default=False, nullable=True)
-    approval_status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

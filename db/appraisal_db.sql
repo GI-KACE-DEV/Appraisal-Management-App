@@ -106,11 +106,13 @@ CREATE TABLE public.appraisal_view (
     grade character varying(255),
     gender character varying(255),
     supervisor_id integer,
+    user_type_id integer,
     positions character varying(255),
     appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
     appraisal_form_id integer,
     is_active boolean,
     is_superuser boolean,
+    reset_password_token character varying(255),
     status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -144,6 +146,163 @@ ALTER SEQUENCE public.appraisal_view_id_seq OWNED BY public.appraisal_view.id;
 CREATE TABLE public.email_verication_codes (
     email character varying(255) NOT NULL
 );
+
+
+--
+-- Name: end_of_year_review; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.end_of_year_review (
+    id integer NOT NULL,
+    appraisers_comment_on_workplan text,
+    training_development_comments text,
+    appraisees_comments_and_plan text,
+    head_of_divisions_comments text,
+    appraisal_form_id integer,
+    performance_details_id integer,
+    average_per_rating text,
+    average_total text,
+    average_per_rating_id text,
+    end_status boolean,
+    submit boolean,
+    approval_status boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: end_of_year_review_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.end_of_year_review_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: end_of_year_review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.end_of_year_review_id_seq OWNED BY public.end_of_year_review.id;
+
+
+--
+-- Name: mid_year_review; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mid_year_review (
+    id integer NOT NULL,
+    progress_review text,
+    remarks text,
+    competency text,
+    appraisal_form_id integer,
+    deadline_start_date character varying(255),
+    deadline_end_date character varying(255),
+    mid_status boolean,
+    submit boolean,
+    approval_status boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: mid_year_review_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.mid_year_review_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: mid_year_review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.mid_year_review_id_seq OWNED BY public.mid_year_review.id;
+
+
+--
+-- Name: overall_performance; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.overall_performance (
+    id integer NOT NULL,
+    description text,
+    performance text,
+    status boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: overall_performance_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.overall_performance_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: overall_performance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.overall_performance_id_seq OWNED BY public.overall_performance.id;
+
+
+--
+-- Name: performance_details; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.performance_details (
+    id integer NOT NULL,
+    comments text,
+    approved_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    weight text,
+    final_score text,
+    appraisal_form_id integer,
+    overall_performance_id integer,
+    performance_assessment text,
+    status boolean,
+    submit boolean,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: performance_details_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.performance_details_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: performance_details_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.performance_details_id_seq OWNED BY public.performance_details.id;
 
 
 --
@@ -189,6 +348,7 @@ CREATE TABLE public.staffs (
     supervisor_id integer,
     department character varying(255),
     positions character varying(255),
+    appointment_date character varying(255),
     grade integer,
     is_active boolean,
     is_superuser boolean,
@@ -231,7 +391,7 @@ CREATE TABLE public.start_of_year (
     deadline_end_date character varying(255),
     start_status boolean,
     submit boolean,
-    start_of_year_status boolean,
+    approval_status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -262,16 +422,16 @@ ALTER SEQUENCE public.start_of_year_id_seq OWNED BY public.start_of_year.id;
 --
 
 CREATE TABLE public.user_type (
-    usertype_id integer NOT NULL,
+    id integer NOT NULL,
     title character varying(255)
 );
 
 
 --
--- Name: user_type_usertype_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: user_type_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.user_type_usertype_id_seq
+CREATE SEQUENCE public.user_type_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -281,10 +441,10 @@ CREATE SEQUENCE public.user_type_usertype_id_seq
 
 
 --
--- Name: user_type_usertype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: user_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.user_type_usertype_id_seq OWNED BY public.user_type.usertype_id;
+ALTER SEQUENCE public.user_type_id_seq OWNED BY public.user_type.id;
 
 
 --
@@ -300,7 +460,8 @@ CREATE TABLE public.users (
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     reset_password_token character varying(255),
-    staff_id integer
+    staff_id integer,
+    user_type_id integer
 );
 
 
@@ -346,6 +507,34 @@ ALTER TABLE ONLY public.appraisal_view ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: end_of_year_review id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.end_of_year_review ALTER COLUMN id SET DEFAULT nextval('public.end_of_year_review_id_seq'::regclass);
+
+
+--
+-- Name: mid_year_review id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mid_year_review ALTER COLUMN id SET DEFAULT nextval('public.mid_year_review_id_seq'::regclass);
+
+
+--
+-- Name: overall_performance id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.overall_performance ALTER COLUMN id SET DEFAULT nextval('public.overall_performance_id_seq'::regclass);
+
+
+--
+-- Name: performance_details id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.performance_details ALTER COLUMN id SET DEFAULT nextval('public.performance_details_id_seq'::regclass);
+
+
+--
 -- Name: revoked_tokens id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -367,10 +556,10 @@ ALTER TABLE ONLY public.start_of_year ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: user_type usertype_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: user_type id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.user_type ALTER COLUMN usertype_id SET DEFAULT nextval('public.user_type_usertype_id_seq'::regclass);
+ALTER TABLE ONLY public.user_type ALTER COLUMN id SET DEFAULT nextval('public.user_type_id_seq'::regclass);
 
 
 --
@@ -390,18 +579,40 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: appraisal_forms; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.appraisal_forms (id, department, grade, positions, appraisal_date, staff_id, status, created_at, updated_at) VALUES (1, 'string', '0', 'string', '2023-07-06', 1, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
 
 
 --
 -- Data for Name: appraisal_view; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.appraisal_view (id, first_name, last_name, email, department, grade, gender, supervisor_id, positions, appraisal_date, appraisal_form_id, is_active, is_superuser, status, created_at, updated_at) VALUES (1, 'string', 'string', 'user@example.com', 'string', '0', 'string', 0, 'string', '2023-07-06', 1, true, true, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
 
 
 --
 -- Data for Name: email_verication_codes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: end_of_year_review; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: mid_year_review; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: overall_performance; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: performance_details; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -416,7 +627,6 @@ INSERT INTO public.appraisal_view (id, first_name, last_name, email, department,
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, supervisor_id, department, positions, grade, is_active, is_superuser, created_at, updated_at) VALUES (1, 'string', 'string', 'string', 'string', 0, 'string', 'string', 0, true, true, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119');
 
 
 --
@@ -429,13 +639,15 @@ INSERT INTO public.staffs (id, first_name, last_name, other_name, gender, superv
 -- Data for Name: user_type; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.user_type (id, title) VALUES (1, 'admin');
+INSERT INTO public.user_type (id, title) VALUES (2, 'supervisor');
+INSERT INTO public.user_type (id, title) VALUES (3, 'staff');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users (id, email, hashed_password, is_active, is_superuser, created_at, updated_at, reset_password_token, staff_id) VALUES (1, 'user@example.com', '$2b$12$Vs/AmYPP7H4bGHuK0BxlPuTr5jyQyjexSWFBX9zi0oJkG472DDdcS', true, false, '2023-07-06 17:59:53.780119', '2023-07-06 17:59:53.780119', NULL, 1);
 
 
 --
@@ -449,7 +661,7 @@ SELECT pg_catalog.setval('public.administrators_admin_id_seq', 1, false);
 -- Name: appraisal_forms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, true);
+SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, false);
 
 
 --
@@ -457,6 +669,34 @@ SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, true);
 --
 
 SELECT pg_catalog.setval('public.appraisal_view_id_seq', 1, false);
+
+
+--
+-- Name: end_of_year_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.end_of_year_review_id_seq', 1, false);
+
+
+--
+-- Name: mid_year_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.mid_year_review_id_seq', 1, false);
+
+
+--
+-- Name: overall_performance_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.overall_performance_id_seq', 1, false);
+
+
+--
+-- Name: performance_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.performance_details_id_seq', 1, false);
 
 
 --
@@ -470,7 +710,7 @@ SELECT pg_catalog.setval('public.revoked_tokens_id_seq', 1, false);
 -- Name: staffs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.staffs_id_seq', 1, true);
+SELECT pg_catalog.setval('public.staffs_id_seq', 1, false);
 
 
 --
@@ -481,17 +721,17 @@ SELECT pg_catalog.setval('public.start_of_year_id_seq', 1, false);
 
 
 --
--- Name: user_type_usertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: user_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.user_type_usertype_id_seq', 1, false);
+SELECT pg_catalog.setval('public.user_type_id_seq', 3, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
@@ -535,6 +775,38 @@ ALTER TABLE ONLY public.email_verication_codes
 
 
 --
+-- Name: end_of_year_review end_of_year_review_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.end_of_year_review
+    ADD CONSTRAINT end_of_year_review_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mid_year_review mid_year_review_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mid_year_review
+    ADD CONSTRAINT mid_year_review_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: overall_performance overall_performance_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.overall_performance
+    ADD CONSTRAINT overall_performance_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: performance_details performance_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.performance_details
+    ADD CONSTRAINT performance_details_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: revoked_tokens revoked_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -563,7 +835,7 @@ ALTER TABLE ONLY public.start_of_year
 --
 
 ALTER TABLE ONLY public.user_type
-    ADD CONSTRAINT user_type_pkey PRIMARY KEY (usertype_id);
+    ADD CONSTRAINT user_type_pkey PRIMARY KEY (id);
 
 
 --
@@ -603,6 +875,34 @@ CREATE UNIQUE INDEX ix_appraisal_view_email ON public.appraisal_view USING btree
 
 
 --
+-- Name: ix_end_of_year_review_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_end_of_year_review_id ON public.end_of_year_review USING btree (id);
+
+
+--
+-- Name: ix_mid_year_review_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_mid_year_review_id ON public.mid_year_review USING btree (id);
+
+
+--
+-- Name: ix_overall_performance_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_overall_performance_id ON public.overall_performance USING btree (id);
+
+
+--
+-- Name: ix_performance_details_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_performance_details_id ON public.performance_details USING btree (id);
+
+
+--
 -- Name: ix_revoked_tokens_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -624,10 +924,10 @@ CREATE INDEX ix_start_of_year_id ON public.start_of_year USING btree (id);
 
 
 --
--- Name: ix_user_type_usertype_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ix_user_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX ix_user_type_usertype_id ON public.user_type USING btree (usertype_id);
+CREATE INDEX ix_user_type_id ON public.user_type USING btree (id);
 
 
 --
@@ -661,6 +961,54 @@ ALTER TABLE ONLY public.appraisal_view
 
 
 --
+-- Name: appraisal_view appraisal_view_user_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_view
+    ADD CONSTRAINT appraisal_view_user_type_id_fkey FOREIGN KEY (user_type_id) REFERENCES public.user_type(id);
+
+
+--
+-- Name: end_of_year_review end_of_year_review_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.end_of_year_review
+    ADD CONSTRAINT end_of_year_review_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: end_of_year_review end_of_year_review_performance_details_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.end_of_year_review
+    ADD CONSTRAINT end_of_year_review_performance_details_id_fkey FOREIGN KEY (performance_details_id) REFERENCES public.performance_details(id);
+
+
+--
+-- Name: mid_year_review mid_year_review_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mid_year_review
+    ADD CONSTRAINT mid_year_review_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: performance_details performance_details_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.performance_details
+    ADD CONSTRAINT performance_details_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: performance_details performance_details_overall_performance_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.performance_details
+    ADD CONSTRAINT performance_details_overall_performance_id_fkey FOREIGN KEY (overall_performance_id) REFERENCES public.overall_performance(id);
+
+
+--
 -- Name: start_of_year start_of_year_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -674,6 +1022,14 @@ ALTER TABLE ONLY public.start_of_year
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
+
+
+--
+-- Name: users users_user_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_user_type_id_fkey FOREIGN KEY (user_type_id) REFERENCES public.user_type(id);
 
 
 --

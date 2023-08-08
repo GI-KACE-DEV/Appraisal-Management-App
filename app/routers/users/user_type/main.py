@@ -15,6 +15,7 @@ usertype_router = APIRouter()
 
 
 @usertype_router.post("/")
+<<<<<<< HEAD
 def create_usertype(payload: CreateUserType, db: Session = Depends(get_db)):
     usertype = crud.create_new_user(payload=payload, db=db)
     return usertype 
@@ -29,3 +30,19 @@ def create_default_user_types():
 def read_usertypes(db: Session = Depends(get_db)):
     usertypes = list_usertypes(db=db)
     return usertypes
+=======
+def create_usertype(usertype: schemas.CreateUserType, db: Session = Depends(get_db)):
+    usertype = crud.create_new_user(usertype=usertype, db=db)
+    return usertype
+
+
+
+
+
+
+
+@usertype_router.get("/all")
+async def get_all_user_type(db:Session = Depends(get_db)):
+
+    return await crud.get_all_user_type(db)
+>>>>>>> a362d94599a120834c6ffb26344a2d795e75146b

@@ -15,23 +15,92 @@ staff_router = APIRouter()
 @staff_router.post("/create", response_model=schemas.ShowStaff)
 async def create_staff_user(staff: schemas.CreateStaff, db: Session = Depends(get_db)):
 
-    staff = crud.create_new_staff_user(staff=staff, db=db)
-    return staff
+    return await crud.create_new_staff_user(staff=staff, db=db)
 
 
 
 ## api route for getting returning all staff.
-@staff_router.get("/getAllStaff")
+@staff_router.get("/all")
 async def get_all_staff(db:Session = Depends(get_db)):
 
     return await crud.get_all_staff(db)
 
 
+
+
+
 # api route to get staff base on id. 
-@staff_router.get("/getStaffById/{id}")
-async def getStaffById(id: int, db:Session = Depends(get_db)):
+@staff_router.get("/id/{id}")
+async def get_Staff_By_Id(id: int, db:Session = Depends(get_db)):
   
     return await crud.getStaffById(id=id, db=db)
+
+
+
+
+
+
+
+# api route to get staff base on email. 
+@staff_router.get("/email/{email}")
+async def get_Staff_By_email(email: str, db:Session = Depends(get_db)):
+  
+    return await crud.get_Staff_By_email(email=email, db=db)
+
+
+
+
+
+
+# api route to get staff base on token. 
+@staff_router.get("/token/{token}")
+async def get_staff_By_Reset_Password_Token(token: str, db:Session = Depends(get_db)):
+  
+    return await crud.get_Admin_By_Token(token=token, db=db)
+
+
+
+
+
+
+
+
+# api route to update staff base on id.
+@staff_router.put("/reset-password")
+async def update_Staff_After_Reset_Password(updateStaff: schemas.UpdateStaff, db:Session = Depends(get_db)):
+    
+    return await crud.update_Staff_After_Reset_Password(updateStaff, db)
+
+
+
+
+
+
+
+## function to get query all supervisors where their is_superuser is true
+@staff_router.get("/supervisors")
+async def get_all_supervisors(db:Session = Depends(get_db)):
+
+    return await crud.get_all_supervisors(db)
+
+
+
+
+
+
+
+## function to get query all staffs under each supervisor
+@staff_router.get("/staff_id/{staff_id}")
+async def staffs_under_supervisor(staff_id: int, db:Session = Depends(get_db)):
+  
+    return await crud.staff_under_supervisor(staff_id=staff_id, db=db)
+
+
+
+
+
+
+
 
 
 # @staff_router.put("/updateStaff")

@@ -19,6 +19,6 @@ class StartOfYear(Base):
     deadline_end_date = Column(String(255), nullable=True)
     start_status = Column(Boolean, default=True, nullable=True)
     submit = Column(Boolean, default=False, nullable=True)
-    start_of_year_status = Column(Boolean, default=False, nullable=True)
+    approval_status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

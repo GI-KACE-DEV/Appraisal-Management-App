@@ -44,8 +44,10 @@ async def login_for_access_token(payload:schemas.Login, db:Session=Depends(get_d
         "access_token": access_token, 
         "refresh_token": refresh_token,
         "user":user,
-        
     }
+
+
+
 
 @auth_router.post("/logout", name='Logout')
 async def logout(payload:schemas.Logout, db:Session=Depends(get_db)):

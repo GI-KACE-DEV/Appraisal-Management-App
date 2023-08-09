@@ -1,13 +1,12 @@
 from typing import Optional
 from pydantic import BaseModel
+
 from datetime import date, datetime 
 
 
-class CreateDeadline(BaseModel):
-    deadline_type: Optional[str]
-    start_date: Optional[str]
-    end_date: Optional[str]
-    departmental_id: Optional[int]
+class CreateComments(BaseModel):
+    comment: Optional[str]
+    appraisal_form_id: Optional[int]
     
 
     class Config():
@@ -16,9 +15,9 @@ class CreateDeadline(BaseModel):
 
 
 
-class UpdateDeadline(BaseModel):
+class UpdateComments(BaseModel):
     id:Optional[int]
-    departmental_id:Optional[int]
+    appraisal_form_id:Optional[int]
     comment: Optional[str]
 
 

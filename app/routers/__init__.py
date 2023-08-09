@@ -16,6 +16,8 @@ from routers.performance_details.models import *
 
 from routers.overall_performance.models import *
 
+from routers.deadline.models import *
+
 
 from database import Base, engine
 

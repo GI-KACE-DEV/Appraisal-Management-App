@@ -1,15 +1,18 @@
-from typing import Optional
+from typing import Optional, Any
 from pydantic import BaseModel
 
 from datetime import date, datetime 
 
 
 class CreateStartOfYear(BaseModel):
-    results_areas: Optional[str]
-    target: Optional[str]
-    resources: Optional[str]
+    first_phase: Any
+    # target: Optional[str]
+    # resources: Optional[str]
     appraisal_form_id: Optional[int]
+    submit_status: Optional[bool] = False
     
+
+
 
 
 

@@ -6,7 +6,6 @@ from . import models, schemas
 #from app.routers.users import user_type
 #from app.routers.users import user_type
 
-<<<<<<< HEAD
 def create_new_user(payload:schemas.CreateUserType, db:Session = Depends(get_db)):
     ## lets check if an exiting user_type exist:
     
@@ -46,22 +45,3 @@ def list_usertypes(db: Session):
         print('hi')
     return usertypes
    
-=======
-def create_new_user(usertype:schemas.CreateUserType, db:Session = Depends(get_db)):
-    usertype = models.UserType(title=usertype.title
-                )
-    db.add(usertype)
-    db.commit()
-    db.refresh(usertype)
-    return usertype
-
-
-
-
-
-
-
-async def get_all_user_type(db:Session):
-    data = db.query(models.UserType).all()
-    return data
->>>>>>> a362d94599a120834c6ffb26344a2d795e75146b

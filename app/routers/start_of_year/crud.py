@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from routers.start_of_year.schemas import CreateStartOfYear,UpdateStartOfYear
 from routers.start_of_year.models import StartOfYear
 from routers.appraisal_form.models import Appraisalview
+from fastapi.encoders import jsonable_encoder
+import json
 
 
 
@@ -12,7 +14,14 @@ from routers.appraisal_form.models import Appraisalview
 
 
 async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
-    start_of_year_object = StartOfYear(**start_of_year.dict())
+
+    json_data = jsonable_encoder({key: item for key, item in enumerate(start_of_year.first_phase)})
+    #json_data = jsonable_encoder(start_of_year.first_phase)
+
+    start_of_year_object = StartOfYear()
+    start_of_year_object.first_phase = json.dumps(json_data)
+    start_of_year_object.appraisal_form_id = start_of_year.appraisal_form_id
+    start_of_year_object.submit_status = start_of_year.submit_status
     
     db.add(start_of_year_object)
     db.flush()
@@ -40,18 +49,26 @@ async def get_all_start_of_year(db:Session):
 
 
 
-
-
 async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
     data = db.query(StartOfYear).filter(
         StartOfYear.appraisal_form_id == Appraisalview.appraisal_form_id,
         StartOfYear.appraisal_form_id == appraisal_form_id
-        ).all()
+        ).first()
     
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Start Of Year form with the id {appraisal_form_id} is not found")
-    return data
+    
+    first_phase = json.loads(data.first_phase)
+
+
+    db_data = {
+            "id": data.id,
+            "first_phase": first_phase,
+            "appraisal_form_id": data.appraisal_form_id,
+            "submit_status": data.submit_status
+    }
+    return db_data
 
 
 

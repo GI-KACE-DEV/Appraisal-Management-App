@@ -53,7 +53,7 @@ class Appraisalview(Base):
     supervisor_id = Column(Integer, nullable=True)
     user_type_id = Column(Integer, ForeignKey("user_type.id"))
     positions = Column(String(255), nullable=True)
-    appraisal_date = Column(Date, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    appraisal_year = Column(String(255))
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean(), default=True)

@@ -19,7 +19,7 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
     db.add(deadline_object)
     db.flush()
 
-    today = datetime.now()
+    appraisal_year = datetime.now()
 
     db_data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == deadline.staff_id).all()
 
@@ -27,9 +27,14 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Staff with the id {deadline.staff_id} is not found")
 
+
     if deadline.deadline_type == "Start of Year" or deadline.deadline_type == "First Phase":
-        appraisalForm_object = AppraisalForm(appraisal_year = today.year, department = db_data.department,
-                            grade = db_data.grade, positions = db_data.positions,  staff_id=deadline.staff_id)
+        appraisalForm_object = AppraisalForm(**db_data.dict())
+        appraisalForm_object.appraisal_year = appraisal_year
+        
+        # appraisalForm_object = AppraisalForm(appraisal_year = today.year, department = db_data.department,
+        #                     grade = db_data.grade, positions = db_data.positions,  staff_id=deadline.staff_id)
+        
     
     db.add(appraisalForm_object)
     db.flush()

@@ -12,7 +12,7 @@ class PerformanceDetails(Base):
 
     id = Column(Integer,primary_key=True,index=True)
     comments = Column(TEXT, nullable=True)
-    approved_date = Column(Date, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    approved_date = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     weight = Column(TEXT, nullable=True)
     final_score = Column(TEXT, nullable=True)
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))

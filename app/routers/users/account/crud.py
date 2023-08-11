@@ -21,7 +21,7 @@ def retreive_user(id:int, db:Session):
 
 ## function for listing all jobs
 def list_user(db: Session):
-    jobs = db.query(models.User).all().filter(models.User.is_active == True)
+    jobs = db.query(models.User).filter(models.User.is_active == True).all()
     return jobs
 
 

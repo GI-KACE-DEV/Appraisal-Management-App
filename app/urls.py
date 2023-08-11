@@ -12,7 +12,7 @@ from routers.overall_performance.main import overall_performance_router
 from routers.users.auth.main import auth_router
 from routers.deadline.main import deadline_router
 #from app.main import app
-import config as cfg
+#import config as cfg
 
 api_router = APIRouter()
 

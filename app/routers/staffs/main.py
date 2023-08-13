@@ -8,7 +8,6 @@ from routers.users.account.models import User
 
 
 
-
 # APIRouter creates path operations for staffs module
 staff_router = APIRouter()
 
@@ -26,18 +25,11 @@ async def get_all_staff(db:Session = Depends(get_db)):
     return await crud.get_all_staff(db)
 
 
-
-
-
 # api route to get staff base on id. 
 @staff_router.get("/id/{id}")
 async def get_Staff_By_Id(id: str, db:Session = Depends(get_db)):
   
     return await crud.getStaffById(id=id, db=db)
-
-
-
-
 
 
 
@@ -49,31 +41,17 @@ async def get_Staff_By_Id(id: str, db:Session = Depends(get_db)):
 
 
 
-
-
-
 # # api route to get staff base on token. 
 # @staff_router.get("/token/{token}")
 # async def get_staff_By_Reset_Password_Token(token: str, db:Session = Depends(get_db)):
   
 #     return await crud.get_Admin_By_Token(token=token, db=db)
 
-
-
-
-
-
-
-
 # # api route to update staff base on id.
 # @staff_router.put("/reset-password")
 # async def update_Staff_After_Reset_Password(updateStaff: schemas.UpdateStaff, db:Session = Depends(get_db)):
     
 #     return await crud.update_Staff_After_Reset_Password(updateStaff, db)
-
-
-
-
 
 
 

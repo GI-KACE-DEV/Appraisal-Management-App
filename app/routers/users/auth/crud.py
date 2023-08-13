@@ -9,24 +9,12 @@ from database import SessionLocal
 from core.utils import raise_exc
 from typing import Union
 
-async def authenticate_user(payload:schemas.Login, db: Session):
+async def get_user(username: str,db: Session):
 
-    #model = User if account=="users" else Administrator
-    user = db.query(models.User).filter_by(email=payload.email).first()
-    #print(user)
-    
-
-    if not user:
-        return False
-    
-            
-    if not Hasher.verify_password(payload.password, user.hashed_password):
-        return False 
+    user = db.query(models.User).filter_by(email=username).first()
 
     return user
         
-  
-
 def read_by_id(id:str, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator
     return db.query(model).get(id)

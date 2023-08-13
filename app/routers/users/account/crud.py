@@ -13,23 +13,15 @@ from routers.staffs.schemas import UpdateStaff
 
 
 
-
 ## function for retrieving a job
 def retreive_user(id:str, db:Session):
     item = db.query(models.User).filter(models.User.id == id).first() 
     return item 
 
 ## function for listing all jobs
-def list_user(db: Session):
+async def list_user(db: Session):
     jobs = db.query(models.User).filter(models.User.is_active == True).all()
     return jobs
-
-
-
-
-
-
-
 
 ## function to get staff base on the email.
 async def get_user_by_email(email: str, db:Session):

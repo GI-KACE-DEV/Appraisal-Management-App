@@ -16,11 +16,6 @@ async def create_new_end_of_year_review(end_of_year_review:schemas.CreateEndofYe
     return await crud.create_new_end_of_year_review(end_of_year_review=end_of_year_review, db=db)
 
 
-
-
-
-
-
 @end_of_year_review_router.get("/all")
 async def get_all_end_of_year_review(db:Session = Depends(get_db)):
 
@@ -28,18 +23,10 @@ async def get_all_end_of_year_review(db:Session = Depends(get_db)):
 
 
 
-
-
-
 @end_of_year_review_router.get("/id/{appraisal_form_id}")
 async def get_staff_end_of_year_review_form(appraisal_form_id: str, db:Session = Depends(get_db)):
     
     return await crud.staff_end_of_year_review_form(appraisal_form_id, db)
-
-
-
-
-
 
 
 @end_of_year_review_router.put("/update")

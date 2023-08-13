@@ -8,7 +8,7 @@ class CreateMidYearReview(BaseModel):
     progress_review: Optional[str]
     remarks: Optional[str]
     competency: Optional[str]
-    appraisal_form_id: Optional[int]
+    appraisal_form_id: Optional[str]
     
 
 
@@ -20,11 +20,11 @@ class CreateMidYearReview(BaseModel):
 
 
 class UpdateMidYearReview(BaseModel):
-    id:Optional[int]
+    id:Optional[str]
     progress_review: Optional[str]
     remarks: Optional[str]
     competency: Optional[str]
-    appraisal_form_id: Optional[int]
+    appraisal_form_id: Optional[str]
     approval_status: Optional[bool]
 
 

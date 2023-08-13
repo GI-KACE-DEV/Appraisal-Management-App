@@ -26,7 +26,7 @@ class CreateAdmin(EmailBase):
     
 
 class Admin(EmailBase):
-    id: int
+    id: str
     push_id: str
     is_active: bool
     created: datetime.datetime
@@ -60,10 +60,10 @@ class ShowUser(EmailBase):
 
 
 class User(EmailBase):
-    id: int 
+    id: str 
     email : EmailStr 
     is_active : bool
-    staff_id : int
+    staff_id : str
   
 
     class Config:

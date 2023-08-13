@@ -36,7 +36,7 @@ async def get_all_end_of_year_review(db:Session):
 
 
 
-async def staff_end_of_year_review_form(appraisal_form_id: int, db:Session):
+async def staff_end_of_year_review_form(appraisal_form_id: str, db:Session):
     data = db.query(EndofYearReview).filter(
         EndofYearReview.appraisal_form_id == Appraisalview.appraisal_form_id,
         EndofYearReview.appraisal_form_id == appraisal_form_id
@@ -87,7 +87,7 @@ async def update_End_of_Year_Review(updateEndofYearReview: UpdateEndofYearReview
 
 
 
-# async def deleteEndofYearReview(id: int, db:Session):
+# async def deleteEndofYearReview(id: str, db:Session):
 #     db_data = db.query(EndofYearReview).filter(EndofYearReview.id == id).update({
 #             EndofYearReview.status: 0
 #             }, synchronize_session=False)

@@ -15,7 +15,7 @@ from routers.staffs.schemas import UpdateStaff
 
 
 ## function for retrieving a job
-def retreive_user(id:int, db:Session):
+def retreive_user(id:str, db:Session):
     item = db.query(models.User).filter(models.User.id == id).first() 
     return item 
 
@@ -118,7 +118,7 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
 
 
 ## 
-def update_user_by_id(id:int, user: schemas.CreateUser, db: Session, owner_id):
+def update_user_by_id(id:str, user: schemas.CreateUser, db: Session, owner_id):
     existing_user = db.query(models.User).filter(models.User.id == id) 
     if not existing_user:
         return 0
@@ -128,7 +128,7 @@ def update_user_by_id(id:int, user: schemas.CreateUser, db: Session, owner_id):
     return 1
 
 
-def delete_job_by_id(id:int, user:schemas.CreateUser, db: Session, owner_id):
+def delete_job_by_id(id:str, user:schemas.CreateUser, db: Session, owner_id):
     existing_user = db.query(models.User).filter(models.User.id == id)
     if not existing_user:
         return 0 

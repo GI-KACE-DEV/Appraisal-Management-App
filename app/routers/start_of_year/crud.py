@@ -49,7 +49,7 @@ async def get_all_start_of_year(db:Session):
 
 
 
-async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
+async def staff_start_of_year_form(appraisal_form_id: str, db:Session):
     data = db.query(StartOfYear).filter(
         StartOfYear.appraisal_form_id == Appraisalview.appraisal_form_id,
         StartOfYear.appraisal_form_id == appraisal_form_id
@@ -104,7 +104,7 @@ async def updateStartOfYear(updateStartOfYear: UpdateStartOfYear, db:Session):
 
 
 
-# async def deleteStartOfYear(id: int, db:Session):
+# async def deleteStartOfYear(id: str, db:Session):
 #     db_data = db.query(StartOfYear).filter(StartOfYear.id == id).update({
 #             StartOfYear.status: 0
 #             }, synchronize_session=False)

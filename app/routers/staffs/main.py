@@ -31,7 +31,7 @@ async def get_all_staff(db:Session = Depends(get_db)):
 
 # api route to get staff base on id. 
 @staff_router.get("/id/{id}")
-async def get_Staff_By_Id(id: int, db:Session = Depends(get_db)):
+async def get_Staff_By_Id(id: str, db:Session = Depends(get_db)):
   
     return await crud.getStaffById(id=id, db=db)
 
@@ -90,10 +90,10 @@ async def get_all_supervisors(db:Session = Depends(get_db)):
 
 
 ## function to get query all staffs under each supervisor
-@staff_router.get("/staff_id/{staff_id}")
-async def staffs_under_supervisor(staff_id: int, db:Session = Depends(get_db)):
+@staff_router.get("/{supervisor_id}")
+async def staffs_under_supervisor(supervisor_id: str, db:Session = Depends(get_db)):
   
-    return await crud.staff_under_supervisor(staff_id=staff_id, db=db)
+    return await crud.staff_under_supervisor(supervisor_id=supervisor_id, db=db)
 
 
 
@@ -111,6 +111,6 @@ async def staffs_under_supervisor(staff_id: int, db:Session = Depends(get_db)):
 
 
 # @staff_router.delete("/deleteStaff/{id}")
-# async def deleteStaff(id: int, db:Session = Depends(get_db)):
+# async def deleteStaff(id: str, db:Session = Depends(get_db)):
 #     current_staff = 1
 #     return await crud.deleteStaff(id=id, db=db, staff_id=current_staff)

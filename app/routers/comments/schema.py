@@ -6,7 +6,7 @@ from datetime import date, datetime
 
 class CreateComments(BaseModel):
     comment: Optional[str]
-    appraisal_form_id: Optional[int]
+    appraisal_form_id: Optional[str]
     
 
     class Config():
@@ -16,8 +16,8 @@ class CreateComments(BaseModel):
 
 
 class UpdateComments(BaseModel):
-    id:Optional[int]
-    appraisal_form_id:Optional[int]
+    id:Optional[str]
+    appraisal_form_id:Optional[str]
     comment: Optional[str]
 
 

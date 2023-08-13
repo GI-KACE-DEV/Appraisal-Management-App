@@ -32,7 +32,7 @@ async def get_all_end_of_year_review(db:Session = Depends(get_db)):
 
 
 @end_of_year_review_router.get("/id/{appraisal_form_id}")
-async def get_staff_end_of_year_review_form(appraisal_form_id: int, db:Session = Depends(get_db)):
+async def get_staff_end_of_year_review_form(appraisal_form_id: str, db:Session = Depends(get_db)):
     
     return await crud.staff_end_of_year_review_form(appraisal_form_id, db)
 
@@ -55,6 +55,6 @@ async def update_end_of_year_review(updateEndofYearReview: schemas.UpdateEndofYe
 
 
 # @end_of_year_review_router.delete("/deleteend_of_year_review/{id}")
-# async def deleteend_of_year_review(id: int, db:Session = Depends(get_db)):
+# async def deleteend_of_year_review(id: str, db:Session = Depends(get_db)):
     
 #     return await crud.deleteend_of_year_review(id, db)

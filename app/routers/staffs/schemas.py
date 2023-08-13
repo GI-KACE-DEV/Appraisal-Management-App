@@ -12,12 +12,12 @@ class CreateStaff(BaseModel):
     last_name: Optional[str]
     other_name: Optional[str]
     gender: Optional[str]
-    supervisor_id: Optional[int]
+    supervisor_id: Optional[str]
     department: Optional[str]
     positions: Optional[str]
     appointment_date: Optional[str]
-    grade: Optional[int]
-    user_type_id: Optional[int]
+    grade: Optional[str]
+    user_type_id: Optional[str]
     is_active: bool
 
 
@@ -27,9 +27,9 @@ class ShowStaff(BaseModel):
     last_name: Optional[str]
     other_name: Optional[str]
     gender: Optional[str]
-    supervisor_id: Optional[int]
+    supervisor_id: Optional[str]
     department: Optional[str]
-    grade: Optional[int]
+    grade: Optional[str]
    
  
     class Config():
@@ -37,19 +37,19 @@ class ShowStaff(BaseModel):
 
 
 class UpdateStaff(BaseModel):
-    id:Optional[int]
+    id:Optional[str]
     email: EmailStr 
     first_name: Optional[str]
     last_name: Optional[str]
     other_name: Optional[str]
     gender: Optional[str]
-    supervisor_id: Optional[int]
+    supervisor_id: Optional[str]
     department: Optional[str]
     positions: Optional[str]
     appointment_date: Optional[str]
-    grade: Optional[int]
+    grade: Optional[str]
     hashed_password: Optional[str]
-    user_type_id: Optional[int]
+    user_type_id: Optional[str]
     is_active: bool
     is_superuser: bool 
 
@@ -69,9 +69,9 @@ class UpdateStaff(BaseModel):
 #     last_name: Optional[str]
 #     other_name: Optional[str]
 #     gender: Optional[str]
-#     supervisor_id: Optional[int]
+#     supervisor_id: Optional[str]
 #     department: Optional[str]
 #     positions: Optional[str]
-#     grade: Optional[int]
+#     grade: Optional[str]
 #     is_active: bool
 #     is_superuser: bool 

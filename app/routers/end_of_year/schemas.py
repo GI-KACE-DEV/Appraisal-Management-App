@@ -12,8 +12,8 @@ class CreateEndofYearReview(BaseModel):
     average_per_rating: Optional[str]
     average_total: Optional[str]
     average_per_rating_id: Optional[str]
-    appraisal_form_id: Optional[int]
-    performance_details_id: Optional[int]
+    appraisal_form_id: Optional[str]
+    performance_details_id: Optional[str]
     
 
     class Config():
@@ -22,7 +22,7 @@ class CreateEndofYearReview(BaseModel):
 
 
 class UpdateEndofYearReview(BaseModel):
-    id:Optional[int]
+    id:Optional[str]
     appraisers_comment_on_workplan: Optional[str]
     training_development_comments: Optional[str]
     appraisees_comments_and_plan: Optional[str]
@@ -30,8 +30,8 @@ class UpdateEndofYearReview(BaseModel):
     average_per_rating: Optional[str]
     average_total: Optional[str]
     average_per_rating_id: Optional[str]
-    appraisal_form_id: Optional[int]
-    performance_details_id: Optional[int]
+    appraisal_form_id: Optional[str]
+    performance_details_id: Optional[str]
     approval_status: Optional[bool]
 
 

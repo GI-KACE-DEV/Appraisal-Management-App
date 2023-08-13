@@ -82,7 +82,7 @@ async def get_all_staff(db:Session):
 
 
 ## function to get staff base on the staff id. 
-async def getStaffById(id:int, db:Session):
+async def getStaffById(id:str, db:Session):
 
     data = db.query(Appraisalview).filter(Appraisalview.id == id).first()
 
@@ -199,12 +199,12 @@ async def get_all_supervisors(db:Session):
 
 
 ## function to get query all staffs under each supervisor
-async def staff_under_supervisor(staff_id:int, db:Session):
-    data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == staff_id).all()
+async def staff_under_supervisor(supervisor_id:str, db:Session):
+    data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == supervisor_id).all()
 
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Supervisor with the id {staff_id} is not found")
+                            detail=f"Supervisor with the id {supervisor_id} is not found")
     return data
 
 
@@ -240,7 +240,7 @@ async def staff_under_supervisor(staff_id:int, db:Session):
 
 
 
-# async def deleteStaff(id: int, db:Session, staff_id):
+# async def deleteStaff(id: str, db:Session, staff_id):
 #     # db_data = db.query(User).filter(User.user_id == staff_id).update({
 #     #         User.is_active: False
 #     #         }, synchronize_session=False)

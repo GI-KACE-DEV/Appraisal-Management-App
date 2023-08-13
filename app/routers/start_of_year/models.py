@@ -1,7 +1,7 @@
 from sqlalchemy import Column,Integer, String,Boolean, ForeignKey,Date,TIMESTAMP,text,TEXT
 from sqlalchemy.orm import relationship
 import datetime
-
+import uuid
 from database import Base
 
 
@@ -10,11 +10,11 @@ class StartOfYear(Base):
     
     __tablename__ = "start_of_year"
 
-    id = Column(Integer,primary_key=True,index=True)
+    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
     first_phase = Column(TEXT, nullable=True)
     # target = Column(TEXT, nullable=True)
     # resources = Column(String(255), nullable=True)
-    appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
+    appraisal_form_id = Column(String(255), ForeignKey("appraisal_forms.id"))
     deadline_start_date = Column(String(255), nullable=True)
     deadline_end_date = Column(String(255), nullable=True)
     start_status = Column(Boolean, default=True, nullable=True)

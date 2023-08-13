@@ -13,7 +13,7 @@ class User(Base):
     __tablename__ = "users"
     #__table_args__ = ({'schema':'public'},)
 
-    id = Column(Integer,primary_key=True,index=True)  
+    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)  
     email = Column(String(255), unique=True, index=True)
     hashed_password = Column(String(255),nullable=True)
     is_active = Column(Boolean, default=True)
@@ -21,8 +21,8 @@ class User(Base):
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     reset_password_token = Column(String(255), nullable=True)
-    staff_id = Column(Integer, ForeignKey("staffs.id"))
-    user_type_id = Column(Integer, ForeignKey("user_type.id"))
+    staff_id = Column(String(255), ForeignKey("staffs.id"))
+    user_type_id = Column(String(255), ForeignKey("user_type.id"))
     #staff = relationship("Staff", back_populates="user")
     #role = relationship("Role", back_populates="users")
     
@@ -43,7 +43,7 @@ class Administrator(Base):
     __tablename__ = "administrators"
     #__table_args__ = ({'schema':'public'},)
     
-    admin_id =Column(Integer,primary_key=True,index=True) 
+    admin_id =Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4) 
     is_active = Column(Boolean, default=False)
     email = Column(String(255), unique=True, index=True)
     is_verified = Column(Boolean, default=False)

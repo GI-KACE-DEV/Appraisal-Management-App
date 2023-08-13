@@ -26,7 +26,7 @@ async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session):
 
 
 
-# async def get_appraisal_formBy_ID(id: int, db:Session):
+# async def get_appraisal_formBy_ID(id: str, db:Session):
 #     data = db.query(AppraisalForm).filter(AppraisalForm.appraisal_form_id == id).all()
     
 #     if not data:
@@ -61,7 +61,7 @@ async def create_new_appraisal_form(appForm:CreateAppraisalForm, db:Session):
 
 
 
-async def deleteAppraisalForm(id: int, db:Session):
+async def deleteAppraisalForm(id: str, db:Session):
     db_data = db.query(AppraisalForm).filter(AppraisalForm.id == id).update({
             AppraisalForm.status: 0
             }, synchronize_session=False)

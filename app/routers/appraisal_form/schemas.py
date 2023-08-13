@@ -26,7 +26,7 @@ class ShowAppraisalForm(BaseModel):
 
 
 class UpdateAppraisalForm(BaseModel):
-    appraisal_form_id:Optional[int]
+    appraisal_form_id:Optional[str]
     department: Optional[str]
     grade: Optional[str]
     positions: Optional[str]

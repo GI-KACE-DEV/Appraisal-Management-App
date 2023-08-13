@@ -8,5 +8,5 @@ class UserType(Base):
 
     __tablename__ = "user_type"
 
-    id =Column(Integer,primary_key=True,index=True)
+    id =Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
     title = Column(String(255), nullable=True)

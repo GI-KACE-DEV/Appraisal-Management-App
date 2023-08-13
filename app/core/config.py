@@ -42,9 +42,9 @@ class Settings:
     ACCOUNT_VERIFICATION_TOKEN_DURATION_IN_MINUTES: int = 15
 
 
-    MAIL_USERNAME: str = 'obwebsitedesign@gmail.com'
-    MAIL_PASSWORD: str = 'mqzcxllgcoprfxia'
-    MAIL_FROM: str = 'obwebsitedesign@gmail.com'
+    MAIL_USERNAME: str = 'dev.aiti.com.gh@gmail.com'
+    MAIL_PASSWORD: str = 'uefuovgtfwyfgskv'
+    MAIL_FROM: str = 'dev.aiti.com.gh@gmail.com'
     MAIL_PORT: int = 587
     MAIL_SERVER: str = 'smtp.gmail.com'
     MAIL_STARTTLS = True

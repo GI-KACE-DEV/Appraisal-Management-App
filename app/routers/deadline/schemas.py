@@ -7,7 +7,7 @@ class CreateDeadline(BaseModel):
     deadline_type: Optional[str]
     start_date: Optional[str]
     end_date: Optional[str]
-    departmental_id: Optional[int]
+    departmental_id: Optional[str]
     
 
     class Config():
@@ -17,8 +17,8 @@ class CreateDeadline(BaseModel):
 
 
 class UpdateDeadline(BaseModel):
-    id:Optional[int]
-    departmental_id:Optional[int]
+    id:Optional[str]
+    departmental_id:Optional[str]
     comment: Optional[str]
 
 

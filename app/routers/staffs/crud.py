@@ -56,16 +56,6 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     return appraisal_view_object
 
 
-
-
-
-
-
-
-
-
-
-
 ## function to get query all staff base on their active status
 async def get_all_staff(db:Session):
     data = db.query(Appraisalview).filter(Appraisalview.is_active == True).all()

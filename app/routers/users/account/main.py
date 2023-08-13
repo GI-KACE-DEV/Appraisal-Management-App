@@ -7,13 +7,8 @@ from routers.staffs.schemas import UpdateStaff
 
 
 
-
 user_acc_router = APIRouter()
 
-# @user_acc_router.post("/create", response_model=schemas.ShowUser)
-# def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
-#     user = crud.create_new_user(user=user, db=db)
-#     return user 
 
 ## lets read a single user from the db
 @user_acc_router.get("/get/{id}", response_model=schemas.ShowUser)
@@ -24,10 +19,6 @@ def read_user(id:int, db:Session = Depends(get_db)):
     return user 
 
 
-
-
-
-
 # ## lets list all users in the db
 @user_acc_router.get("/all", response_model=List[schemas.ShowUser])
 def read_users(db: Session = Depends(get_db)):
@@ -35,24 +26,11 @@ def read_users(db: Session = Depends(get_db)):
     return users 
 
 
-
-
-
-
-
-
 # api route to get staff base on email. 
 @user_acc_router.get("/email/{email}")
 async def get_user_by_email(email: str, db:Session = Depends(get_db)):
   
     return await crud.get_user_by_email(email=email, db=db)
-
-
-
-
-
-
-
 
 
 # api route to get staff base on token. 

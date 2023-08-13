@@ -11,11 +11,18 @@ from routers.appraisal_form.models import AppraisalForm, Appraisalview
 from  dependencies import get_db
 from services.email import sendEmailToNewStaff
 #from passlib.context import CryptContext
+from datetime import datetime
 
 
+
+
+
+## ## function to create new staff
 async def create_new_staff_user(staff:CreateStaff, db: Session):
-    #staff_object = Staff(**staff.dict())
+    #extract only year from today's date
+    appraisal_year = datetime.now()
 
+    #check if staff email exist
     db_query = db.query(User).filter(User.email == staff.email).first()
 
     if db_query is not None:
@@ -23,30 +30,29 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
            detail="Staff with email (" + \
         str(staff.email) + ") already exists")
     
-
+    ## create staff into staff table
     staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name, appointment_date = staff.appointment_date,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions)
     db.add(staff_object)
     db.flush()
 
+    ## create staff into user table
     user_object = User(email=staff.email, staff_id=staff_object.id, user_type_id= staff.user_type_id,
                        reset_password_token=Hasher.generate_reset_password_token(), 
                        hashed_password=Hasher.get_password_hash(),is_active=True, is_superuser=False)
-    
     db.add(user_object)
     db.flush()
     
+    ## create staff into appraisal form table
     appraisalForm_object = AppraisalForm(department = staff.department,grade = staff.grade, positions = staff.positions,
-    staff_id=staff_object.id)
-    
+    staff_id=staff_object.id, appraisal_year = appraisal_year)
     db.add(appraisalForm_object)
     db.flush()
 
+    ## create staff into appraisal view table
     appraisal_view_object = Appraisalview(id=staff_object.id,first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
     gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions,
     appraisal_form_id=appraisalForm_object.id,user_type_id= staff.user_type_id, reset_password_token=Hasher.generate_reset_password_token())
-
-
     db.add(appraisal_view_object)
     db.commit()
     db.refresh(staff_object)

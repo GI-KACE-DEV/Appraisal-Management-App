@@ -27,8 +27,6 @@ def get_user_type_by_id(id: str, db: Session = Depends(get_db)):
      return data
 
 
-
-
 @usertype_router.get("/all")
 def read_usertypes(db: Session = Depends(get_db)):
     usertypes = list_usertypes(db=db)

@@ -9,7 +9,7 @@ from database import SessionLocal
 from core.utils import raise_exc
 from typing import Union
 
-async def get_user(username: str,db: Session):
+def get_user(username: str,db: Session):
 
     user = db.query(models.User).filter_by(email=username).first()
 

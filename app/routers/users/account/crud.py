@@ -24,7 +24,7 @@ def list_user(db: Session):
     return jobs
 
 ## function to get staff base on the email.
-async def get_user_by_email(email: str, db:Session):
+def get_user_by_email(email: str, db:Session):
 
     user_db_data = db.query(User).filter(User.email == email).update({
         User.hashed_password : None,
@@ -47,7 +47,7 @@ async def get_user_by_email(email: str, db:Session):
 
 
 ## function to get staff base on the token.
-async def get_user_By_Token(token: str, db:Session):
+def get_user_By_Token(token: str, db:Session):
     db_data = db.query(User).filter(User.reset_password_token == token).update({
         User.hashed_password : None
         }, synchronize_session=False)
@@ -62,7 +62,7 @@ async def get_user_By_Token(token: str, db:Session):
 
 
 ## function to update user after reset password.
-async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session):
+def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session):
     staffID = updateStaff.id
     is_staffID_update = db.query(User).filter(User.staff_id == staffID).update({
         User.reset_password_token : None,

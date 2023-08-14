@@ -13,6 +13,6 @@ class Deadline(Base):
     deadline_type = Column(String(255), nullable=True)
     start_date = Column(String(255), nullable=True)
     end_date = Column(String(255), nullable=True)
-    appraisal_form_id = Column(String(255), ForeignKey("appraisal_forms.id"))
+    supervisor_id = Column(String(255), ForeignKey("staffs.id"))
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

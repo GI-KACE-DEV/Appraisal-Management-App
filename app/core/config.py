@@ -54,7 +54,7 @@ class Settings:
 
 
 
-    # DATABASE_URL = "mysql+pymysql://root:Openforme@localhost:3306/appraisal_db"
+    # DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
     # SECRET_KEY = "supersecretkeyhere"
 
 settings = Settings()

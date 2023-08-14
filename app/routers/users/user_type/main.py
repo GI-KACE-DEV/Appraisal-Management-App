@@ -20,11 +20,8 @@ def create_usertype(payload: CreateUserType, db: Session = Depends(get_db)):
     return usertype 
 
 
-
-#@usertype_router.post("/create-usertype")
-#@usertype_router.post("/create-usertype")
 @usertype_router.post("/id/{id}")
-async def get_user_type_by_id(id: str, db: Session = Depends(get_db)):
+def get_user_type_by_id(id: str, db: Session = Depends(get_db)):
     
      data = crud.get_user_type_by_id(id, db=db)
      return data

@@ -19,7 +19,7 @@ def retreive_user(id:int, db:Session):
     return item 
 
 ## function for listing all jobs
-async def list_user(db: Session):
+def list_user(db: Session):
     jobs = db.query(models.User).filter(models.User.is_active == True).all()
     return jobs
 
@@ -46,10 +46,6 @@ async def get_user_by_email(email: str, db:Session):
 
 
 
-
-
-
-
 ## function to get staff base on the token.
 async def get_user_By_Token(token: str, db:Session):
     db_data = db.query(User).filter(User.reset_password_token == token).update({
@@ -62,16 +58,6 @@ async def get_user_By_Token(token: str, db:Session):
             detail="Invalid Token")
     data = db.query(Appraisalview).filter(Appraisalview.reset_password_token == token).one()
     return data
-
-
-
-
-
-
-
-
-
-
 
 
 

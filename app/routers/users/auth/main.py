@@ -23,12 +23,11 @@ auth_router = APIRouter()
 
 def authenticate_user(username: str, password: str, db: Session):
 
-    user = get_user(username=username, db=db )
+    user = get_user(username=username, db=db)
     
     if not user:
         return False
-    
-            
+             
     if not Hasher.verify_password(password, user.hashed_password):
         return False 
 
@@ -44,20 +43,25 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     # if not user.is:
     #     raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="account is not a super user")
 
-    data = {"sub":user.email}
+    data = {"sub": user.email}
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data=data,
         expires_delta=access_token_expires
     )
+
     refresh_token = create_access_token(
         data=data,
         expires_delta=access_token_expires
     )
+
     return {
+
         "access_token": access_token, 
         "refresh_token": refresh_token,
         "user":user,
+
     }
 
 
@@ -66,18 +70,19 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
     
     
 ## lets create a function to create a dependency to indentify a current user
-async def get_current_user_from_token(token: str = Depends(oauth2_scheme), db: Session=Depends(get_db)):
+def get_current_user_from_token(token: str = Depends(oauth2_scheme), db: Session=Depends(get_db)):
     
-
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials"
     )
+
     try:
-        #token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTY5MTc1MzkxOX0.u0IcNwimQk_ctPldFEYibyDfX9JSuS4jYwNS8xzdEpo"
+
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
-        print("username/email extracted is ",username)
+        print("username/email extracted is ", username)
+        
     except JWTError:
         raise credentials_exception
     

@@ -36,7 +36,7 @@ async def create_new_start_of_year(start_of_year:schemas.CreateStartOfYear, db:S
 
 
 @start_of_year_router.get("/id/{appraisal_form_id}")
-async def get_staff_start_of_year_form(appraisal_form_id: str, db:Session = Depends(get_db)):
+async def get_staff_start_of_year_form(appraisal_form_id: int, db:Session = Depends(get_db)):
     
     return await crud.staff_start_of_year_form(appraisal_form_id, db)
 
@@ -59,6 +59,6 @@ async def update_Start_Of_Year(updateStaff: schemas.UpdateStartOfYear, db:Sessio
 
 
 # @start_of_year_router.delete("/deletestart_of_year/{id}")
-# async def deletestart_of_year(id: str, db:Session = Depends(get_db)):
+# async def deletestart_of_year(id: int, db:Session = Depends(get_db)):
     
 #     return await crud.deletestart_of_year(id, db)

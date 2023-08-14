@@ -15,6 +15,17 @@ def create_new_user(payload:schemas.CreateUserType, db:Session = Depends(get_db)
     db.refresh(usertype)
     return usertype 
 
+
+
+
+
+def get_user_type_by_id(id: str, db: Session ):
+    ## lets query the db to see if we already have the default users before adding them
+    data = db.query(models.UserType).filter(models.UserType.id == id).first()
+    return data
+
+
+
 def create_default_user_type():
     db: Session 
     ## lets query the db to see if we already have the default users before adding them

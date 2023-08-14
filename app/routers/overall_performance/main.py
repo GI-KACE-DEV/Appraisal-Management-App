@@ -32,7 +32,7 @@ async def get_all_overall_performance(db:Session = Depends(get_db)):
 
 
 @overall_performance_router.get("/id/{id}")
-async def get_overall_performance_By_Id(id: str, db:Session = Depends(get_db)):
+async def get_overall_performance_By_Id(id: int, db:Session = Depends(get_db)):
     
     return await crud.get_overall_performance_By_ID(id, db)
 
@@ -55,6 +55,6 @@ async def update_overall_performance(updateOverallPerformance: schemas.UpdateOve
 
 
 # @overall_performance_router.delete("/deleteoverall_performance/{id}")
-# async def deleteoverall_performance(id: str, db:Session = Depends(get_db)):
+# async def deleteoverall_performance(id: int, db:Session = Depends(get_db)):
     
 #     return await crud.deleteoverall_performance(id, db)

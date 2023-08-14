@@ -19,13 +19,20 @@ def create_usertype(payload: CreateUserType, db: Session = Depends(get_db)):
     usertype = crud.create_new_user(payload=payload, db=db)
     return usertype 
 
-#@usertype_router.post("/create-usertype")
-def create_default_user_types():
-    db: Session 
-    df_usertype = crud.create_default_user_type(db=db)
-    return df_usertype 
 
-@usertype_router.get("/all", response_model=List[ShowUserType])
+
+#@usertype_router.post("/create-usertype")
+#@usertype_router.post("/create-usertype")
+@usertype_router.post("/id/{id}")
+async def get_user_type_by_id(id: str, db: Session = Depends(get_db)):
+    
+     data = crud.get_user_type_by_id(id, db=db)
+     return data
+
+
+
+
+@usertype_router.get("/all")
 def read_usertypes(db: Session = Depends(get_db)):
     usertypes = list_usertypes(db=db)
     return usertypes

@@ -8,7 +8,7 @@ class CreateStartOfYear(BaseModel):
     first_phase: Any
     # target: Optional[str]
     # resources: Optional[str]
-    appraisal_form_id: Optional[str]
+    appraisal_form_id: Optional[int]
     submit_status: Optional[bool] = False
     
 
@@ -28,8 +28,8 @@ class ShowStartOfYear(BaseModel):
 
 
 class UpdateStartOfYear(BaseModel):
-    id:Optional[str]
-    appraisal_form_id:Optional[str]
+    id:Optional[int]
+    appraisal_form_id:Optional[int]
     results_areas: Optional[str]
     target: Optional[str]
     resources: Optional[str]

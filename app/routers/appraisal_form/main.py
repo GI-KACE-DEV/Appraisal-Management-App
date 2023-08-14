@@ -32,7 +32,7 @@ async def create_new_appraisal_form(appForm:schemas.CreateAppraisalForm, db:Sess
 
 
 # @appraisalForm_router.get("/getAppraisalFormById/{id}")
-# async def getAppraisalFormById(id: str, db:Session = Depends(get_db)):
+# async def getAppraisalFormById(id: int, db:Session = Depends(get_db)):
     
 #     return await crud.get_appraisal_formBy_ID(id, db)
 
@@ -55,6 +55,6 @@ async def create_new_appraisal_form(appForm:schemas.CreateAppraisalForm, db:Sess
 
 
 # @appraisalForm_router.delete("/deleteAppraisalForm/{id}")
-# async def deleteAppraisalForm(id: str, db:Session = Depends(get_db)):
+# async def deleteAppraisalForm(id: int, db:Session = Depends(get_db)):
     
 #     return await crud.deleteAppraisalForm(id, db)

@@ -37,7 +37,7 @@ async def get_all_mid_year_review(db:Session):
 
 
 
-async def staff_mid_year_review_form(appraisal_form_id: str, db:Session):
+async def staff_mid_year_review_form(appraisal_form_id: int, db:Session):
     data = db.query(MidYearReview).filter(
         MidYearReview.appraisal_form_id == Appraisalview.appraisal_form_id,
         MidYearReview.appraisal_form_id == appraisal_form_id
@@ -81,7 +81,7 @@ async def update_mid_year_review(updateMidYearReview: UpdateMidYearReview, db:Se
 
 
 
-async def deleteAppraisalForm(id: str, db:Session):
+async def deleteAppraisalForm(id: int, db:Session):
     db_data = db.query(MidYearReview).filter(MidYearReview.id == id).update({
             MidYearReview.status: 0
             }, synchronize_session=False)

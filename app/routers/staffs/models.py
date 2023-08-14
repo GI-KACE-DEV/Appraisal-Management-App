@@ -2,6 +2,7 @@ from sqlalchemy import Column,Integer, String,Boolean, ForeignKey,Date,TIMESTAMP
 from sqlalchemy.orm import relationship
 import uuid
 from database import Base
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class Staff(Base):
@@ -10,12 +11,12 @@ class Staff(Base):
     __tablename__ = "staffs"
     #__table_args__ = ({'schema':'public'},)
     
-    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
+    id = Column(Integer,primary_key=True,index=True)
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
     other_name = Column(String(255), nullable=True)
     gender = Column(String(255), nullable=True)
-    supervisor_id = Column(String(255), nullable=True)
+    supervisor_id = Column(Integer, nullable=True)
     department = Column(String(255), nullable=True)
     positions = Column(String(255), nullable=True)
     appointment_date = Column(String(255), nullable=True)

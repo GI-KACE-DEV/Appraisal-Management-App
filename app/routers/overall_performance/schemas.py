@@ -18,7 +18,7 @@ class CreateOverallPerformance(BaseModel):
 
 
 class UpdateOverallPerformance(BaseModel):
-    id:Optional[str]
+    id:Optional[int]
     description: Optional[str]
     performance: Optional[str]
 

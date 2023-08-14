@@ -32,7 +32,7 @@ async def get_all_performance_details(db:Session = Depends(get_db)):
 
 
 @performance_details_router.get("/id/{id}")
-async def get_performance_details_By_Id(id: str, db:Session = Depends(get_db)):
+async def get_performance_details_By_Id(id: int, db:Session = Depends(get_db)):
     
     return await crud.get_performance_details_By_ID(id, db)
 
@@ -55,6 +55,6 @@ async def update_performance_details(updatePerformanceDetails: schemas.UpdatePer
 
 
 # @performance_details_router.delete("/deleteperformance_details/{id}")
-# async def deleteperformance_details(id: str, db:Session = Depends(get_db)):
+# async def deleteperformance_details(id: int, db:Session = Depends(get_db)):
     
 #     return await crud.deleteperformance_details(id, db)

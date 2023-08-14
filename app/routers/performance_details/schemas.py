@@ -9,8 +9,8 @@ class CreatePerformanceDetails(BaseModel):
     weight: Optional[str]
     final_score: Optional[str]
     performance_assessment: Optional[str]
-    appraisal_form_id: Optional[str]
-    overall_performance_id: Optional[str]
+    appraisal_form_id: Optional[int]
+    overall_performance_id: Optional[int]
     
 
     class Config():
@@ -19,13 +19,13 @@ class CreatePerformanceDetails(BaseModel):
 
 
 class UpdatePerformanceDetails(BaseModel):
-    id:Optional[str]
+    id:Optional[int]
     comments: Optional[str]
     weight: Optional[str]
     final_score: Optional[str]
     performance_assessment: Optional[str]
-    appraisal_form_id: Optional[str]
-    overall_performance_id: Optional[str]
+    appraisal_form_id: Optional[int]
+    overall_performance_id: Optional[int]
 
 
 

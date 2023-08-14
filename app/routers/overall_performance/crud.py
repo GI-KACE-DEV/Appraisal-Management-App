@@ -33,7 +33,7 @@ async def get_all_overall_performance(db:Session):
 
 
 
-async def get_overall_performance_By_ID(id: str, db:Session):
+async def get_overall_performance_By_ID(id: int, db:Session):
     data = db.query(OverallPerformance).filter(OverallPerformance.id == id).all()
     
     if not data:
@@ -72,7 +72,7 @@ async def update_Overall_Performance(updateOverallPerformance: UpdateOverallPerf
 
 
 
-# async def deleteOverallPerformance(id: str, db:Session):
+# async def deleteOverallPerformance(id: int, db:Session):
 #     db_data = db.query(OverallPerformance).filter(OverallPerformance.id == id).update({
 #             OverallPerformance.status: 0
 #             }, synchronize_session=False)

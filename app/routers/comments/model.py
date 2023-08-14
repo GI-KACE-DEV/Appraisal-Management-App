@@ -3,16 +3,16 @@ from sqlalchemy.orm import relationship
 import datetime
 import uuid
 from database import Base
-
+from sqlalchemy.dialects.postgresql import UUID
 
 class Comments(Base):
     '''Comments Model'''
     
     __tablename__ = "comments"
 
-    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
+    id = Column(Integer,primary_key=True,index=True)
     comment = Column(TEXT, nullable=True)
-    appraisal_form_id = Column(String(255), ForeignKey("appraisal_forms.id"))
+    appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
 

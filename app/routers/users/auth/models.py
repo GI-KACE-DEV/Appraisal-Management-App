@@ -4,6 +4,7 @@ from ..account.models import *
 from constants import EMAIL
 from database import Base
 import re
+from sqlalchemy.dialects.postgresql import UUID
 
 class EmailVerificationCode(Base):
     '''Email Verification model'''

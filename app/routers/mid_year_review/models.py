@@ -3,18 +3,18 @@ from sqlalchemy.orm import relationship
 import datetime
 import uuid
 from database import Base
-
+from sqlalchemy.dialects.postgresql import UUID
 
 class MidYearReview(Base):
     '''Mid of Year Review Model'''
     
     __tablename__ = "mid_year_review"
 
-    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
+    id = Column(Integer,primary_key=True,index=True)
     progress_review = Column(TEXT, nullable=True)
     remarks = Column(TEXT, nullable=True)
     competency = Column(TEXT, nullable=True)
-    appraisal_form_id = Column(String(255), ForeignKey("appraisal_forms.id"))
+    appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
     deadline_start_date = Column(String(255), nullable=True)
     deadline_end_date = Column(String(255), nullable=True)
     mid_status = Column(Boolean, default=True, nullable=True)

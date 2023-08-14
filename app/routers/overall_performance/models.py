@@ -3,14 +3,14 @@ from sqlalchemy.orm import relationship
 import datetime
 import uuid
 from database import Base
-
+from sqlalchemy.dialects.postgresql import UUID
 
 class OverallPerformance(Base):
     '''Overall Performance Model'''
     
     __tablename__ = "overall_performance"
 
-    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
+    id = Column(Integer,primary_key=True,index=True)
     description = Column(TEXT, nullable=True)
     performance = Column(TEXT, nullable=True)
     status = Column(Boolean, default=True, nullable=True)

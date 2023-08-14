@@ -9,7 +9,7 @@ class CreateUserType(BaseModel):
     title: str
 
 class ShowUserType(BaseModel):
-    id: Optional[str]
+    id: Optional[int]
     title: Optional[str]
 
     class Config:

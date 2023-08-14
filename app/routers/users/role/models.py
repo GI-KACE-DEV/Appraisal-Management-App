@@ -6,19 +6,20 @@ from core.config import STATIC_ROOT
 from database import Base
 import json, os
 import uuid
+from sqlalchemy.dialects.postgresql import UUID
 
 class RolePermission(Base):
     '''Role Permission Model'''
     __tablename__ = "role_permissions"
  
-    role_id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
-    permission_id = Column(String(255), ForeignKey('permissions.id'), primary_key=True)
+    role_id = Column(Integer,primary_key=True,index=True)
+    permission_id = Column(Integer, ForeignKey('permissions.id'))
 
 class Role(Base):
     '''Roles Model'''
     __tablename__ = "roles"
 
-    id = Column(String(255), primary_key=True,index=True, nullable=False, default=uuid.uuid4)
+    id = Column(Integer,primary_key=True,index=True)
     title = Column(String(255), nullable=False)
     description = Column(String(255), nullable=True)
     #users = relationship('User', back_populates="role")

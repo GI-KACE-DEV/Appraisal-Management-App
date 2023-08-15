@@ -1,16 +1,35 @@
-from multiprocessing import synchronize
+from core.utils import raise_exc, decode_jwt, schema_to_model, create_jwt
+from ..auth.crud import is_token_blacklisted, revoke_token
+from ..auth.models import EmailVerificationCode
+from fastapi import HTTPException, Depends, status
+from exceptions import BlacklistedToken
 from sqlalchemy.orm import Session
+from ..auth.schemas import Logout
 from . import models, schemas
 from core.config import settings
+from dependencies import get_db
 from routers.users.account.models import User
-from fastapi import status
-from fastapi.exceptions import HTTPException
 from routers.appraisal_form.models import Appraisalview
 from core.hashing import Hasher
 from routers.staffs.schemas import UpdateStaff
 
+# user = CRUD(models.User)
+# administrator = CRUD(models.Administrator)
 
-
+async def decode_token(token:str, db:Session=Depends(get_db)):
+    try:
+        if await is_token_blacklisted(token, db):
+            raise BlacklistedToken('token blacklisted')  
+        obj = decode_jwt(token)
+    except Exception as e:
+        raise HTTPException(
+            status_code=401,
+            detail=raise_exc(loc="<token>", msg=f"{e}", type=f"{e.__class__}"), 
+            headers={"WWW-Authenticate": "token"})
+    else:
+        if obj.get('revoke_after', False):
+            await revoke_token(token, db)
+    return obj
 
 
 ## function for retrieving a job

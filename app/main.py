@@ -8,22 +8,15 @@ from fastapi.staticfiles import StaticFiles
 #from services.broadcaster import broadcast
 from database import SessionLocal, engine
 from fastapi import FastAPI, Request,  Depends
-
-from dependencies import get_db
 from sqlalchemy.orm import Session
 #from scheduler import scheduler
 from core.config import *
 from urls import * 
-## 
-from dependencies import *
-from routers.users.user_type.crud import create_default_user_type
 
 ## adding our api routes 
 def include_router(app):
     app.include_router(api_router)
 
-def add_default_usertypes():
-    create_default_user_type()
 # app = FastAPI(
 #     docs_url=None, 
 #     redoc_url=None,
@@ -41,7 +34,7 @@ def add_default_usertypes():
 #     allow_headers = cfg.HEADERS,
 # )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+#oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 #app.mount(cfg.STATIC_URL, StaticFiles(directory=cfg.STATIC_ROOT), name="static")
 #app.mount(cfg.UPLOAD_URL, StaticFiles(directory=cfg.UPLOAD_ROOT), name="upload")
@@ -82,7 +75,3 @@ def start_application():
     return app
 app = start_application() 
 
-
-# @app.on_event("startup")
-# async def app_startup():
-#     await create_default_user_type()

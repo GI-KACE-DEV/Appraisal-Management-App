@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from scheduler import scheduler
 import core.config as cfg
 from urls import * 
+import os
 
 # # ## adding our api routes 
 # def include_router(app):
@@ -37,8 +38,13 @@ app.add_middleware(
 )
 
 
+uploads: str = os.path.join(os.getcwd(), "core/uploads")
+# Create the flyer directory if it doesn't exist
+if not os.path.exists(uploads):
+        os.makedirs(uploads)
+
 app.mount(cfg.STATIC_URL, StaticFiles(directory=cfg.STATIC_ROOT), name="static")
-app.mount(cfg.UPLOAD_URL, StaticFiles(directory=cfg.UPLOAD_ROOT), name="upload")
+app.mount(cfg.UPLOAD_URL, StaticFiles(directory=cfg.UPLOAD_ROOT), name="uploads")
 
 @app.on_event("startup")
 async def startup_event():

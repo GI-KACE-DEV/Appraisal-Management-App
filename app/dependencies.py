@@ -3,11 +3,10 @@ from jwt.exceptions import ExpiredSignatureError
 from exceptions import BlacklistedToken
 from database import SessionLocal
 from email.generator import Generator
-#from routers.users.auth.main import oauth2_scheme
 
 from core.utils import raise_exc
 
-
+from fastapi.security import OAuth2PasswordBearer
 
 def get_db() -> Generator:
     db = SessionLocal()
@@ -16,9 +15,9 @@ def get_db() -> Generator:
     finally:
         db.close()
 
-# def validate_bearer():
-#     pass 
-async def validate_bearer(token: str , db = Depends(get_db)):
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+
+async def validate_bearer(token: str = Depends(oauth2_scheme), db = Depends(get_db)):
     from routers.users.auth.crud import is_token_blacklisted 
     from core.utils import decode_jwt 
 

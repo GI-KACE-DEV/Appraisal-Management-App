@@ -15,7 +15,7 @@ user_acc_router = APIRouter()
 def read_user(id:int, db:Session = Depends(get_db), is_validated=Depends(validate_bearer)):
     user = crud.retreive_user(id=id, db=db)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Job with this id {id} does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"User with this id {id} does not exist")
     return user 
 
 

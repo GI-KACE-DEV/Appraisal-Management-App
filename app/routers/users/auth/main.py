@@ -17,7 +17,8 @@ from .schemas import Token
 from .crud import  get_user
 from core.security import create_access_token
 from core.config import settings
-from core.utils import create_jwt
+from core.utils import create_jwt 
+
 
 auth_router = APIRouter()
 

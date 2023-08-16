@@ -4,9 +4,9 @@ from datetime import datetime
 
 class Message(Base):
     __tablename__ = 'messages'
-    __table_args__ = ({'schema':'public'},)
+    #__table_args__ = ({'schema':'public'},)
 
-    push_id = Column(String, nullable=False)
+    push_id = Column(String(255), nullable=False)
     message = Column(JSON, nullable=False)
     web_push_subscription = Column(JSON)
     created = Column(DateTime, default=datetime.utcnow)

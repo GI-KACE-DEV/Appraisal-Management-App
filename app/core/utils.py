@@ -1,7 +1,7 @@
 from jose import JWTError, jwt
 
 from datetime import timedelta, datetime, date
-from .config import * 
+from .config import settings
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
@@ -49,3 +49,13 @@ def schema_to_model(schema, exclude_unset=False):
         parsed_schema = {k: v for k, v in parsed_schema.items() if v is not None}
     
     return parsed_schema
+
+def db_url():
+    '''
+        current version of sqlalchemy does not support [postgres]:// 
+        hence change to postgresql to accomodate
+    '''
+    db_url = settings.DATABASE_URL
+    if db_url.split(':', 1)[0] in ['postgres']:
+        db_url = 'postgresql:'+db_url.split(':', 1)[1]
+    return db_url

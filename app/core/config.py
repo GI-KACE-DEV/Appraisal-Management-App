@@ -70,11 +70,11 @@ class Settings:
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", 5432)
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "appraisal_db")
 
-    #DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 
     ## lets define var for creating the access token
-    #SECRET_KEY : str = os.getenv("SECRET_KEY")
+    SECRET_KEY : str = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"
     JWT_SECRET_KEY : str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -103,7 +103,7 @@ class Settings:
     APS_PROCESS_POOL_MAX_WORKERS: int = 5
 
 
-    DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
-    SECRET_KEY = "supersecretkeyhere"
+    # DATABASE_URL = "mysql+pymysql://root:@localhost:3307/appraisal_db"
+    # SECRET_KEY = "supersecretkeyhere"
 
 settings = Settings()

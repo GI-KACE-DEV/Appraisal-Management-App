@@ -20,7 +20,8 @@ from datetime import datetime
 ## ## function to create new staff
 async def create_new_staff_user(staff:CreateStaff, db: Session):
     #extract only year from today's date
-    appraisal_year = datetime.now()
+    current_year = datetime.now()
+    appraisal_year = current_year.year
 
     #check if staff email exist
     db_query = db.query(User).filter(User.email == staff.email).first()

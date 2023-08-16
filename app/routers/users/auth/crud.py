@@ -10,7 +10,7 @@ from core.utils import raise_exc
 from typing import Union
 
 def get_user(username: str,db: Session):
-
+    
     user = db.query(models.User).filter_by(email=username).first()
 
     return user
@@ -19,14 +19,14 @@ def read_by_id(id:str, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator
     return db.query(model).get(id)
 
-async def read_by_email(email:str, account:str, db:Session):
+def read_by_email(email:str, account:str, db:Session):
     model = User if account=="users" else Administrator
     return db.query(model).filter_by(email=email).first()
 
-async def is_token_blacklisted(token:str, db:Session):
+def is_token_blacklisted(token:str, db:Session):
     return db.query(models.RevokedToken.id).filter_by(jti=token).first() is not None
 
-async def add_email_verification_code(email, account:schemas.Account, db:Session):
+def add_email_verification_code(email, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator
     user = db.query(model).filter_by(email=email)
     if not user:
@@ -37,7 +37,7 @@ async def add_email_verification_code(email, account:schemas.Account, db:Session
     db.refresh(obj)
     return obj
 
-async def revoke_token(payload:Union[schemas.Logout, str], db:Session):
+def revoke_token(payload:Union[schemas.Logout, str], db:Session):
     try:
         if isinstance(payload, str):
             db.add(models.RevokedToken(jti=payload))

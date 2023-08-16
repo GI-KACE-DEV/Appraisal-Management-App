@@ -22,7 +22,7 @@ async def validate_bearer(token: str = Depends(oauth2_scheme), db = Depends(get_
     from core.utils import decode_jwt 
 
     try:
-        if await is_token_blacklisted(token, db):
+        if is_token_blacklisted(token, db):
             raise BlacklistedToken('token blacklisted')
         return decode_jwt(token)
 

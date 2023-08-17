@@ -19,16 +19,22 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
     year = datetime.now()
     appraisal_year = year.year
 
+    db_user_type = db.query(Staff).filter(
+        UserType.id == Staff.user_type_id,
+        UserType.title == "Supervisor",
+        Staff.id == deadline.supervisor_id
+        ).first()
+
+    if not db_user_type:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Deadline is created by only Supervisors")
+    
     deadline_object = Deadline(**deadline.dict())
     deadline_object.deadline_year = appraisal_year
     db.add(deadline_object)
     db.flush()
-
+    
     db_data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == deadline.supervisor_id).all()
-
-    if not db_data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Staff with the id {deadline.staff_id} is not found")
 
     if deadline.deadline_type == "Start of Year" or deadline.deadline_type == "First Phase":
         for row in db_data:

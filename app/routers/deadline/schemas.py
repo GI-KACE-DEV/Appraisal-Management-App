@@ -18,8 +18,10 @@ class CreateDeadline(BaseModel):
 
 class UpdateDeadline(BaseModel):
     id:Optional[int]
-    supervisor_id:Optional[int]
-    comment: Optional[str]
+    deadline_type: Optional[str]
+    start_date: Optional[str]
+    end_date: Optional[str]
+    supervisor_id: Optional[int]
 
 
 

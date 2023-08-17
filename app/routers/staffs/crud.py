@@ -32,8 +32,9 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
         str(staff.email) + ") already exists")
     
     ## create staff into staff table
-    staff_object = Staff(first_name = staff.first_name,last_name = staff.last_name,other_name = staff.other_name, appointment_date = staff.appointment_date,
-    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions)
+    staff_object = Staff(first_name = staff.first_name, last_name = staff.last_name,other_name=staff.other_name,
+                         department = staff.department,grade = staff.grade,gender= staff.gender,user_type_id= staff.user_type_id,
+                         supervisor_id=staff.supervisor_id, positions = staff.positions, appointment_date=staff.appointment_date)
     db.add(staff_object)
     db.flush()
 
@@ -44,16 +45,11 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     db.add(user_object)
     db.flush()
     
-    ## create staff into appraisal form table
-    appraisalForm_object = AppraisalForm(department = staff.department,grade = staff.grade, positions = staff.positions,
-    staff_id=staff_object.id, appraisal_year = appraisal_year)
-    db.add(appraisalForm_object)
-    db.flush()
+
 
     ## create staff into appraisal view table
-    appraisal_view_object = Appraisalview(id=staff_object.id,first_name = staff.first_name,last_name = staff.last_name,email = staff.email,
-    gender = staff.gender,supervisor_id = staff.supervisor_id,department = staff.department,grade = staff.grade, positions = staff.positions,
-    appraisal_form_id=appraisalForm_object.id,user_type_id= staff.user_type_id, reset_password_token=Hasher.generate_reset_password_token())
+    appraisal_view_object = Appraisalview(staff_id=staff_object.id,department = staff.department,
+                                          grade = staff.grade, positions = staff.positions, supervisor_id=staff.supervisor_id)
     db.add(appraisal_view_object)
     db.commit()
     db.refresh(staff_object)
@@ -63,9 +59,15 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     return appraisal_view_object
 
 
+
+
+
+
+
+
 ## function to get query all staff base on their active status
 async def get_all_staff(db:Session):
-    data = db.query(Appraisalview).filter(Appraisalview.is_active == True).all()
+    data = db.query(Staff).filter(Staff.is_active == True).all()
     return data
 
 
@@ -75,7 +77,7 @@ async def get_all_staff(db:Session):
 ## function to get staff base on the staff id. 
 async def getStaffById(id:str, db:Session):
 
-    data = db.query(Appraisalview).filter(Appraisalview.id == id).first()
+    data = db.query(Staff).filter(Staff.id == id).first()
 
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -99,7 +101,10 @@ async def get_Admin_By_Token(token: str, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Invalid Token")
 
-    data = db.query(Appraisalview).filter(Appraisalview.reset_password_token == token).one()
+    data = db.query(Staff).filter(
+        Staff.id == User.staff_id,
+        User.reset_password_token == token
+        ).first()
     return data
 
 
@@ -126,13 +131,7 @@ async def get_Staff_By_email(email: str, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Staff with email (" + str(email) + ") is not found")
 
-    db.query(Appraisalview).filter(Appraisalview.email == email).update({
-        Appraisalview.reset_password_token : Hasher.generate_reset_password_token()
-        }, synchronize_session=False)
-    db.flush()
-    db.commit()
-
-    data = db.query(Appraisalview).filter(Appraisalview.email == email).one()
+    data = db.query(Staff).filter(Staff.id == User.staff_id,User.email == email).first()
     return data
 
 
@@ -157,15 +156,8 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
     if not is_staffID_update:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Staff with the id (" + str(staffID) + ") is not found")
-    
 
-    db.query(Appraisalview).filter(Appraisalview.id == staffID).update({
-        Appraisalview.reset_password_token : None
-        }, synchronize_session=False)
-    db.flush()
-    db.commit()
-
-    data = db.query(Appraisalview).filter(Appraisalview.id == staffID).one()
+    data = db.query(Staff).filter(Staff.id == staffID).first()
     return data
 
 
@@ -178,7 +170,7 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
 
 ## function to get query all supervisors where usertype is supervisor
 async def get_all_supervisors(db:Session):
-    data = db.query(Appraisalview).filter(Appraisalview.user_type_id == 2).all()
+    data = db.query(Staff).filter(Staff.user_type_id == 2).all()
     
     return data
 
@@ -191,7 +183,7 @@ async def get_all_supervisors(db:Session):
 
 ## function to get query all staffs under each supervisor
 async def staff_under_supervisor(supervisor_id:str, db:Session):
-    data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == supervisor_id).all()
+    data = db.query(Staff).filter(Staff.supervisor_id == supervisor_id).all()
 
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

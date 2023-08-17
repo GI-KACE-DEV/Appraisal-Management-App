@@ -20,3 +20,7 @@ async def create_new_deadline(deadline:schemas.CreateDeadline, db:Session = Depe
 
 
 
+@deadline_router.put("/update")
+async def update_deadline(update: schemas.UpdateDeadline, db:Session = Depends(get_db)):
+    
+    return await crud.update_deadline(update, db)

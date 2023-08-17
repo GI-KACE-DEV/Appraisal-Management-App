@@ -1,6 +1,6 @@
 from urllib import response
 from fastapi import APIRouter, Depends, HTTPException, Request
-from dependencies import get_db
+from dependencies import get_db, validate_bearer
 
 from typing import Union, List, Optional
 
@@ -21,13 +21,13 @@ def create_usertype(payload: CreateUserType, db: Session = Depends(get_db)):
 
 
 @usertype_router.post("/id/{id}")
-def get_user_type_by_id(id: str, db: Session = Depends(get_db)):
+def get_user_type_by_id(id: str, db: Session = Depends(get_db), is_validated=Depends(validate_bearer)):
     
      data = crud.get_user_type_by_id(id, db=db)
      return data
 
 
 @usertype_router.get("/all")
-def read_usertypes(db: Session = Depends(get_db)):
+def read_usertypes(db: Session = Depends(get_db), is_validated=Depends(validate_bearer)):
     usertypes = list_usertypes(db=db)
     return usertypes

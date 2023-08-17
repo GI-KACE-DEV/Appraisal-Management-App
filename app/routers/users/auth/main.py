@@ -93,6 +93,11 @@ def get_current_user_from_token(token: str = Depends(oauth2_scheme), db: Session
         raise credentials_exception
     return user 
 
+# @auth_router.post("/logout", name='Logout')
+# async def logout(payload:schemas.Logout, db:Session=Depends(get_db)):
+#     return await crud.revoke_token(payload, db)
+
 @auth_router.post("/logout", name='Logout')
-async def logout(payload:schemas.Logout, db:Session=Depends(get_db)):
-    return await crud.revoke_token(payload, db)
+async def logout(token: str = Depends(oauth2_scheme), db:Session=Depends(get_db)):
+    print(token)
+    return await crud.revoke_token(token, db)

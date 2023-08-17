@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, event
+from sqlalchemy import Column, String, event, TIMESTAMP
 from sqlalchemy.orm import validates 
 from ..account.models import *
 from constants import EMAIL
@@ -18,11 +18,19 @@ class EmailVerificationCode(Base):
         assert re.search(EMAIL, value), 'invalid email format'
         return value
 
+# class RevokedToken(Base):
+#     __tablename__ = 'revoked_tokens'
+#     #__table_args__ = ({'schema':'public'},)
+#     id = Column(Integer,primary_key=True,index=True)
+#     jti = Column(String(255))
+
 class RevokedToken(Base):
-    __tablename__ = 'revoked_tokens'
-    #__table_args__ = ({'schema':'public'},)
-    id = Column(Integer,primary_key=True,index=True)
-    jti = Column(String(255))
+    __tablename__ = "revoked_tokens"
+    id = Column(Integer, primary_key=True,index=True)
+    access_toke = Column(String(450), primary_key=True)
+    refresh_toke = Column(String(450),nullable=False)
+    status = Column(Boolean)
+    created_date = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
 @event.listens_for(EmailVerificationCode, 'before_insert')
 def delete_existing_value(mapper, connection, target):

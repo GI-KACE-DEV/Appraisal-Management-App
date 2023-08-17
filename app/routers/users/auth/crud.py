@@ -9,6 +9,10 @@ from database import SessionLocal
 from core.utils import raise_exc
 from typing import Union
 
+
+from jose import JWTError, jwt
+from core.config import settings
+
 def get_user(username: str,db: Session):
     
     user = db.query(models.User).filter_by(email=username).first()
@@ -37,16 +41,40 @@ def add_email_verification_code(email, account:schemas.Account, db:Session):
     db.refresh(obj)
     return obj
 
-def revoke_token(payload:Union[schemas.Logout, str], db:Session):
-    try:
-        if isinstance(payload, str):
-            db.add(models.RevokedToken(jti=payload))
-        else:
-            db.add_all([models.RevokedToken(jti=token) for token in payload.dict().values()])
+# async def revoke_token(payload:Union[schemas.Logout, str], db:Session):
+#     try:
+#         if isinstance(payload, str):
+#             db.add(models.RevokedToken(jti=payload))
+#         else:
+#             db.add_all([models.RevokedToken(jti=token) for token in payload.dict().values()])
+#         db.commit()
+#         return 'success', 'token(s) successfully blacklisted'
+#     except Exception as e: 
+#         print(e)
+
+async def revoke_token(token: str, db: Session):
+
+    payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
+    id = payload['sub']
+    token_record = db.query(models.RevokedToken).all()
+    info=[]
+    for record in token_record :
+        print("record",record)
+        if (datetime.utcnow() - record.created_date).days >1:
+            info.append(record.id)
+    if info:
+        existing_token = db.query(models.RevokedToken).where(models.RevokedToken.id.in_(info)).delete()
         db.commit()
-        return 'success', 'token(s) successfully blacklisted'
-    except Exception as e: 
-        print(e)
+        
+    existing_token = db.query(models.RevokedToken).filter(models.RevokedToken.id == id, models.TokenTable.access_toke==token).first()
+    if existing_token:
+        existing_token.status=False
+        db.add(existing_token)
+        db.commit()
+        db.refresh(existing_token)
+
+
+    return {"message": "Logout Successfully"}
 
 def del_code(email, db:Session=SessionLocal()):
     obj = db.query(models.EmailVerificationCode).get(email)

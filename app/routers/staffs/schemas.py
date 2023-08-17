@@ -1,25 +1,28 @@
 import email
 from typing import Optional
 from pydantic import BaseModel, EmailStr
-from sqlalchemy.dialects.postgresql import UUID
 
 from datetime import date, datetime 
 
 
     
 class CreateStaff(BaseModel):
-    email: EmailStr 
+    user_type_id: Optional[int]
     first_name: Optional[str]
     last_name: Optional[str]
     other_name: Optional[str]
+    email: EmailStr 
+    department: Optional[str]
+    grade: Optional[int]
     gender: Optional[str]
     supervisor_id: Optional[int]
-    department: Optional[str]
     positions: Optional[str]
     appointment_date: Optional[str]
-    grade: Optional[int]
-    user_type_id: Optional[int]
-    is_active: bool
+
+
+
+
+
 
 
 class ShowStaff(BaseModel):

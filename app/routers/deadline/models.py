@@ -2,7 +2,7 @@ from sqlalchemy import Column,Integer, String,Boolean, ForeignKey,Date,TIMESTAMP
 from sqlalchemy.orm import relationship
 import uuid
 from database import Base
-from sqlalchemy.dialects.postgresql import UUID
+
 
 class Deadline(Base):
     '''Deadline Model'''
@@ -13,6 +13,7 @@ class Deadline(Base):
     deadline_type = Column(String(255), nullable=True)
     start_date = Column(String(255), nullable=True)
     end_date = Column(String(255), nullable=True)
+    deadline_year = Column(String(255), nullable=True)
     supervisor_id = Column(Integer, ForeignKey("staffs.id"))
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

@@ -28,6 +28,21 @@ async def create_new_mid_year_review(mid_year_review:CreateMidYearReview, db:Ses
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async def get_all_mid_year_review(db:Session):
     data = db.query(MidYearReview).all()
     return data

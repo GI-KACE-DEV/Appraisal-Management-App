@@ -4,9 +4,13 @@ from sqlalchemy.orm import Session
 from routers.start_of_year.schemas import CreateStartOfYear,UpdateStartOfYear
 from routers.start_of_year.models import StartOfYear
 from routers.appraisal_form.models import Appraisalview
+from routers.staffs.models import Staff 
 from fastapi.encoders import jsonable_encoder
+from routers.deadline.models import Deadline
 import json
-
+from routers.appraisal_form.models import AppraisalForm
+from datetime import datetime
+from sqlalchemy import or_
 
 
 
@@ -15,19 +19,33 @@ import json
 
 async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
 
-    json_data = jsonable_encoder({key: item for key, item in enumerate(start_of_year.first_phase)})
-    #json_data = jsonable_encoder(start_of_year.first_phase)
-
-    start_of_year_object = StartOfYear()
-    start_of_year_object.first_phase = json.dumps(json_data)
-    start_of_year_object.appraisal_form_id = start_of_year.appraisal_form_id
-    start_of_year_object.submit_status = start_of_year.submit_status
+    data = db.query(Deadline).filter(
+        Deadline.deadline_type == "Start of Year",
+        Deadline.supervisor_id == AppraisalForm.supervisor_id,
+        AppraisalForm.id == start_of_year.appraisal_form_id).first()
     
-    db.add(start_of_year_object)
-    db.flush()
-    db.commit()
-    db.refresh(start_of_year_object)
-    return start_of_year_object
+    year = datetime.now()
+    current_year = year.strftime("%Y")
+    date_str = year.strftime("%m/%d/%Y")
+    start_date = data.start_date
+    end_date = data.end_date
+    db_deadline_year = data.deadline_year
+
+    if current_year == db_deadline_year and date_str >= start_date and date_str <= end_date:
+        json_data = jsonable_encoder({key: item for key, item in enumerate(start_of_year.first_phase)})
+        #json_data = jsonable_encoder(start_of_year.first_phase)
+        start_of_year_object = StartOfYear()
+        start_of_year_object.first_phase = json.dumps(json_data)
+        start_of_year_object.appraisal_form_id = start_of_year.appraisal_form_id
+        start_of_year_object.submit_status = start_of_year.submit_status
+        db.add(start_of_year_object)
+        db.flush()
+        db.commit()
+        db.refresh(start_of_year_object)
+        return "start of year added successfully"
+    
+    raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
+            detail="please contact your supervisor for more info")
 
 
 
@@ -51,7 +69,7 @@ async def get_all_start_of_year(db:Session):
 
 async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
     data = db.query(StartOfYear).filter(
-        StartOfYear.appraisal_form_id == Appraisalview.appraisal_form_id,
+        StartOfYear.appraisal_form_id == Staff.appraisal_form_id,
         StartOfYear.appraisal_form_id == appraisal_form_id
         ).first()
     
@@ -60,7 +78,6 @@ async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
                             detail=f"Start Of Year form with the id {appraisal_form_id} is not found")
     
     first_phase = json.loads(data.first_phase)
-
 
     db_data = {
             "id": data.id,

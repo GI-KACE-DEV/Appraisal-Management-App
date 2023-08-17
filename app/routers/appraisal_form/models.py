@@ -18,19 +18,10 @@ class AppraisalForm(Base):
     positions = Column(String(255), nullable=True)
     appraisal_year = Column(String(255), nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.id"))
+    supervisor_id = Column(Integer, nullable=True)
     status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -44,20 +35,11 @@ class Appraisalview(Base):
     __tablename__ = "appraisal_view"
 
     id = Column(Integer,primary_key=True,index=True)
-    first_name = Column(String(255), nullable=True)
-    last_name = Column(String(255), nullable=True)
-    email = Column(String(255), unique=True, index=True)
     department = Column(String(255), nullable=True)
     grade = Column(String(255), nullable=True)
-    gender = Column(String(255), nullable=True)
-    supervisor_id = Column(Integer, nullable=True)
-    user_type_id = Column(Integer, ForeignKey("user_type.id"))
     positions = Column(String(255), nullable=True)
-    appraisal_year = Column(String(255))
-    appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean(), default=True)
-    reset_password_token = Column(String(255), nullable=True)
+    staff_id = Column(Integer, ForeignKey("staffs.id"))
+    supervisor_id = Column(Integer, nullable=True)
     status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

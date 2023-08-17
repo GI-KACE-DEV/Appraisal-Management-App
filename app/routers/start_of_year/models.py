@@ -16,8 +16,6 @@ class StartOfYear(Base):
     # target = Column(TEXT, nullable=True)
     # resources = Column(String(255), nullable=True)
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
-    deadline_start_date = Column(String(255), nullable=True)
-    deadline_end_date = Column(String(255), nullable=True)
     start_status = Column(Boolean, default=True, nullable=True)
     submit_status = Column(Boolean, default=False, nullable=True)
     approval_status = Column(Boolean, default=False, nullable=True)

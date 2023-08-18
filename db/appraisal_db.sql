@@ -65,8 +65,9 @@ CREATE TABLE public.appraisal_forms (
     department character varying(255),
     grade character varying(255),
     positions character varying(255),
-    appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    appraisal_year character varying(255),
     staff_id integer,
+    supervisor_id integer,
     status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -99,20 +100,11 @@ ALTER SEQUENCE public.appraisal_forms_id_seq OWNED BY public.appraisal_forms.id;
 
 CREATE TABLE public.appraisal_view (
     id integer NOT NULL,
-    first_name character varying(255),
-    last_name character varying(255),
-    email character varying(255),
     department character varying(255),
     grade character varying(255),
-    gender character varying(255),
-    supervisor_id integer,
-    user_type_id integer,
     positions character varying(255),
-    appraisal_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    appraisal_form_id integer,
-    is_active boolean,
-    is_superuser boolean,
-    reset_password_token character varying(255),
+    staff_id integer,
+    supervisor_id integer,
     status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -137,6 +129,53 @@ CREATE SEQUENCE public.appraisal_view_id_seq
 --
 
 ALTER SEQUENCE public.appraisal_view_id_seq OWNED BY public.appraisal_view.id;
+
+
+--
+-- Name: apscheduler_jobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.apscheduler_jobs (
+    id character varying(191) NOT NULL,
+    next_run_time double precision,
+    job_state bytea NOT NULL
+);
+
+
+--
+-- Name: department_deadline; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.department_deadline (
+    id integer NOT NULL,
+    deadline_type character varying(255),
+    start_date character varying(255),
+    end_date character varying(255),
+    deadline_year character varying(255),
+    supervisor_id integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: department_deadline_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.department_deadline_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: department_deadline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.department_deadline_id_seq OWNED BY public.department_deadline.id;
 
 
 --
@@ -189,6 +228,39 @@ CREATE SEQUENCE public.end_of_year_review_id_seq
 --
 
 ALTER SEQUENCE public.end_of_year_review_id_seq OWNED BY public.end_of_year_review.id;
+
+
+--
+-- Name: messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.messages (
+    push_id character varying(255) NOT NULL,
+    message json NOT NULL,
+    web_push_subscription json,
+    created timestamp without time zone,
+    id integer NOT NULL
+);
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.messages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.messages_id_seq OWNED BY public.messages.id;
 
 
 --
@@ -272,7 +344,7 @@ ALTER SEQUENCE public.overall_performance_id_seq OWNED BY public.overall_perform
 CREATE TABLE public.performance_details (
     id integer NOT NULL,
     comments text,
-    approved_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    approved_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     weight text,
     final_score text,
     appraisal_form_id integer,
@@ -311,28 +383,11 @@ ALTER SEQUENCE public.performance_details_id_seq OWNED BY public.performance_det
 
 CREATE TABLE public.revoked_tokens (
     id integer NOT NULL,
-    jti character varying(255)
+    access_toke character varying(450) NOT NULL,
+    refresh_toke character varying(450) NOT NULL,
+    status boolean,
+    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
-
-
---
--- Name: revoked_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.revoked_tokens_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: revoked_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.revoked_tokens_id_seq OWNED BY public.revoked_tokens.id;
 
 
 --
@@ -341,17 +396,18 @@ ALTER SEQUENCE public.revoked_tokens_id_seq OWNED BY public.revoked_tokens.id;
 
 CREATE TABLE public.staffs (
     id integer NOT NULL,
-    first_name character varying(255) NOT NULL,
-    last_name character varying(255) NOT NULL,
+    first_name character varying(255),
+    last_name character varying(255),
     other_name character varying(255),
+    department character varying(255),
+    grade character varying(255),
+    appointment_date character varying(255),
     gender character varying(255),
     supervisor_id integer,
-    department character varying(255),
     positions character varying(255),
-    appointment_date character varying(255),
-    grade integer,
+    appraisal_form_id integer,
     is_active boolean,
-    is_superuser boolean,
+    status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -378,20 +434,56 @@ ALTER SEQUENCE public.staffs_id_seq OWNED BY public.staffs.id;
 
 
 --
+-- Name: start_deadline; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.start_deadline (
+    id integer NOT NULL,
+    deadline_type character varying(255),
+    start_date character varying(255),
+    comment text,
+    end_date character varying(255),
+    deadline_year character varying(255),
+    appraisal_form_id integer,
+    supervisor_id integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: start_deadline_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.start_deadline_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: start_deadline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.start_deadline_id_seq OWNED BY public.start_deadline.id;
+
+
+--
 -- Name: start_of_year; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.start_of_year (
     id integer NOT NULL,
-    results_areas text,
-    target text,
-    resources character varying(255),
+    first_phase text,
     appraisal_form_id integer,
-    deadline_start_date character varying(255),
-    deadline_end_date character varying(255),
     start_status boolean,
-    submit boolean,
+    submit_status boolean,
     approval_status boolean,
+    approval_date character varying(255),
+    comment text,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -507,10 +599,24 @@ ALTER TABLE ONLY public.appraisal_view ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: department_deadline id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.department_deadline ALTER COLUMN id SET DEFAULT nextval('public.department_deadline_id_seq'::regclass);
+
+
+--
 -- Name: end_of_year_review id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.end_of_year_review ALTER COLUMN id SET DEFAULT nextval('public.end_of_year_review_id_seq'::regclass);
+
+
+--
+-- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq'::regclass);
 
 
 --
@@ -535,17 +641,17 @@ ALTER TABLE ONLY public.performance_details ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: revoked_tokens id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.revoked_tokens ALTER COLUMN id SET DEFAULT nextval('public.revoked_tokens_id_seq'::regclass);
-
-
---
 -- Name: staffs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.staffs ALTER COLUMN id SET DEFAULT nextval('public.staffs_id_seq'::regclass);
+
+
+--
+-- Name: start_deadline id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_deadline ALTER COLUMN id SET DEFAULT nextval('public.start_deadline_id_seq'::regclass);
 
 
 --
@@ -588,6 +694,18 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: apscheduler_jobs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: department_deadline; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: email_verication_codes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -595,6 +713,12 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 --
 -- Data for Name: end_of_year_review; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: messages; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -625,6 +749,12 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 --
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: start_deadline; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -672,10 +802,24 @@ SELECT pg_catalog.setval('public.appraisal_view_id_seq', 1, false);
 
 
 --
+-- Name: department_deadline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.department_deadline_id_seq', 1, false);
+
+
+--
 -- Name: end_of_year_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.end_of_year_review_id_seq', 1, false);
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.messages_id_seq', 1, false);
 
 
 --
@@ -700,17 +844,17 @@ SELECT pg_catalog.setval('public.performance_details_id_seq', 1, false);
 
 
 --
--- Name: revoked_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.revoked_tokens_id_seq', 1, false);
-
-
---
 -- Name: staffs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.staffs_id_seq', 1, false);
+
+
+--
+-- Name: start_deadline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.start_deadline_id_seq', 1, false);
 
 
 --
@@ -767,6 +911,22 @@ ALTER TABLE ONLY public.appraisal_view
 
 
 --
+-- Name: apscheduler_jobs apscheduler_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.apscheduler_jobs
+    ADD CONSTRAINT apscheduler_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: department_deadline department_deadline_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.department_deadline
+    ADD CONSTRAINT department_deadline_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: email_verication_codes email_verication_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -780,6 +940,14 @@ ALTER TABLE ONLY public.email_verication_codes
 
 ALTER TABLE ONLY public.end_of_year_review
     ADD CONSTRAINT end_of_year_review_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.messages
+    ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -811,7 +979,7 @@ ALTER TABLE ONLY public.performance_details
 --
 
 ALTER TABLE ONLY public.revoked_tokens
-    ADD CONSTRAINT revoked_tokens_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT revoked_tokens_pkey PRIMARY KEY (id, access_toke);
 
 
 --
@@ -820,6 +988,14 @@ ALTER TABLE ONLY public.revoked_tokens
 
 ALTER TABLE ONLY public.staffs
     ADD CONSTRAINT staffs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: start_deadline start_deadline_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_deadline
+    ADD CONSTRAINT start_deadline_pkey PRIMARY KEY (id);
 
 
 --
@@ -868,10 +1044,24 @@ CREATE INDEX ix_appraisal_forms_id ON public.appraisal_forms USING btree (id);
 
 
 --
--- Name: ix_appraisal_view_email; Type: INDEX; Schema: public; Owner: -
+-- Name: ix_appraisal_view_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX ix_appraisal_view_email ON public.appraisal_view USING btree (email);
+CREATE INDEX ix_appraisal_view_id ON public.appraisal_view USING btree (id);
+
+
+--
+-- Name: ix_apscheduler_jobs_next_run_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_apscheduler_jobs_next_run_time ON public.apscheduler_jobs USING btree (next_run_time);
+
+
+--
+-- Name: ix_department_deadline_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_department_deadline_id ON public.department_deadline USING btree (id);
 
 
 --
@@ -879,6 +1069,13 @@ CREATE UNIQUE INDEX ix_appraisal_view_email ON public.appraisal_view USING btree
 --
 
 CREATE INDEX ix_end_of_year_review_id ON public.end_of_year_review USING btree (id);
+
+
+--
+-- Name: ix_messages_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_messages_id ON public.messages USING btree (id);
 
 
 --
@@ -914,6 +1111,13 @@ CREATE INDEX ix_revoked_tokens_id ON public.revoked_tokens USING btree (id);
 --
 
 CREATE INDEX ix_staffs_id ON public.staffs USING btree (id);
+
+
+--
+-- Name: ix_start_deadline_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_start_deadline_id ON public.start_deadline USING btree (id);
 
 
 --
@@ -953,19 +1157,19 @@ ALTER TABLE ONLY public.appraisal_forms
 
 
 --
--- Name: appraisal_view appraisal_view_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appraisal_view appraisal_view_staff_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appraisal_view
-    ADD CONSTRAINT appraisal_view_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+    ADD CONSTRAINT appraisal_view_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
 
 
 --
--- Name: appraisal_view appraisal_view_user_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: department_deadline department_deadline_supervisor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.appraisal_view
-    ADD CONSTRAINT appraisal_view_user_type_id_fkey FOREIGN KEY (user_type_id) REFERENCES public.user_type(id);
+ALTER TABLE ONLY public.department_deadline
+    ADD CONSTRAINT department_deadline_supervisor_id_fkey FOREIGN KEY (supervisor_id) REFERENCES public.staffs(id);
 
 
 --
@@ -1006,6 +1210,30 @@ ALTER TABLE ONLY public.performance_details
 
 ALTER TABLE ONLY public.performance_details
     ADD CONSTRAINT performance_details_overall_performance_id_fkey FOREIGN KEY (overall_performance_id) REFERENCES public.overall_performance(id);
+
+
+--
+-- Name: staffs staffs_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staffs
+    ADD CONSTRAINT staffs_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: start_deadline start_deadline_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_deadline
+    ADD CONSTRAINT start_deadline_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: start_deadline start_deadline_supervisor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.start_deadline
+    ADD CONSTRAINT start_deadline_supervisor_id_fkey FOREIGN KEY (supervisor_id) REFERENCES public.staffs(id);
 
 
 --

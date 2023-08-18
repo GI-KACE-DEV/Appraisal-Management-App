@@ -21,7 +21,7 @@ class Staff(Base):
     appointment_date = Column(String(255), nullable=True)
     gender = Column(String(255), nullable=True)
     supervisor_id = Column(Integer, nullable=True)
-    user_type_id = Column(Integer, ForeignKey("user_type.id"))
+    #user_type_id = Column(Integer, ForeignKey("user_type.id"))
     positions = Column(String(255), nullable=True)
     appraisal_form_id = Column(Integer, ForeignKey("appraisal_forms.id"))
     is_active = Column(Boolean, default=True)

@@ -1,12 +1,12 @@
 from fastapi.exceptions import HTTPException
 from fastapi import status
 from sqlalchemy.orm import Session
-from routers.start_of_year.schemas import CreateStartOfYear,UpdateStartOfYear
+from routers.start_of_year.schemas import CreateStartOfYear,UpdateStartOfYear,UpdateStaffDeadline
 from routers.start_of_year.models import StartOfYear
 from routers.appraisal_form.models import Appraisalview
 from routers.staffs.models import Staff 
 from fastapi.encoders import jsonable_encoder
-from routers.deadline.models import Deadline
+from routers.deadline.models import DepartmentDeadline,StaffDeadline
 import json
 from routers.appraisal_form.models import AppraisalForm
 from datetime import datetime
@@ -19,10 +19,11 @@ from sqlalchemy import or_
 
 async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
 
-    data = db.query(Deadline).filter(
-        Deadline.deadline_type == "Start of Year",
-        Deadline.supervisor_id == AppraisalForm.supervisor_id,
-        AppraisalForm.id == start_of_year.appraisal_form_id).first()
+    data = db.query(StaffDeadline).filter(
+        StaffDeadline.deadline_type == "Start of Year",
+        StaffDeadline.supervisor_id == AppraisalForm.supervisor_id,
+        StaffDeadline.appraisal_form_id == start_of_year.appraisal_form_id
+        ).first()
     
     year = datetime.now()
     current_year = year.strftime("%Y")
@@ -36,6 +37,8 @@ async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
         #json_data = jsonable_encoder(start_of_year.first_phase)
         start_of_year_object = StartOfYear()
         start_of_year_object.first_phase = json.dumps(json_data)
+        start_of_year_object.deadline_start_date = data.start_date
+        start_of_year_object.deadline_end_date = data.end_date
         start_of_year_object.appraisal_form_id = start_of_year.appraisal_form_id
         start_of_year_object.submit_status = start_of_year.submit_status
         db.add(start_of_year_object)
@@ -81,9 +84,9 @@ async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
 
     db_data = {
             "id": data.id,
-            "first_phase": first_phase,
             "appraisal_form_id": data.appraisal_form_id,
-            "submit_status": data.submit_status
+            "submit_status": data.submit_status,
+            "first_phase": first_phase
     }
     return db_data
 
@@ -94,25 +97,85 @@ async def staff_start_of_year_form(appraisal_form_id: int, db:Session):
 
 
 
-async def updateStartOfYear(updateStartOfYear: UpdateStartOfYear, db:Session):
-    start_of_year_id = updateStartOfYear.id
-    is_start_of_year_id_update = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).update({
-        StartOfYear.results_areas : updateStartOfYear.results_areas,
-        StartOfYear.target : updateStartOfYear.target,
-        StartOfYear.resources : updateStartOfYear.resources,
-        StartOfYear.approval_status : updateStartOfYear.approval_status
+async def update_start_of_year(updateStartOfYear: UpdateStartOfYear, db:Session):
+    db_id = updateStartOfYear.id
+    json_data = jsonable_encoder({key: item for key, item in enumerate(updateStartOfYear.first_phase)})
+    year = datetime.now()
+    approval_date = year.strftime("%m/%d/%Y %H:%M:%S")
+    is_db_id_update = db.query(StartOfYear).filter(StartOfYear.id == db_id).update({
+        StartOfYear.first_phase : json.dumps(json_data),
+        StartOfYear.appraisal_form_id : updateStartOfYear.appraisal_form_id,
+        StartOfYear.approval_status : updateStartOfYear.approval_status,
+        StartOfYear.comment : updateStartOfYear.comment,
+        StartOfYear.approval_date : approval_date
         }, synchronize_session=False)
     db.flush()
     db.commit()
-    if not is_start_of_year_id_update:
+    if not is_db_id_update:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-            detail="Start Of Year with the id (" + str(start_of_year_id) + ") is not found")
+            detail="Start Of Year with the id (" + str(db_id) + ") is not found")
 
-    data = db.query(StartOfYear).filter(StartOfYear.id == start_of_year_id).one()
+    data = db.query(StartOfYear).filter(StartOfYear.id == db_id).one()
     return data
 
 
 
+
+
+
+
+
+
+
+
+
+
+async def get_start_deadline(appraisal_form_id: int, db:Session):
+    data = db.query(StaffDeadline).filter(
+        StaffDeadline.appraisal_form_id == Staff.appraisal_form_id,
+        StaffDeadline.appraisal_form_id == appraisal_form_id
+        ).first()
+    
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Staff Deadline with the id {appraisal_form_id} is not found")
+
+    return data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async def update_start_deadline(update_start_deadline: UpdateStaffDeadline, db:Session):
+    deadline_id = update_start_deadline.appraisal_form_id
+    is_mid_year_review_id_update = db.query(StaffDeadline).filter(StaffDeadline.appraisal_form_id == deadline_id).update({
+        StaffDeadline.deadline_type : update_start_deadline.deadline_type,
+        StaffDeadline.start_date : update_start_deadline.start_date,
+        StaffDeadline.appraisal_form_id : update_start_deadline.appraisal_form_id,
+        StaffDeadline.supervisor_id : update_start_deadline.supervisor_id,
+        StaffDeadline.end_date : update_start_deadline.end_date,
+        StaffDeadline.comment : update_start_deadline.comment
+        }, synchronize_session=False)
+    db.flush()
+    db.commit()
+    if not is_mid_year_review_id_update:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+            detail="Staff Deadline with the id (" + str(deadline_id) + ") is not found")
+
+    data = db.query(StaffDeadline).filter(StaffDeadline.appraisal_form_id == deadline_id).one()
+    return data
 
 
 

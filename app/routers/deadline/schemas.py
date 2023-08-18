@@ -21,6 +21,7 @@ class UpdateDeadline(BaseModel):
     deadline_type: Optional[str]
     start_date: Optional[str]
     end_date: Optional[str]
+    comment: Optional[str]
     supervisor_id: Optional[int]
 
 

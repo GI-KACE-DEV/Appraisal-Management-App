@@ -4,13 +4,14 @@ from fastapi import status, Form, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from routers.deadline.schemas import CreateDeadline, UpdateDeadline
-from routers.deadline.models import Deadline
+from routers.deadline.models import DepartmentDeadline, StaffDeadline
 from routers.users.user_type.models import UserType
 from routers.staffs.models import Staff 
 from routers.appraisal_form.models import AppraisalForm, Appraisalview
 from  dependencies import get_db
 from routers.staffs.models import Staff 
 from datetime import datetime
+from routers.users.account.models import User
 
 
 
@@ -20,7 +21,8 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
     appraisal_year = year.year
 
     db_user_type = db.query(Staff).filter(
-        UserType.id == Staff.user_type_id,
+        User.staff_id == Staff.id,
+        UserType.id == User.user_type_id,
         UserType.title == "Supervisor",
         Staff.id == deadline.supervisor_id
         ).first()
@@ -29,7 +31,7 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Deadline is created by only Supervisors")
     
-    deadline_object = Deadline(**deadline.dict())
+    deadline_object = DepartmentDeadline(**deadline.dict())
     deadline_object.deadline_year = appraisal_year
     db.add(deadline_object)
     db.flush()
@@ -42,8 +44,15 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
                                                 supervisor_id=row.supervisor_id,positions=row.positions, staff_id=row.staff_id)
             db.add(appraisalForm_object)
             db.flush()
-            db.commit()
             db.refresh(appraisalForm_object)
+
+            staffDeadline_object = StaffDeadline(**deadline.dict())
+            staffDeadline_object.deadline_year = appraisal_year
+            staffDeadline_object.appraisal_form_id = appraisalForm_object.id
+            db.add(staffDeadline_object)
+            db.flush()
+            db.commit()
+            db.refresh(staffDeadline_object)
 
             db.query(Staff).filter(Staff.id == row.staff_id, Staff.supervisor_id == deadline.supervisor_id).update({
             Staff.appraisal_form_id : appraisalForm_object.id,
@@ -64,12 +73,12 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
 
 
 
-async def update_deadline(updateDeadline: UpdateDeadline, db:Session):
+async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session):
     deadline_id = updateDeadline.id
-    is_mid_year_review_id_update = db.query(Deadline).filter(Deadline.id == deadline_id).update({
-        Deadline.deadline_type : updateDeadline.deadline_type,
-        Deadline.start_date : updateDeadline.start_date,
-        Deadline.end_date : updateDeadline.end_date
+    is_mid_year_review_id_update = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).update({
+        DepartmentDeadline.deadline_type : updateDeadline.deadline_type,
+        DepartmentDeadline.start_date : updateDeadline.start_date,
+        DepartmentDeadline.end_date : updateDeadline.end_date
         }, synchronize_session=False)
     db.flush()
     db.commit()
@@ -77,5 +86,5 @@ async def update_deadline(updateDeadline: UpdateDeadline, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Deadline with the id (" + str(deadline_id) + ") is not found")
 
-    data = db.query(Deadline).filter(Deadline.id == deadline_id).one()
+    data = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).one()
     return data

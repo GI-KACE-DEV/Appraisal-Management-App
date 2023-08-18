@@ -33,7 +33,7 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     
     ## create staff into staff table
     staff_object = Staff(first_name = staff.first_name, last_name = staff.last_name,other_name=staff.other_name,
-                         department = staff.department,grade = staff.grade,gender= staff.gender,user_type_id= staff.user_type_id,
+                         department = staff.department,grade = staff.grade,gender= staff.gender,
                          supervisor_id=staff.supervisor_id, positions = staff.positions, appointment_date=staff.appointment_date)
     db.add(staff_object)
     db.flush()
@@ -170,7 +170,7 @@ async def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session
 
 ## function to get query all supervisors where usertype is supervisor
 async def get_all_supervisors(db:Session):
-    data = db.query(Staff).filter(Staff.user_type_id == 2).all()
+    data = db.query(Staff).filter(Staff.id == User.staff_id,  User.user_type_id == 2).all()
     
     return data
 

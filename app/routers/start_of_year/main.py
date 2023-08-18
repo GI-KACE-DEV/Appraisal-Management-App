@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
 from . import schemas, models, crud
 from  dependencies import get_db
-from routers.deadline.models import Deadline
+from routers.deadline.models import DepartmentDeadline
 import json
 from routers.appraisal_form.models import AppraisalForm
 from datetime import datetime
@@ -52,40 +52,64 @@ async def get_staff_start_of_year_form(appraisal_form_id: int, db:Session = Depe
 
 
 @start_of_year_router.put("/update")
-async def update_Start_Of_Year(updateStaff: schemas.UpdateStartOfYear, db:Session = Depends(get_db)):
+async def update_start_of_year(updateStartOfYear: schemas.UpdateStartOfYear, db:Session = Depends(get_db)):
     
-    return await crud.updateStartOfYear(updateStaff, db)
+    return await crud.update_start_of_year(updateStartOfYear, db)
 
 
 
 
 
 
-@start_of_year_router.get("/testing/{appraisal_form_id}")
-async def testing(appraisal_form_id: int, db:Session = Depends(get_db)):
-    data = db.query(Deadline).filter(
-        Deadline.deadline_type == "Start of Year",
-        Deadline.supervisor_id == AppraisalForm.supervisor_id, 
-        AppraisalForm.id == appraisal_form_id
-        ).first()
+
+
+@start_of_year_router.get("/get/{appraisal_form_id}")
+async def get_staff_deadline(appraisal_form_id: int, db:Session = Depends(get_db)):
     
-    date = datetime.now()
-    current_year = date.strftime("%Y")
-    db_deadline_year = data.deadline_year
+    return await crud.get_start_deadline(appraisal_form_id, db)
 
-    # db_data ={
-    #     "current_year": current_year,
-    #     "deadline_year": data.deadline_year
-    # }
 
-    # return db_data
 
-    if current_year == db_deadline_year:
 
-       return "deadline year is (" + str(current_year) + ")"
 
-    raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
-            detail="deadline year does not match")
+
+
+@start_of_year_router.put("/update_start_deadline")
+async def update_start_deadline(update_start_deadline: schemas.UpdateStaffDeadline, db:Session = Depends(get_db)):
+    
+    return await crud.update_start_deadline(update_start_deadline, db)
+
+
+
+
+
+
+
+# @start_of_year_router.get("/testing/{appraisal_form_id}")
+# async def testing(appraisal_form_id: int, db:Session = Depends(get_db)):
+#     data = db.query(DepartmentDeadline).filter(
+#         DepartmentDeadline.deadline_type == "Start of Year",
+#         DepartmentDeadline.supervisor_id == AppraisalForm.supervisor_id, 
+#         AppraisalForm.id == appraisal_form_id
+#         ).first()
+    
+#     date = datetime.now()
+#     current_year = date.strftime("%Y")
+#     db_deadline_year = data.deadline_year
+
+#     # db_data ={
+#     #     "current_year": current_year,
+#     #     "deadline_year": data.deadline_year
+#     # }
+
+#     # return db_data
+
+#     if current_year == db_deadline_year:
+
+#        return "deadline year is (" + str(current_year) + ")"
+
+#     raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
+#             detail="deadline year does not match")
 
 
 

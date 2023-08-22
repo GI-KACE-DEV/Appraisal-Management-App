@@ -17,7 +17,7 @@ def get_db() -> Generator:
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-async def validate_bearer(token: str = Depends(oauth2_scheme), db = Depends(get_db)):
+def validate_bearer(token: str = Depends(oauth2_scheme), db = Depends(get_db)):
     from routers.users.auth.crud import is_token_blacklisted 
     from core.utils import decode_jwt 
 

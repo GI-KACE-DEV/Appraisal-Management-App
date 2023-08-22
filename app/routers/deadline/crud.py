@@ -7,7 +7,7 @@ from routers.deadline.schemas import CreateDeadline, UpdateDeadline
 from routers.deadline.models import DepartmentDeadline, StaffDeadline
 from routers.users.user_type.models import UserType
 from routers.staffs.models import Staff 
-from routers.appraisal_form.models import AppraisalForm, Appraisalview
+from routers.appraisal_form.models import AppraisalForm
 from  dependencies import get_db
 from routers.staffs.models import Staff 
 from datetime import datetime
@@ -28,7 +28,7 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
         ).first()
 
     if not db_user_type:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
                             detail="Deadline is created by only Supervisors")
     
     deadline_object = DepartmentDeadline(**deadline.dict())
@@ -36,12 +36,12 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
     db.add(deadline_object)
     db.flush()
     
-    db_data = db.query(Appraisalview).filter(Appraisalview.supervisor_id == deadline.supervisor_id).all()
+    db_data = db.query(Staff).filter(Staff.supervisor_id == deadline.supervisor_id).all()
 
-    if deadline.deadline_type == "Start of Year" or deadline.deadline_type == "First Phase":
+    if deadline.deadline_type == "Start" or deadline.deadline_type == "First":
         for row in db_data:
             appraisalForm_object = AppraisalForm(department= row.department, grade=row.grade,appraisal_year= appraisal_year,
-                                                supervisor_id=row.supervisor_id,positions=row.positions, staff_id=row.staff_id)
+                                                supervisor_id=row.supervisor_id,positions=row.positions, staff_id=row.id)
             db.add(appraisalForm_object)
             db.flush()
             db.refresh(appraisalForm_object)
@@ -54,7 +54,7 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
             db.commit()
             db.refresh(staffDeadline_object)
 
-            db.query(Staff).filter(Staff.id == row.staff_id, Staff.supervisor_id == deadline.supervisor_id).update({
+            db.query(Staff).filter(Staff.id == row.id, Staff.supervisor_id == deadline.supervisor_id).update({
             Staff.appraisal_form_id : appraisalForm_object.id,
             }, synchronize_session=False)
             db.flush()

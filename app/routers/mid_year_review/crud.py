@@ -1,9 +1,12 @@
-from fastapi.exceptions import HTTPException
-from fastapi import status
-from sqlalchemy.orm import Session
 from routers.mid_year_review.schemas import CreateMidYearReview,UpdateMidYearReview
 from routers.mid_year_review.models import MidYearReview
-from routers.appraisal_form.models import Appraisalview
+from fastapi.exceptions import HTTPException
+from routers.staffs.models import Staff 
+from sqlalchemy.orm import Session
+from fastapi import status
+
+
+
 
 
 
@@ -54,7 +57,7 @@ async def get_all_mid_year_review(db:Session):
 
 async def staff_mid_year_review_form(appraisal_form_id: int, db:Session):
     data = db.query(MidYearReview).filter(
-        MidYearReview.appraisal_form_id == Appraisalview.appraisal_form_id,
+        MidYearReview.appraisal_form_id == Staff.appraisal_form_id,
         MidYearReview.appraisal_form_id == appraisal_form_id
         ).all()
     

@@ -7,7 +7,6 @@ from routers.staffs.schemas import CreateStaff, UpdateStaff
 from routers.users.account.models import User
 from routers.users.user_type.models import UserType
 from routers.staffs.models import Staff 
-from routers.appraisal_form.models import AppraisalForm, Appraisalview
 from  dependencies import get_db
 from services.email import sendEmailToNewStaff
 #from passlib.context import CryptContext
@@ -46,17 +45,11 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
     db.flush()
     
 
-
-    ## create staff into appraisal view table
-    appraisal_view_object = Appraisalview(staff_id=staff_object.id,department = staff.department,
-                                          grade = staff.grade, positions = staff.positions, supervisor_id=staff.supervisor_id)
-    db.add(appraisal_view_object)
     db.commit()
     db.refresh(staff_object)
     db.refresh(user_object)
-    db.refresh(appraisal_view_object)
-    #await sendEmailToNewStaff([staff.email], appraisal_view_object)
-    return appraisal_view_object
+    #await sendEmailToNewStaff([staff.email], user_object)
+    return user_object
 
 
 

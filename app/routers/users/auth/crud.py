@@ -28,7 +28,7 @@ def read_by_email(email:str, account:str, db:Session):
     return db.query(model).filter_by(email=email).first()
 
 def is_token_blacklisted(token:str, db:Session):
-    return db.query(models.RevokedToken.id).filter_by(jti=token).first() is not None
+    return db.query(models.RevokedToken.id).filter_by(access_toke=token).first() is not None
 
 def add_email_verification_code(email, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator

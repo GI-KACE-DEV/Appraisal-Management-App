@@ -21,7 +21,7 @@ import json
 async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
 
     data = db.query(StaffDeadline).filter(
-        StaffDeadline.deadline_type == "Start of Year",
+        StaffDeadline.deadline_type == "Start",
         StaffDeadline.supervisor_id == AppraisalForm.supervisor_id,
         StaffDeadline.appraisal_form_id == start_of_year.appraisal_form_id
         ).first()
@@ -32,14 +32,11 @@ async def create_new_start_of_year(start_of_year:CreateStartOfYear, db:Session):
     start_date = data.start_date
     end_date = data.end_date
     db_deadline_year = data.deadline_year
-
     if current_year == db_deadline_year and date_str >= start_date and date_str <= end_date:
         json_data = jsonable_encoder({key: item for key, item in enumerate(start_of_year.first_phase)})
         #json_data = jsonable_encoder(start_of_year.first_phase)
         start_of_year_object = StartOfYear()
         start_of_year_object.first_phase = json.dumps(json_data)
-        start_of_year_object.deadline_start_date = data.start_date
-        start_of_year_object.deadline_end_date = data.end_date
         start_of_year_object.appraisal_form_id = start_of_year.appraisal_form_id
         start_of_year_object.submit_status = start_of_year.submit_status
         db.add(start_of_year_object)

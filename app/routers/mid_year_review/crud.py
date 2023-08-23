@@ -1,9 +1,14 @@
-from routers.mid_year_review.schemas import CreateMidYearReview,UpdateMidYearReview
+from routers.mid_year_review.schemas import CreateMidYearReview,UpdateMidYearReview,UpdateStaffDeadline
 from routers.mid_year_review.models import MidYearReview
+from routers.appraisal_form.models import AppraisalForm
+from routers.deadline.models import StaffDeadline
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from routers.staffs.models import Staff 
 from sqlalchemy.orm import Session
+from datetime import datetime
 from fastapi import status
+import json
 
 
 
@@ -15,23 +20,28 @@ from fastapi import status
 
 
 async def create_new_mid_year_review(mid_year_review:CreateMidYearReview, db:Session):
-    mid_year_review_object = MidYearReview(**mid_year_review.dict())
+    data = db.query(StaffDeadline).filter(
+        StaffDeadline.deadline_type == "Mid",
+        StaffDeadline.supervisor_id == AppraisalForm.supervisor_id,
+        StaffDeadline.appraisal_form_id == mid_year_review.appraisal_form_id
+        ).first()
+    year = datetime.now()
+    current_year = year.strftime("%Y")
+    date_str = year.strftime("%m/%d/%Y")
+    start_date = data.start_date
+    end_date = data.end_date
+    db_deadline_year = data.deadline_year
+
+    if current_year == db_deadline_year and date_str >= start_date and date_str <= end_date:
+        mid_year_review_object = MidYearReview(**mid_year_review.dict())
+        db.add(mid_year_review_object)
+        db.flush()
+        db.commit()
+        db.refresh(mid_year_review_object)
+        return "mid of year added successfully"
     
-    db.add(mid_year_review_object)
-    db.flush()
-    db.commit()
-    db.refresh(mid_year_review_object)
-    return mid_year_review_object
-
-
-
-
-
-
-
-
-
-
+    raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
+            detail="please contact your supervisor for more info")
 
 
 

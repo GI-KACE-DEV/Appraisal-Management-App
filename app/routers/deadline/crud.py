@@ -73,6 +73,42 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
 
 
 
+
+async def get_deadline(db:Session):
+    return db.query(DepartmentDeadline).all()
+
+
+
+
+
+
+
+
+
+async def get_deadline_by_type(deadline_type: str, db:Session):
+    year = datetime.now()
+    current_year = year.strftime("%Y")
+    data = db.query(DepartmentDeadline).filter(
+        DepartmentDeadline.deadline_year == current_year,
+        DepartmentDeadline.deadline_type == deadline_type).first()
+    
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Department Deadline {deadline_type} not found")
+
+    return data
+
+
+
+
+
+
+
+
+
+
+
+
 async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session):
     deadline_id = updateDeadline.id
     is_mid_year_review_id_update = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).update({

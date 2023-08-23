@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from . import schemas, models, crud
+from . import schemas, crud
 from  dependencies import get_db
 
 
@@ -8,6 +8,10 @@ from  dependencies import get_db
 
 # APIRouter creates path operations for mid_year_review module
 mid_year_review_router = APIRouter()
+
+
+
+
 
 
 @mid_year_review_router.post("/create")
@@ -19,12 +23,6 @@ async def create_new_mid_year_review(mid_year_review:schemas.CreateMidYearReview
 
 
 
-
-
-@mid_year_review_router.get("/all")
-async def get_all_mid_year_review(db:Session = Depends(get_db)):
-
-    return await crud.get_all_mid_year_review(db)
 
 
 

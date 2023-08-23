@@ -52,7 +52,7 @@ def add_email_verification_code(email, account:schemas.Account, db:Session):
 #     except Exception as e: 
 #         print(e)
 
-async def revoke_token(token: str, db: Session):
+async def log_revoke_token(token: str, db: Session):
 
     payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
     #print(payload)

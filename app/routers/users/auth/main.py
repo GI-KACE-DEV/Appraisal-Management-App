@@ -105,4 +105,4 @@ def get_current_user_from_token(token: str = Depends(oauth2_scheme), db: Session
 @auth_router.post("/logout", name='Logout')
 async def logout(token: str = Depends(oauth2_scheme), db:Session=Depends(get_db)):
     #print(token)
-    return await crud.revoke_token(token, db)
+    return await crud.log_revoke_token(token, db)

@@ -18,7 +18,7 @@ class MidYearReview(Base):
     deadline_start_date = Column(String(255), nullable=True)
     deadline_end_date = Column(String(255), nullable=True)
     mid_status = Column(Boolean, default=True, nullable=True)
-    submit = Column(Boolean, default=False, nullable=True)
+    submit_status = Column(Boolean, default=False, nullable=True)
     approval_status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

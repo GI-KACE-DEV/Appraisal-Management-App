@@ -9,7 +9,6 @@ from . import models, schemas
 from core.config import settings
 from dependencies import get_db
 from routers.users.account.models import User
-from routers.appraisal_form.models import Appraisalview
 from core.hashing import Hasher
 from routers.staffs.schemas import UpdateStaff
 
@@ -54,12 +53,12 @@ def get_user_by_email(email: str, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Staff with email (" + str(email) + ") is not found")
 
-    db.query(Appraisalview).filter(Appraisalview.email == email).update({
-        Appraisalview.reset_password_token : Hasher.generate_reset_password_token()
+    db.query(User).filter(User.email == email).update({
+        User.reset_password_token : Hasher.generate_reset_password_token()
         }, synchronize_session=False)
     db.flush()
     db.commit()
-    data = db.query(Appraisalview).filter(Appraisalview.email == email).one()
+    data = db.query(User).filter(User.email == email).one()
     return data
 
 
@@ -75,7 +74,7 @@ def get_user_By_Token(token: str, db:Session):
     if not db_data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Invalid Token")
-    data = db.query(Appraisalview).filter(Appraisalview.reset_password_token == token).one()
+    data = db.query(User).filter(User.reset_password_token == token).one()
     return data
 
 
@@ -93,12 +92,12 @@ def update_Staff_After_Reset_Password(updateStaff: UpdateStaff, db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Staff with the id (" + str(staffID) + ") is not found")
     
-    db.query(Appraisalview).filter(Appraisalview.id == staffID).update({
-        Appraisalview.reset_password_token : None
+    db.query(User).filter(User.id == staffID).update({
+        User.reset_password_token : None
         }, synchronize_session=False)
     db.flush()
     db.commit()
-    data = db.query(Appraisalview).filter(Appraisalview.id == staffID).one()
+    data = db.query(User).filter(User.id == staffID).one()
     return data
 
 

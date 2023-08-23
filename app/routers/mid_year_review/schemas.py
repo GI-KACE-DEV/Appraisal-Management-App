@@ -9,6 +9,7 @@ class CreateMidYearReview(BaseModel):
     remarks: Optional[str]
     competency: Optional[str]
     appraisal_form_id: Optional[int]
+    submit_status: Optional[bool] = False
     
 
 
@@ -33,3 +34,27 @@ class UpdateMidYearReview(BaseModel):
     class Config():
         orm_model = True 
     
+
+
+
+
+
+
+
+
+
+
+class UpdateStaffDeadline(BaseModel):
+    id:Optional[int]
+    deadline_type: Optional[str]
+    start_date: Optional[str]
+    end_date: Optional[str]
+    appraisal_form_id: Optional[int]
+    supervisor_id: Optional[int]
+    comment: str
+
+
+
+
+    class Config():
+        orm_model = True 

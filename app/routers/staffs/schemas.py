@@ -60,22 +60,3 @@ class UpdateStaff(BaseModel):
 
     class Config():
         orm_mode = True 
-
-
-
-
-
-
-# class ShowAppraisalView(BaseModel):
-#     staff_id: Optional[str]
-#     email: EmailStr 
-#     first_name: Optional[str]
-#     last_name: Optional[str]
-#     other_name: Optional[str]
-#     gender: Optional[str]
-#     supervisor_id: Optional[str]
-#     department: Optional[str]
-#     positions: Optional[str]
-#     grade: Optional[str]
-#     is_active: bool
-#     is_superuser: bool 

@@ -4,8 +4,9 @@ from pydantic import BaseModel, EmailStr
 from starlette.responses import JSONResponse
 from dotenv  import dotenv_values
 from core.config import settings
-from routers.appraisal_form.models import Appraisalview
-
+from routers.users.account.models import User
+from routers.staffs.models import Staff
+from sqlalchemy.orm import Session
 
 
 config_credentials = dotenv_values(".env")
@@ -31,12 +32,30 @@ conf = ConnectionConfig(
 
 
 
-async def sendEmailToNewStaff(email: EmailSchema, instance: Appraisalview):
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async def sendEmailToNewStaff(email: EmailSchema, instance: User, db: Session):
+
+    db_data = db.query(Staff).filter(Staff.id == instance.staff_id).first()
 
     html = f"""                    
                     <br>
-                    <p>Hi {instance.last_name}, {instance.first_name} !</p>
+                    <p>Hi {db_data.last_name}, {db_data.first_name} !</p>
                     <br>
                     <p>You have been added and assigned to <b>GI-KACE APPRAISAL MANAGEMENT SYSTEM</b></p>
                     <br><br>
@@ -52,8 +71,6 @@ async def sendEmailToNewStaff(email: EmailSchema, instance: Appraisalview):
                     http://localhost:4200/reset-password?token={instance.reset_password_token}
                     
     """
-
-
 
 
     message = MessageSchema(
@@ -103,11 +120,13 @@ async def sendEmailToNewStaff(email: EmailSchema, instance: Appraisalview):
 
 
 
-async def send_Reset_Password_LinkToStaffEmail(email: EmailSchema, instance: Appraisalview):
+async def send_Reset_Password_LinkToStaffEmail(email: EmailSchema, instance: User,db: Session):
+
+    db_data = db.query(Staff).filter(Staff.id == instance.staff_id).first()
 
     html = f"""                    
                     <br>
-                    <p>Hi {instance.last_name}, {instance.first_name} !</p>
+                    <p>Hi {db_data.last_name}, {db_data.first_name} !</p>
                     <br>
                     <p>You have requested to reset your password. Click on the button below to reset your password</p>
 

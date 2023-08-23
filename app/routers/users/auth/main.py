@@ -1,3 +1,5 @@
+from lib2to3.pgen2 import token
+from routers.users.auth.models import TokenTable
 from . import schemas, crud
 from fastapi import Depends,APIRouter, status,HTTPException
 from sqlalchemy.orm import Session
@@ -12,8 +14,7 @@ from pydantic import EmailStr
 
 from dependencies import get_db
 from core.hashing import Hasher
-from .schemas import Token
-
+from .schemas import TokenCreate
 from .crud import  get_user
 from core.security import create_access_token
 from core.config import settings
@@ -44,7 +45,7 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     # if not user.is:
     #     raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="account is not a super user")
 
-    data = {"sub": user.email}
+    data = {"sub": user.email, "user_id": user.id}
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -57,6 +58,10 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
         expires_delta=access_token_expires
     )
 
+    token_db = TokenTable(id=user.id, access_toke=access_token, refresh_toke=refresh_token, status=True)
+    db.add(token_db)
+    db.commit()
+    db.refresh(token_db)
     return {
 
         "access_token": access_token, 
@@ -99,5 +104,5 @@ def get_current_user_from_token(token: str = Depends(oauth2_scheme), db: Session
 
 @auth_router.post("/logout", name='Logout')
 async def logout(token: str = Depends(oauth2_scheme), db:Session=Depends(get_db)):
-    print(token)
+    #print(token)
     return await crud.revoke_token(token, db)

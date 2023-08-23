@@ -28,7 +28,7 @@ def read_by_email(email:str, account:str, db:Session):
     return db.query(model).filter_by(email=email).first()
 
 def is_token_blacklisted(token:str, db:Session):
-    return db.query(models.RevokedToken.id).filter_by(access_toke=token).first() is not None
+    return db.query(models.TokenTable.id).filter_by(access_toke=token).first() is not None
 
 def add_email_verification_code(email, account:schemas.Account, db:Session):
     model = User if account=="users" else Administrator
@@ -55,18 +55,21 @@ def add_email_verification_code(email, account:schemas.Account, db:Session):
 async def revoke_token(token: str, db: Session):
 
     payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
-    id = payload['sub']
-    token_record = db.query(models.RevokedToken).all()
+    #print(payload)
+    id = payload['user_id']
+    token_record = db.query(models.TokenTable).all()
     info=[]
     for record in token_record :
         print("record",record)
-        if (datetime.utcnow() - record.created_date).days >1:
+        if (datetime.utcnow() - record.created_date).days > 1:
             info.append(record.id)
+
+    print(info)
     if info:
-        existing_token = db.query(models.RevokedToken).where(models.RevokedToken.id.in_(info)).delete()
+        existing_token = db.query(models.TokenTable).where(models.TokenTable.id.in_(info)).delete()
         db.commit()
         
-    existing_token = db.query(models.RevokedToken).filter(models.RevokedToken.id == id, models.TokenTable.access_toke==token).first()
+    existing_token = db.query(models.TokenTable).filter(models.TokenTable.id == id, models.TokenTable.access_toke==token).first()
     if existing_token:
         existing_token.status=False
         db.add(existing_token)

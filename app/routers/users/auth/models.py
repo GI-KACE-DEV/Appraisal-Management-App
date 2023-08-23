@@ -24,9 +24,9 @@ class EmailVerificationCode(Base):
 #     id = Column(Integer,primary_key=True,index=True)
 #     jti = Column(String(255))
 
-class RevokedToken(Base):
-    __tablename__ = "revoked_tokens"
-    id = Column(Integer, primary_key=True,index=True)
+class TokenTable(Base):
+    __tablename__ = "tokens"
+    id = Column(Integer)
     access_toke = Column(String(450), primary_key=True)
     refresh_toke = Column(String(450),nullable=False)
     status = Column(Boolean)

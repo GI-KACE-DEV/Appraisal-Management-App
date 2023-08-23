@@ -1,5 +1,6 @@
 from routers.users.account.schemas import User, Admin, EmailBase, Account
 from pydantic import BaseModel, constr
+import datetime
 from typing import Optional, Union
 
 class Login(EmailBase):
@@ -25,6 +26,9 @@ class Logout(BaseModel):
     access_token: str
     refresh_token: str
 
-class Token(BaseModel):
+class TokenCreate(BaseModel):
+    id = str
     access_token: Optional[str]
     token_type: Optional[str]
+    status : bool
+    create_date: datetime.datetime

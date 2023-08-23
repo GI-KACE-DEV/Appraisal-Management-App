@@ -95,43 +95,6 @@ ALTER SEQUENCE public.appraisal_forms_id_seq OWNED BY public.appraisal_forms.id;
 
 
 --
--- Name: appraisal_view; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.appraisal_view (
-    id integer NOT NULL,
-    department character varying(255),
-    grade character varying(255),
-    positions character varying(255),
-    staff_id integer,
-    supervisor_id integer,
-    status boolean,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
---
--- Name: appraisal_view_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.appraisal_view_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: appraisal_view_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.appraisal_view_id_seq OWNED BY public.appraisal_view.id;
-
-
---
 -- Name: apscheduler_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -276,7 +239,7 @@ CREATE TABLE public.mid_year_review (
     deadline_start_date character varying(255),
     deadline_end_date character varying(255),
     mid_status boolean,
-    submit boolean,
+    submit_status boolean,
     approval_status boolean,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -375,19 +338,6 @@ CREATE SEQUENCE public.performance_details_id_seq
 --
 
 ALTER SEQUENCE public.performance_details_id_seq OWNED BY public.performance_details.id;
-
-
---
--- Name: revoked_tokens; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.revoked_tokens (
-    id integer NOT NULL,
-    access_toke character varying(450) NOT NULL,
-    refresh_toke character varying(450) NOT NULL,
-    status boolean,
-    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
-);
 
 
 --
@@ -510,6 +460,19 @@ ALTER SEQUENCE public.start_of_year_id_seq OWNED BY public.start_of_year.id;
 
 
 --
+-- Name: tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tokens (
+    id integer,
+    access_toke character varying(450) NOT NULL,
+    refresh_toke character varying(450) NOT NULL,
+    status boolean,
+    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+--
 -- Name: user_type; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -589,13 +552,6 @@ ALTER TABLE ONLY public.administrators ALTER COLUMN admin_id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.appraisal_forms ALTER COLUMN id SET DEFAULT nextval('public.appraisal_forms_id_seq'::regclass);
-
-
---
--- Name: appraisal_view id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.appraisal_view ALTER COLUMN id SET DEFAULT nextval('public.appraisal_view_id_seq'::regclass);
 
 
 --
@@ -688,12 +644,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: appraisal_view; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
 -- Data for Name: apscheduler_jobs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -742,12 +692,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: revoked_tokens; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -766,12 +710,18 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: tokens; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: user_type; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.user_type (id, title) VALUES (1, 'admin');
-INSERT INTO public.user_type (id, title) VALUES (2, 'supervisor');
-INSERT INTO public.user_type (id, title) VALUES (3, 'staff');
+INSERT INTO public.user_type (id, title) VALUES (1, 'Admin');
+INSERT INTO public.user_type (id, title) VALUES (2, 'Supervisor');
+INSERT INTO public.user_type (id, title) VALUES (3, 'Staff');
 
 
 --
@@ -792,13 +742,6 @@ SELECT pg_catalog.setval('public.administrators_admin_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.appraisal_forms_id_seq', 1, false);
-
-
---
--- Name: appraisal_view_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.appraisal_view_id_seq', 1, false);
 
 
 --
@@ -903,14 +846,6 @@ ALTER TABLE ONLY public.appraisal_forms
 
 
 --
--- Name: appraisal_view appraisal_view_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.appraisal_view
-    ADD CONSTRAINT appraisal_view_pkey PRIMARY KEY (id);
-
-
---
 -- Name: apscheduler_jobs apscheduler_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -975,14 +910,6 @@ ALTER TABLE ONLY public.performance_details
 
 
 --
--- Name: revoked_tokens revoked_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.revoked_tokens
-    ADD CONSTRAINT revoked_tokens_pkey PRIMARY KEY (id, access_toke);
-
-
---
 -- Name: staffs staffs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1004,6 +931,14 @@ ALTER TABLE ONLY public.start_deadline
 
 ALTER TABLE ONLY public.start_of_year
     ADD CONSTRAINT start_of_year_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tokens tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tokens
+    ADD CONSTRAINT tokens_pkey PRIMARY KEY (access_toke);
 
 
 --
@@ -1041,13 +976,6 @@ CREATE UNIQUE INDEX ix_administrators_email ON public.administrators USING btree
 --
 
 CREATE INDEX ix_appraisal_forms_id ON public.appraisal_forms USING btree (id);
-
-
---
--- Name: ix_appraisal_view_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ix_appraisal_view_id ON public.appraisal_view USING btree (id);
 
 
 --
@@ -1100,13 +1028,6 @@ CREATE INDEX ix_performance_details_id ON public.performance_details USING btree
 
 
 --
--- Name: ix_revoked_tokens_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ix_revoked_tokens_id ON public.revoked_tokens USING btree (id);
-
-
---
 -- Name: ix_staffs_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1154,14 +1075,6 @@ CREATE INDEX ix_users_id ON public.users USING btree (id);
 
 ALTER TABLE ONLY public.appraisal_forms
     ADD CONSTRAINT appraisal_forms_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
-
-
---
--- Name: appraisal_view appraisal_view_staff_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.appraisal_view
-    ADD CONSTRAINT appraisal_view_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
 
 
 --

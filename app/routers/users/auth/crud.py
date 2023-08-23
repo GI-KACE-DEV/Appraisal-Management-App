@@ -64,7 +64,6 @@ async def revoke_token(token: str, db: Session):
         if (datetime.utcnow() - record.created_date).days > 1:
             info.append(record.id)
 
-    print(info)
     if info:
         existing_token = db.query(models.TokenTable).where(models.TokenTable.id.in_(info)).delete()
         db.commit()

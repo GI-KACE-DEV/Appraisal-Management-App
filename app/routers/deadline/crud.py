@@ -151,6 +151,7 @@ async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session)
     deadline_id = updateDeadline.id
     is_mid_year_review_id_update = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).update({
         DepartmentDeadline.deadline_type : updateDeadline.deadline_type,
+        DepartmentDeadline.deadline_year : updateDeadline.deadline_year,
         DepartmentDeadline.start_date : updateDeadline.start_date,
         DepartmentDeadline.end_date : updateDeadline.end_date
         }, synchronize_session=False)
@@ -160,5 +161,24 @@ async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session)
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
             detail="Deadline with the id (" + str(deadline_id) + ") is not found")
 
-    data = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).one()
-    return data
+    data = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).first()
+
+    update_staff_deadline = db.query(DepartmentDeadline).filter(
+        StaffDeadline.deadline_year == data.deadline_year,
+        StaffDeadline.supervisor_id == data.supervisor_id,
+        StaffDeadline.deadline_type == data.deadline_type
+        ).first()
+    
+    if update_staff_deadline:
+        db.query(StaffDeadline).filter(
+                StaffDeadline.deadline_year == data.deadline_year,
+                StaffDeadline.supervisor_id == data.supervisor_id,
+                StaffDeadline.deadline_type == data.deadline_type
+                ).update({
+                StaffDeadline.start_date : updateDeadline.start_date,
+                StaffDeadline.end_date : updateDeadline.end_date
+            }, synchronize_session=False)
+        db.flush()
+        db.commit()
+
+    return "Deadline updated successfully"

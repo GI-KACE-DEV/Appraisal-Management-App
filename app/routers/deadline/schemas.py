@@ -19,6 +19,7 @@ class CreateDeadline(BaseModel):
 class UpdateDeadline(BaseModel):
     id:Optional[int]
     deadline_type: Optional[str]
+    deadline_year: Optional[str]
     start_date: Optional[str]
     end_date: Optional[str]
     comment: Optional[str]

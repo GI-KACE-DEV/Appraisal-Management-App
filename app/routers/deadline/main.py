@@ -57,7 +57,7 @@ async def get_deadline_by_type(deadline_type: str, db:Session = Depends(get_db))
 
 
 
-# @deadline_router.put("/update")
-# async def update_deadline(update: schemas.UpdateDeadline, db:Session = Depends(get_db)):
+@deadline_router.put("/update")
+async def update_departmental_deadline(update: schemas.UpdateDeadline, db:Session = Depends(get_db)):
     
-#     return await crud.update_deadline(update, db)
+    return await crud.update_department_deadline(update, db)

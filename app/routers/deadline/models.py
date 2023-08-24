@@ -15,6 +15,7 @@ class DepartmentDeadline(Base):
     end_date = Column(String(255), nullable=True)
     deadline_year = Column(String(255), nullable=True)
     supervisor_id = Column(Integer, ForeignKey("staffs.id"))
+    comment = Column(TEXT, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
 

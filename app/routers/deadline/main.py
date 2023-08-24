@@ -38,15 +38,23 @@ async def get_all_deadline(db:Session = Depends(get_db)):
 
 
 
-@deadline_router.get("/get/{deadline_type}")
-async def get_deadline_by_type(deadline_type: str, db:Session = Depends(get_db)):
+@deadline_router.get("/get/{supervisor_id}")
+async def get_deadline_by_supervisor_id(supervisor_id: int, db:Session = Depends(get_db)):
 
-    return await crud.get_deadline_by_type(deadline_type, db)
-
-
+    return await crud.get_deadline_by_supervisor_id(supervisor_id, db)
 
 
 
+
+
+
+
+
+
+@deadline_router.get("/id/{id}")
+async def get_deadline_by_id(id: int, db:Session = Depends(get_db)):
+
+    return await crud.get_deadline_by_id(id, db)
 
 
 

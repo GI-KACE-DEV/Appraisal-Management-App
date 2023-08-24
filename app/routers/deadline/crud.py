@@ -123,21 +123,41 @@ async def get_deadline(db:Session):
 
 
 
-async def get_deadline_by_type(deadline_type: str, db:Session):
+async def get_deadline_by_supervisor_id(supervisor_id: int, db:Session):
     year = datetime.now()
     current_year = year.strftime("%Y")
     data = db.query(DepartmentDeadline).filter(
         DepartmentDeadline.deadline_year == current_year,
-        DepartmentDeadline.deadline_type == deadline_type).first()
+        DepartmentDeadline.supervisor_id == supervisor_id).all()
     
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Department Deadline {deadline_type} not found")
+                            detail=f"Department Deadline {supervisor_id} not found")
 
     return data
 
 
 
+
+
+
+
+
+
+
+
+async def get_deadline_by_id(id: int, db:Session):
+    year = datetime.now()
+    current_year = year.strftime("%Y")
+    data = db.query(DepartmentDeadline).filter(
+        DepartmentDeadline.deadline_year == current_year,
+        DepartmentDeadline.id == id).all()
+    
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Department Deadline {id} not found")
+
+    return data
 
 
 
@@ -153,7 +173,8 @@ async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session)
         DepartmentDeadline.deadline_type : updateDeadline.deadline_type,
         DepartmentDeadline.deadline_year : updateDeadline.deadline_year,
         DepartmentDeadline.start_date : updateDeadline.start_date,
-        DepartmentDeadline.end_date : updateDeadline.end_date
+        DepartmentDeadline.end_date : updateDeadline.end_date,
+        DepartmentDeadline.comment : updateDeadline.comment
         }, synchronize_session=False)
     db.flush()
     db.commit()

@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from routers.staffs.schemas import CreateStaff, UpdateStaff
 from routers.users.account.models import User
 from routers.users.user_type.models import UserType
+from routers.appraisal_form.models import AppraisalForm
+from routers.deadline.models import DepartmentDeadline, StaffDeadline
 from routers.staffs.models import Staff 
 from  dependencies import get_db
 from services.email import sendEmailToNewStaff
@@ -19,8 +21,8 @@ from datetime import datetime
 ## ## function to create new staff
 async def create_new_staff_user(staff:CreateStaff, db: Session):
     #extract only year from today's date
-    current_year = datetime.now()
-    appraisal_year = current_year.year
+    year = datetime.now()
+    current_year = year.year
 
     #check if staff email exist
     db_query = db.query(User).filter(User.email == staff.email).first()
@@ -29,6 +31,7 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
         raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
            detail="Staff with email (" + \
         str(staff.email) + ") already exists")
+    
     
     ## create staff into staff table
     staff_object = Staff(first_name = staff.first_name, last_name = staff.last_name,other_name=staff.other_name,
@@ -43,13 +46,53 @@ async def create_new_staff_user(staff:CreateStaff, db: Session):
                        hashed_password=Hasher.get_password_hash(),is_active=True, is_superuser=False)
     db.add(user_object)
     db.flush()
-    
-
     db.commit()
     db.refresh(staff_object)
     db.refresh(user_object)
+
+    ##creating appraisal_form for staff if start of year deadline is already created within that year
+    db_appraisal_form = db.query(DepartmentDeadline).filter(
+        DepartmentDeadline.deadline_year == current_year,
+        DepartmentDeadline.deadline_type == "Start",
+        ).first()
+    
+    if db_appraisal_form:
+        appraisalForm_object = AppraisalForm(department = staff.department,grade = staff.grade,appraisal_year= current_year, 
+        supervisor_id = staff.supervisor_id, positions = staff.positions,staff_id=staff_object.id)
+        db.add(appraisalForm_object)
+        db.flush()
+        db.commit()
+        db.refresh(appraisalForm_object)
+
+    # creating appraisal_form_id for staff
+        db.query(Staff).filter(Staff.id == staff_object.id).update({
+        Staff.appraisal_form_id : appraisalForm_object.id,
+        }, synchronize_session=False)
+        db.flush()
+
+
+    # creating start,mid and end of year deadline for staff if only they are created
+    db_staff_deadline = db.query(DepartmentDeadline).filter(
+            DepartmentDeadline.deadline_year == current_year,
+            DepartmentDeadline.supervisor_id == staff.supervisor_id,
+            ).all()
+    
+    if db_staff_deadline:
+        for row in db_staff_deadline:
+            start_staff_deadline = StaffDeadline(deadline_type=row.deadline_type,start_date=row.start_date,end_date=row.end_date,
+                        deadline_year=row.deadline_year,supervisor_id=row.supervisor_id,appraisal_form_id=appraisalForm_object.id)
+            db.add(start_staff_deadline)
+            db.flush()
+            db.commit()
+            db.refresh(start_staff_deadline)
+
+    db.commit()
     #await sendEmailToNewStaff([staff.email], user_object)
-    return user_object
+    return staff_object
+
+
+
+
 
 
 

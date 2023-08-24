@@ -16,10 +16,12 @@ from routers.users.account.models import User
 
 
 
+# function for creating deadline
 async def create_deadline(deadline:CreateDeadline, db: Session):
     year = datetime.now()
-    appraisal_year = year.year
+    current_year = year.year
 
+    # check if user creating deadline is supervisor
     db_user_type = db.query(Staff).filter(
         User.staff_id == Staff.id,
         UserType.id == User.user_type_id,
@@ -31,34 +33,70 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
         raise HTTPException(status_code=status.HTTP_303_SEE_OTHER,
                             detail="Deadline is created by only Supervisors")
     
+    # creating of Departmental Deadline by only supervisor
     deadline_object = DepartmentDeadline(**deadline.dict())
-    deadline_object.deadline_year = appraisal_year
+    deadline_object.deadline_year = current_year
     db.add(deadline_object)
     db.flush()
     
+    #extracting staff info to create appraisal_form for all staff if only deadline is start of year(only staff under the supervisor)
     db_data = db.query(Staff).filter(Staff.supervisor_id == deadline.supervisor_id).all()
 
+    #creating appraisal_form for staff if deadline is start of year
     if deadline.deadline_type == "Start" or deadline.deadline_type == "First":
         for row in db_data:
-            appraisalForm_object = AppraisalForm(department= row.department, grade=row.grade,appraisal_year= appraisal_year,
+            appraisalForm_object = AppraisalForm(department= row.department, grade=row.grade,appraisal_year= current_year,
                                                 supervisor_id=row.supervisor_id,positions=row.positions, staff_id=row.id)
             db.add(appraisalForm_object)
             db.flush()
             db.refresh(appraisalForm_object)
 
-            staffDeadline_object = StaffDeadline(**deadline.dict())
-            staffDeadline_object.deadline_year = appraisal_year
-            staffDeadline_object.appraisal_form_id = appraisalForm_object.id
-            db.add(staffDeadline_object)
+            # creating individual start of year deadline for all staff
+            start_staff_deadline = StaffDeadline(**deadline.dict())
+            start_staff_deadline.deadline_year = current_year
+            start_staff_deadline.appraisal_form_id = appraisalForm_object.id
+            db.add(start_staff_deadline)
             db.flush()
             db.commit()
-            db.refresh(staffDeadline_object)
+            db.refresh(start_staff_deadline)
 
+            # creating appraisal_form_id for all staff after deadline been created for start of year
             db.query(Staff).filter(Staff.id == row.id, Staff.supervisor_id == deadline.supervisor_id).update({
             Staff.appraisal_form_id : appraisalForm_object.id,
             }, synchronize_session=False)
             db.flush()
-        
+    
+    #extracting appraisal_form_id to create mid year deadline for all staff
+    mid_AppraisalForm = db.query(AppraisalForm).filter(
+        AppraisalForm.appraisal_year == current_year, 
+        AppraisalForm.supervisor_id == deadline.supervisor_id).all()
+
+    # creating individual mid year deadline for all staff
+    if deadline.deadline_type == "Mid" or deadline.deadline_type == "Second":
+        for row in mid_AppraisalForm:
+            mid_staff_deadline = StaffDeadline(**deadline.dict())
+            mid_staff_deadline.deadline_year = current_year
+            mid_staff_deadline.appraisal_form_id = row.id
+            db.add(mid_staff_deadline)
+            db.flush()
+            db.commit()
+            db.refresh(mid_staff_deadline)
+
+    #extracting appraisal_form_id to create end of year deadline for all staff
+    end_AppraisalForm = db.query(AppraisalForm).filter(
+        AppraisalForm.appraisal_year == current_year, 
+        AppraisalForm.supervisor_id == deadline.supervisor_id).all()
+
+    # creating individual end of year deadline for all staff
+    if deadline.deadline_type == "End" or deadline.deadline_type == "Third":
+        for row in end_AppraisalForm:
+            mid_staff_deadline = StaffDeadline(**deadline.dict())
+            mid_staff_deadline.deadline_year = current_year
+            mid_staff_deadline.appraisal_form_id = row.id
+            db.add(mid_staff_deadline)
+            db.flush()
+            db.commit()
+            db.refresh(mid_staff_deadline)
     db.commit()
     db.refresh(deadline_object)
     return "(" + str(deadline_object.deadline_type) + ") deadline created successfuly"

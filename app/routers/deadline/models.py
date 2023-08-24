@@ -29,7 +29,7 @@ class DepartmentDeadline(Base):
 class StaffDeadline(Base):
     '''Staff Deadline Model'''
     
-    __tablename__ = "start_deadline"
+    __tablename__ = "staff_deadline"
 
     id = Column(Integer,primary_key=True,index=True)
     deadline_type = Column(String(255), nullable=True)

@@ -18,7 +18,7 @@ class AppraisalForm(Base):
     positions = Column(String(255), nullable=True)
     appraisal_year = Column(String(255), nullable=True)
     staff_id = Column(Integer, ForeignKey("staffs.id"))
-    supervisor_id = Column(Integer, nullable=True)
+    supervisor_id = Column(Integer, ForeignKey("staffs.id"))
     status = Column(Boolean, default=False, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))

@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.9 (Ubuntu 14.9-0ubuntu0.22.04.1)
 
 \c appraisal_db;
 
@@ -116,6 +116,7 @@ CREATE TABLE public.department_deadline (
     end_date character varying(255),
     deadline_year character varying(255),
     supervisor_id integer,
+    comment text,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -341,6 +342,44 @@ ALTER SEQUENCE public.performance_details_id_seq OWNED BY public.performance_det
 
 
 --
+-- Name: staff_deadline; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.staff_deadline (
+    id integer NOT NULL,
+    deadline_type character varying(255),
+    start_date character varying(255),
+    comment text,
+    end_date character varying(255),
+    deadline_year character varying(255),
+    appraisal_form_id integer,
+    supervisor_id integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: staff_deadline_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.staff_deadline_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_deadline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.staff_deadline_id_seq OWNED BY public.staff_deadline.id;
+
+
+--
 -- Name: staffs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -381,44 +420,6 @@ CREATE SEQUENCE public.staffs_id_seq
 --
 
 ALTER SEQUENCE public.staffs_id_seq OWNED BY public.staffs.id;
-
-
---
--- Name: start_deadline; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.start_deadline (
-    id integer NOT NULL,
-    deadline_type character varying(255),
-    start_date character varying(255),
-    comment text,
-    end_date character varying(255),
-    deadline_year character varying(255),
-    appraisal_form_id integer,
-    supervisor_id integer,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
---
--- Name: start_deadline_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.start_deadline_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: start_deadline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.start_deadline_id_seq OWNED BY public.start_deadline.id;
 
 
 --
@@ -597,17 +598,17 @@ ALTER TABLE ONLY public.performance_details ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: staff_deadline id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_deadline ALTER COLUMN id SET DEFAULT nextval('public.staff_deadline_id_seq'::regclass);
+
+
+--
 -- Name: staffs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.staffs ALTER COLUMN id SET DEFAULT nextval('public.staffs_id_seq'::regclass);
-
-
---
--- Name: start_deadline id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.start_deadline ALTER COLUMN id SET DEFAULT nextval('public.start_deadline_id_seq'::regclass);
 
 
 --
@@ -692,13 +693,13 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: staff_deadline; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: staffs; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: start_deadline; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -787,17 +788,17 @@ SELECT pg_catalog.setval('public.performance_details_id_seq', 1, false);
 
 
 --
+-- Name: staff_deadline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.staff_deadline_id_seq', 1, false);
+
+
+--
 -- Name: staffs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.staffs_id_seq', 1, false);
-
-
---
--- Name: start_deadline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.start_deadline_id_seq', 1, false);
 
 
 --
@@ -910,19 +911,19 @@ ALTER TABLE ONLY public.performance_details
 
 
 --
+-- Name: staff_deadline staff_deadline_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_deadline
+    ADD CONSTRAINT staff_deadline_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: staffs staffs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.staffs
     ADD CONSTRAINT staffs_pkey PRIMARY KEY (id);
-
-
---
--- Name: start_deadline start_deadline_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.start_deadline
-    ADD CONSTRAINT start_deadline_pkey PRIMARY KEY (id);
 
 
 --
@@ -1028,17 +1029,17 @@ CREATE INDEX ix_performance_details_id ON public.performance_details USING btree
 
 
 --
+-- Name: ix_staff_deadline_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_staff_deadline_id ON public.staff_deadline USING btree (id);
+
+
+--
 -- Name: ix_staffs_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX ix_staffs_id ON public.staffs USING btree (id);
-
-
---
--- Name: ix_start_deadline_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ix_start_deadline_id ON public.start_deadline USING btree (id);
 
 
 --
@@ -1075,6 +1076,14 @@ CREATE INDEX ix_users_id ON public.users USING btree (id);
 
 ALTER TABLE ONLY public.appraisal_forms
     ADD CONSTRAINT appraisal_forms_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staffs(id);
+
+
+--
+-- Name: appraisal_forms appraisal_forms_supervisor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.appraisal_forms
+    ADD CONSTRAINT appraisal_forms_supervisor_id_fkey FOREIGN KEY (supervisor_id) REFERENCES public.staffs(id);
 
 
 --
@@ -1126,27 +1135,27 @@ ALTER TABLE ONLY public.performance_details
 
 
 --
+-- Name: staff_deadline staff_deadline_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_deadline
+    ADD CONSTRAINT staff_deadline_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
+
+
+--
+-- Name: staff_deadline staff_deadline_supervisor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_deadline
+    ADD CONSTRAINT staff_deadline_supervisor_id_fkey FOREIGN KEY (supervisor_id) REFERENCES public.staffs(id);
+
+
+--
 -- Name: staffs staffs_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.staffs
     ADD CONSTRAINT staffs_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
-
-
---
--- Name: start_deadline start_deadline_appraisal_form_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.start_deadline
-    ADD CONSTRAINT start_deadline_appraisal_form_id_fkey FOREIGN KEY (appraisal_form_id) REFERENCES public.appraisal_forms(id);
-
-
---
--- Name: start_deadline start_deadline_supervisor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.start_deadline
-    ADD CONSTRAINT start_deadline_supervisor_id_fkey FOREIGN KEY (supervisor_id) REFERENCES public.staffs(id);
 
 
 --

@@ -15,6 +15,8 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 def validate_bearer(token: str = Depends(oauth2_scheme), db = Depends(get_db)):

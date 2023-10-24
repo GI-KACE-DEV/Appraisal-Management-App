@@ -73,6 +73,13 @@ class Settings:
     DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 
+    POOL_SIZE: int = 20
+    POOL_RECYCLE: int = 3600
+    POOL_TIMEOUT: int = 15
+    MAX_OVERFLOW: int = 2
+    CONNECT_TIMEOUT: int = 60
+    connect_args = {"connect_timeout":CONNECT_TIMEOUT}
+
     ## lets define var for creating the access token
     SECRET_KEY : str = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"

@@ -70,8 +70,7 @@ async def create_deadline(deadline:CreateDeadline, db: Session):
     mid_AppraisalForm = db.query(AppraisalForm).filter(
         AppraisalForm.appraisal_year == current_year, 
         AppraisalForm.supervisor_id == deadline.supervisor_id).all()
-
-    # creating individual mid year deadline for all staff
+   # creating individual mid year deadline for all staff
     if deadline.deadline_type == "Mid" or deadline.deadline_type == "Second":
         for row in mid_AppraisalForm:
             mid_staff_deadline = StaffDeadline(**deadline.dict())
@@ -166,7 +165,7 @@ async def get_deadline_by_id(id: int, db:Session):
 
 
 
-
+#function to update department deadline 
 async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session):
     deadline_id = updateDeadline.id
     is_mid_year_review_id_update = db.query(DepartmentDeadline).filter(DepartmentDeadline.id == deadline_id).update({
@@ -190,6 +189,7 @@ async def update_department_deadline(updateDeadline: UpdateDeadline, db:Session)
         StaffDeadline.deadline_type == data.deadline_type
         ).first()
     
+    # update staff deadline
     if update_staff_deadline:
         db.query(StaffDeadline).filter(
                 StaffDeadline.deadline_year == data.deadline_year,

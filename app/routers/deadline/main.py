@@ -10,6 +10,7 @@ from  dependencies import get_db
 deadline_router = APIRouter()
 
 
+#function to create new department deadline 
 @deadline_router.post("/create")
 async def create_new_deadline(deadline:schemas.CreateDeadline, db:Session = Depends(get_db)):
 
@@ -24,7 +25,7 @@ async def create_new_deadline(deadline:schemas.CreateDeadline, db:Session = Depe
 
 
 
-
+#function to get all department deadline
 @deadline_router.get("/all")
 async def get_all_deadline(db:Session = Depends(get_db)):
     return await crud.get_deadline(db)
@@ -37,7 +38,7 @@ async def get_all_deadline(db:Session = Depends(get_db)):
 
 
 
-
+#function to get department deadline by supervisor id
 @deadline_router.get("/get/{supervisor_id}")
 async def get_deadline_by_supervisor_id(supervisor_id: int, db:Session = Depends(get_db)):
 
@@ -50,7 +51,7 @@ async def get_deadline_by_supervisor_id(supervisor_id: int, db:Session = Depends
 
 
 
-
+#function to get department deadline by id
 @deadline_router.get("/id/{id}")
 async def get_deadline_by_id(id: int, db:Session = Depends(get_db)):
 
@@ -64,7 +65,7 @@ async def get_deadline_by_id(id: int, db:Session = Depends(get_db)):
 
 
 
-
+#function to update department deadline 
 @deadline_router.put("/update")
 async def update_departmental_deadline(update: schemas.UpdateDeadline, db:Session = Depends(get_db)):
     

@@ -86,7 +86,7 @@ def del_code(email, db:Session=SessionLocal()):
     return True
 
 def schedule_del_code(email):
-    from config import settings
+    from core.config import settings
     return scheduler.add_job(
         del_code,
         trigger='date',
